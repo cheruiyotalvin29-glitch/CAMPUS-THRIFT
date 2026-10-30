@@ -45,7 +45,20 @@ campus-thrift-market/
 
 ## 🚀 Quick Start Guide
 
-### 1. Running Locally (No Build Tools Needed!)
+### 1. One-Click Free Vercel Deployment
+
+Deploy this project on Vercel's free/hobby tier in under 60 seconds with zero build steps:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fcheruiyotalvin29-glitch%2FCAMPUS-THRIFT)
+
+1. Click the **Deploy** button above or go to [Vercel](https://vercel.com/new).
+2. Import the `cheruiyotalvin29-glitch/CAMPUS-THRIFT` repository.
+3. Keep **Framework Preset** as **Other** (Root directory: `./`). No build command or output directory is required.
+4. Click **Deploy**. Your campus marketplace is live instantly with free HTTPS, CDN caching, and custom domain support!
+
+---
+
+### 2. Running Locally (No Build Tools Needed!)
 Because this application runs on native web standards and ESM modules, you can serve it with any local static HTTP server.
 
 Using Python 3 (installed on most systems):
