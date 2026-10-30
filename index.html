@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="theme-color" content="#4f46e5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Campus Online Thrift Market | Student P2P Marketplace</title>
+    <meta name="description" content="A decentralized peer-to-peer campus marketplace for students to buy and sell textbooks, electronics, dorm essentials, and clothes with instant WhatsApp contact.">
+
+    <!-- Google Fonts (Non-blocking asynchronous load) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    </noscript>
+
+    <!-- Precompiled Fast Tailwind CSS -->
+    <link rel="stylesheet" href="tailwind.css">
+
+    <!-- Custom System Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Pre-bundled Zero-Latency Supabase Client -->
+    <script src="js/vendor/supabase.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-indigo-100 selection:text-indigo-800">
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" aria-live="polite"></div>
+
+    <!-- MAIN APP SHELL (Full Width Responsive on Mobile & Desktop, Phone Frame in Simulator Mode) -->
+    <div id="app-shell" class="min-h-screen flex flex-col w-full relative">
+
+        <!-- PHONE FRAME DYNAMIC ISLAND & STATUS BAR (Visible when Phone Frame View is Active) -->
+        <div id="phone-dynamic-island" class="flex items-center justify-between text-[11px] font-bold text-slate-800 select-none">
+            <span class="font-semibold text-slate-900">9:41</span>
+            <div class="w-24 h-4 bg-black rounded-full mx-auto relative flex items-center justify-end pr-2">
+                <div class="w-1.5 h-1.5 rounded-full bg-indigo-900 border border-slate-700"></div>
+            </div>
+            <div class="flex items-center gap-1.5 text-[10px] text-slate-700">
+                <span>5G</span>
+                <span>🔋</span>
+            </div>
+        </div>
+
+    <!-- TOP NAVIGATION BAR (STICKY GLASSMORPHISM) -->
+    <header class="glass-nav sticky top-0 z-40 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3.5 flex justify-between items-center gap-2 sm:gap-4">
+            
+            <!-- Logo & Brand Name -->
+            <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                <a href="#" class="flex items-center gap-2 sm:gap-2.5 group min-w-0">
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-indigo-200 group-hover:scale-105 transition-transform shrink-0">
+                        <span class="text-lg sm:text-xl">🎓</span>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-1.5 sm:gap-2">
+                            <span class="brand-font font-extrabold text-lg sm:text-2xl tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors truncate">CampusThrift</span>
+                            <span class="hidden md:inline-flex text-[10px] font-bold uppercase tracking-wider bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full shrink-0">P2P Mart</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 hidden sm:block -mt-0.5">Student Peer-to-Peer Marketplace</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Central Status / Mode Pill -->
+            <button id="backend-status-pill" onclick="openConfigModal()" class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition shadow-sm" title="Click to view or edit Supabase configuration">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span id="backend-status-text">Supabase Ready</span>
+                <span class="text-slate-400 font-mono text-[10px]">⚙️</span>
+            </button>
+
+            <!-- Navigation Controls & Auth Buttons -->
+            <div id="auth-buttons" class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+                
+                <!-- My Listings Button (Visible only on desktop when logged in; on mobile it is in bottom nav) -->
+                <button id="nav-my-listings-btn" onclick="openMyListingsModal()" class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition shadow-sm" title="View & manage your listings">
+                    <span>🏷️</span>
+                    <span>My Listings</span>
+                </button>
+
+                <!-- User Profile Badge (Visible when logged in) -->
+                <button id="user-badge" onclick="openMyListingsModal()" class="hidden flex items-center gap-1.5 bg-slate-100/90 hover:bg-slate-200 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-xl border border-slate-200/90 transition text-xs font-semibold text-slate-700 shadow-sm" title="Signed in - Click to manage your listings">
+                    <span class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-[10px] sm:text-[11px] shrink-0">👤</span>
+                    <span id="user-name-display" class="max-w-[65px] sm:max-w-[120px] truncate font-semibold text-[11px] sm:text-xs">Student</span>
+                </button>
+
+                <!-- Sell Item CTA (Primary Action) -->
+                <button id="open-post-btn" onclick="checkAuthAndOpenPostModal()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-indigo-200 flex items-center gap-1 sm:gap-1.5 transition-all shrink-0">
+                    <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    <span class="hidden sm:inline">Sell Item</span>
+                    <span class="inline sm:hidden">Sell</span>
+                </button>
+
+                <!-- Sign In Button (Visible when logged out) -->
+                <button id="open-login-btn" onclick="toggleModal('auth-modal', true)" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold transition active:scale-95 shadow-sm shrink-0">
+                    Sign In
+                </button>
+
+                <!-- Logout Button (Visible when logged in on desktop) -->
+                <button id="logout-btn" onclick="handleLogout()" class="hidden md:inline-flex bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-200 hover:border-rose-200 px-3 py-2 rounded-xl text-xs font-semibold transition shrink-0" title="Log out">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO / CAMPUS BANNER -->
+    <section class="hero-gradient border-b border-indigo-50/50 py-5 sm:py-12 px-3.5 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5 sm:gap-6">
+            <div class="max-w-2xl text-center md:text-left">
+                <div class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-indigo-100/80 text-indigo-800 text-[11px] sm:text-xs font-semibold mb-2 sm:mb-3">
+                    <span>✨ Save up to 70% on student essentials</span>
+                </div>
+                <h2 class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                    Campus Thrift, <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Reinvented.</span>
+                </h2>
+                <p class="mt-2 sm:mt-3 text-xs sm:text-base text-slate-600 max-w-xl">
+                    Buy, sell, and hand down verified textbooks, dorm gear, electronics, and fashion directly to students on campus. Zero fees, one-tap phone and WhatsApp copying.
+                </p>
+
+                <!-- Quick Feature Highlights -->
+                <div class="mt-5 flex flex-wrap justify-center md:justify-start items-center gap-4 text-xs font-medium text-slate-600">
+                    <span class="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm px-2.5 py-1 rounded-md border border-slate-200/60 shadow-sm">
+                        <span class="text-emerald-500">✓</span> One-Tap Number Copy
+                    </span>
+                    <span class="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm px-2.5 py-1 rounded-md border border-slate-200/60 shadow-sm">
+                        <span class="text-indigo-500">✓</span> Zero Commission Fees
+                    </span>
+                    <span class="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm px-2.5 py-1 rounded-md border border-slate-200/60 shadow-sm">
+                        <span class="text-violet-500">✓</span> On-Campus Handover
+                    </span>
+                </div>
+            </div>
+
+            <!-- Quick Action Box / Stats -->
+            <div class="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-lg shadow-indigo-100 border border-slate-200/70 w-full md:w-80 flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Market Overview</span>
+                    <span id="items-count-badge" class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full font-bold">Loading...</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3 pt-1">
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                        <span class="text-2xl font-black text-indigo-600" id="stat-active-listings">--</span>
+                        <p class="text-[11px] text-slate-500 font-medium">Active Listings</p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                        <span class="text-2xl font-black text-emerald-600">0%</span>
+                        <p class="text-[11px] text-slate-500 font-medium">Buyer Fees</p>
+                    </div>
+                </div>
+                <button onclick="checkAuthAndOpenPostModal()" class="w-full mt-1 bg-slate-900 hover:bg-slate-800 text-white font-semibold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition shadow-sm">
+                    <span>Have something to sell? Post now</span>
+                    <span>→</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN MARKETPLACE CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        
+        <!-- SEARCH, CATEGORIES & FILTER CONTROLS -->
+        <section class="mb-8 space-y-4">
+            
+            <!-- Search & Sort Bar -->
+            <div class="bg-white p-3.5 sm:p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-3 items-center justify-between">
+                
+                <!-- Keyword Search Input -->
+                <div class="relative w-full md:flex-1">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <input type="text" id="search-input" oninput="filterItems()" placeholder="Search textbooks, laptops, mini-fridges, clothing..." class="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition">
+                    <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600">
+                        &times;
+                    </button>
+                </div>
+
+                <!-- Secondary Controls: Sort Order -->
+                <div class="w-full md:w-auto flex flex-wrap sm:flex-nowrap items-center gap-2.5">
+                    <!-- Sort Order Dropdown -->
+                    <div class="relative flex-1 sm:flex-initial">
+                        <select id="sort-filter" onchange="filterItems()" class="w-full sm:w-auto px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer transition">
+                            <option value="newest">🕒 Sort: Newest First</option>
+                            <option value="price-asc">💰 Price: Low to High</option>
+                            <option value="price-desc">💎 Price: High to Low</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Pills Bar -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs font-semibold">
+                <span class="text-slate-400 pl-1 uppercase tracking-wider text-[10px] hidden sm:inline">Category:</span>
+                <button onclick="setCategory('ALL')" class="category-pill active px-3.5 py-2 rounded-xl border border-indigo-600 bg-indigo-600 text-white transition shadow-sm whitespace-nowrap" data-category="ALL">
+                    All Categories
+                </button>
+                <button onclick="setCategory('Textbooks')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Textbooks">
+                    📚 Textbooks
+                </button>
+                <button onclick="setCategory('Electronics')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Electronics">
+                    💻 Electronics
+                </button>
+                <button onclick="setCategory('Clothing')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Clothing">
+                    👕 Clothing
+                </button>
+                <button onclick="setCategory('Dorm Essentials')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Dorm Essentials">
+                    🛋️ Dorm Essentials
+                </button>
+                <button onclick="setCategory('Other')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Other">
+                    📦 Other
+                </button>
+            </div>
+        </section>
+
+        <!-- MARKETPLACE ITEM GRID -->
+        <section aria-label="Marketplace Items">
+            
+            <!-- Items Grid -->
+            <div id="items-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Dynamically populated via js/app.js -->
+            </div>
+
+            <!-- Loading Shimmer State -->
+            <div id="loading-spinner" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-4">
+                    <div class="h-44 rounded-xl skeleton-shimmer"></div>
+                    <div class="h-4 w-1/3 rounded skeleton-shimmer"></div>
+                    <div class="h-5 w-3/4 rounded skeleton-shimmer"></div>
+                    <div class="h-4 w-1/2 rounded skeleton-shimmer"></div>
+                </div>
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-4">
+                    <div class="h-44 rounded-xl skeleton-shimmer"></div>
+                    <div class="h-4 w-1/3 rounded skeleton-shimmer"></div>
+                    <div class="h-5 w-3/4 rounded skeleton-shimmer"></div>
+                    <div class="h-4 w-1/2 rounded skeleton-shimmer"></div>
+                </div>
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-4 hidden md:block">
+                    <div class="h-44 rounded-xl skeleton-shimmer"></div>
+                    <div class="h-4 w-1/3 rounded skeleton-shimmer"></div>
+                    <div class="h-5 w-3/4 rounded skeleton-shimmer"></div>
+                    <div class="h-4 w-1/2 rounded skeleton-shimmer"></div>
+                </div>
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-4 hidden lg:block">
+                    <div class="h-44 rounded-xl skeleton-shimmer"></div>
+                    <div class="h-4 w-1/3 rounded skeleton-shimmer"></div>
+                    <div class="h-5 w-3/4 rounded skeleton-shimmer"></div>
+                    <div class="h-4 w-1/2 rounded skeleton-shimmer"></div>
+                </div>
+            </div>
+
+            <!-- Empty State View -->
+            <div id="empty-state" class="hidden text-center py-16 px-4 bg-white rounded-2xl border border-dashed border-slate-300 my-4 max-w-lg mx-auto">
+                <div class="w-16 h-16 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                    🔍
+                </div>
+                <h3 class="text-lg font-bold text-slate-800">No campus listings found</h3>
+                <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto">
+                    We couldn't find anything matching your search and category filter. Try clearing your filters or be the first to sell this item!
+                </p>
+                <div class="mt-5 flex justify-center gap-3">
+                    <button onclick="resetAllFilters()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition">
+                        Reset Filters
+                    </button>
+                    <button onclick="checkAuthAndOpenPostModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl transition">
+                        + Sell Item Now
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MOBILE APP BOTTOM NAVIGATION BAR (FIXED FOR PHONES) -->
+    <nav id="mobile-bottom-nav" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-slate-200/80 px-1.5 flex items-center justify-between text-[10px] font-bold text-slate-500 shadow-[0_-4px_25px_rgba(0,0,0,0.06)] select-none">
+        
+        <!-- 1. Feed -->
+        <button onclick="scrollToFeed()" class="flex-1 flex flex-col items-center justify-center py-1.5 text-indigo-600 focus:outline-none transition-colors">
+            <span class="w-6 h-6 flex items-center justify-center mb-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+            </span>
+            <span class="tracking-tight">Feed</span>
+        </button>
+
+        <!-- 2. Search -->
+        <button onclick="focusSearchInput()" class="flex-1 flex flex-col items-center justify-center py-1.5 hover:text-indigo-600 focus:outline-none transition-colors">
+            <span class="w-6 h-6 flex items-center justify-center mb-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </span>
+            <span class="tracking-tight">Search</span>
+        </button>
+
+        <!-- 3. Sell Center Action Button -->
+        <div class="flex-1 flex flex-col items-center justify-center relative">
+            <button onclick="checkAuthAndOpenPostModal()" class="-mt-5 w-12 h-12 rounded-full bg-gradient-to-tr from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 active:scale-95 text-white flex items-center justify-center shadow-lg shadow-indigo-500/35 border-[3.5px] border-white transition-all focus:outline-none" aria-label="Sell Item" title="Sell an Item">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
+                </svg>
+            </button>
+            <span class="text-[9px] font-bold text-indigo-600 tracking-tight mt-0.5">Sell</span>
+        </div>
+
+        <!-- 4. My Items -->
+        <button onclick="openMyListingsModal()" class="flex-1 flex flex-col items-center justify-center py-1.5 hover:text-indigo-600 focus:outline-none transition-colors">
+            <span class="w-6 h-6 flex items-center justify-center mb-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                </svg>
+            </span>
+            <span class="tracking-tight whitespace-nowrap">My Items</span>
+        </button>
+
+        <!-- 5. Account / Logout -->
+        <button onclick="handleMobileAuthAction()" class="flex-1 flex flex-col items-center justify-center py-1.5 hover:text-indigo-600 focus:outline-none transition-colors">
+            <span class="w-6 h-6 flex items-center justify-center mb-0.5" id="mobile-account-icon">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+            </span>
+            <span id="mobile-account-text" class="tracking-tight">Account</span>
+        </button>
+    </nav>
+
+    </div> <!-- /#app-shell -->
+
+    <!-- ======================================================================
+         MODALS & DIALOG OVERLAYS
+         ====================================================================== -->
+
+    <!-- 1. POST ITEM FORM MODAL -->
+    <div id="post-modal" class="modal-backdrop fixed inset-0 hidden z-50 flex items-center justify-center p-4">
+        <div class="modal-content-panel bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 sm:p-7 relative max-h-[92vh] overflow-y-auto border border-slate-100">
+            <!-- Mobile Sheet Grab Handle -->
+            <div class="sm:hidden w-12 h-1.5 bg-slate-300 rounded-full mx-auto mb-3"></div>
+            
+            <!-- Close Button (High contrast, elevated) -->
+            <button onclick="toggleModal('post-modal', false)" 
+                    class="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 z-40 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 flex items-center justify-center transition-all hover:scale-105 active:scale-95" 
+                    title="Close (Esc)" 
+                    aria-label="Close modal">
+                <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            
+            <div class="flex items-center gap-3 mb-5">
+                <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg font-bold">
+                    🏷️
+                </div>
+                <div>
+                    <h2 id="post-modal-title" class="text-xl font-bold text-slate-900 brand-font">List an Item for Sale</h2>
+                    <p id="post-modal-subtitle" class="text-xs text-slate-500">Connect directly with students on campus via WhatsApp, Phone, or Email.</p>
+                </div>
+            </div>
+            
+            <form id="post-item-form" onsubmit="handlePostItem(event)" class="space-y-4">
+                
+                <!-- Title -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-title">Item Title *</label>
+                    <input type="text" id="item-title" required placeholder="e.g. Calculus: Early Transcendentals (8th Ed)" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                </div>
+
+                <!-- Price & Category Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-price">Price (KSh / $) *</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-xs font-bold text-slate-400">KSh</span>
+                            <input type="number" id="item-price" required min="0" step="any" placeholder="1500" class="w-full pl-11 pr-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-category">Category *</label>
+                        <select id="item-category" required class="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                            <option value="Textbooks">📚 Textbooks</option>
+                            <option value="Electronics">💻 Electronics</option>
+                            <option value="Clothing">👕 Clothing</option>
+                            <option value="Dorm Essentials">🛋️ Dorm Essentials</option>
+                            <option value="Other">📦 Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Condition & Campus Location -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-condition">Item Condition</label>
+                        <select id="item-condition" class="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                            <option value="Like New">Like New (Mint)</option>
+                            <option value="Gently Used" selected>Gently Used</option>
+                            <option value="Fair">Fair / Functional</option>
+                            <option value="Brand New">Brand New</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-location">Pickup Campus Location</label>
+                        <input type="text" id="item-location" placeholder="e.g. Science Library, Hall 4" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-description">Description & Details *</label>
+                    <textarea id="item-description" required rows="3" placeholder="Condition details, edition year, working status, best handover spots..." class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition"></textarea>
+                </div>
+
+                <!-- Image Upload with Instant Preview -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Item Photo (Optional)</label>
+                    
+                    <div id="dropzone" class="upload-dropzone rounded-xl p-4 text-center cursor-pointer relative bg-slate-50">
+                        <input type="file" id="item-image" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewImage(this)">
+                        
+                        <div id="upload-prompt" class="space-y-1">
+                            <span class="text-2xl">📸</span>
+                            <p class="text-xs font-semibold text-slate-700">Click to upload photo or drag & drop</p>
+                            <p class="text-[11px] text-slate-400">PNG, JPG, WebP up to 5MB</p>
+                        </div>
+
+                        <!-- Image Preview Thumbnail -->
+                        <div id="image-preview-container" class="hidden relative mt-2">
+                            <img id="image-preview" src="#" alt="Preview" class="h-36 w-full object-cover rounded-lg shadow-sm border border-slate-200">
+                            <button type="button" onclick="removeImagePreview(event)" class="absolute top-2 right-2 bg-rose-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shadow-md hover:bg-rose-700 transition">&times;</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preferred Contact Method & Target Value -->
+                <div class="bg-indigo-50/60 p-3.5 rounded-xl border border-indigo-100 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-indigo-900 uppercase tracking-wider">How Buyers Reach You</span>
+                        <span class="text-[11px] text-indigo-600 font-semibold">One-Tap Copy</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1" for="item-contact-method">Contact Method</label>
+                            <select id="item-contact-method" required onchange="updateContactPlaceholder()" class="w-full px-3 py-2 text-xs bg-white border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                                <option value="WhatsApp" selected>WhatsApp Number</option>
+                                <option value="Phone">Phone Number</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1" for="item-contact-value">Phone / WhatsApp Number *</label>
+                            <input type="text" id="item-contact-value" required placeholder="+254712345678" class="w-full px-3 py-2 text-xs bg-white border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                        </div>
+                    </div>
+                    <p id="contact-helper-text" class="text-[10px] text-indigo-600/80">
+                        Include country code or local format (e.g. +254 712 345 678 or 0712345678). Buyers will be able to copy your number with a single click.
+                    </p>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-2">
+                    <button type="submit" id="submit-item-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3 rounded-xl transition shadow-md shadow-indigo-200 flex items-center justify-center gap-2">
+                        <span id="submit-item-btn-text">Publish Listing</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. STUDENT AUTHENTICATION MODAL -->
+    <div id="auth-modal" class="modal-backdrop fixed inset-0 hidden z-50 flex items-center justify-center p-4">
+        <div class="modal-content-panel bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 sm:p-7 relative border border-slate-100">
+            <!-- Mobile Sheet Grab Handle -->
+            <div class="sm:hidden w-12 h-1.5 bg-slate-300 rounded-full mx-auto mb-3"></div>
+            
+            <!-- Close Button (High contrast, elevated) -->
+            <button onclick="toggleModal('auth-modal', false)" 
+                    class="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 z-40 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 flex items-center justify-center transition-all hover:scale-105 active:scale-95" 
+                    title="Close (Esc)" 
+                    aria-label="Close modal">
+                <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl font-bold shadow-sm">
+                    🎓
+                </div>
+                <h2 id="auth-title" class="text-xl font-bold text-slate-900 brand-font">Student Sign In</h2>
+                <p id="auth-subtitle" class="text-xs text-slate-500 mt-1">Sign in with your student credentials to post items</p>
+            </div>
+            
+            <form id="auth-form" onsubmit="handleAuth(event)" class="space-y-3.5">
+                
+                <!-- Sign-Up Specific Fields -->
+                <div id="signup-fields" class="space-y-3 hidden">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="auth-name">Full Name *</label>
+                        <input type="text" id="auth-name" placeholder="Alex Kamau" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="auth-phone">Phone / WhatsApp</label>
+                        <input type="text" id="auth-phone" placeholder="+254712345678" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                    </div>
+                </div>
+
+                <!-- Email & Password -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="auth-email">Student Email *</label>
+                    <input type="email" id="auth-email" required placeholder="student@university.ac.ke" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="auth-password">Password *</label>
+                    <input type="password" id="auth-password" required minlength="6" placeholder="••••••••" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                </div>
+
+                <button type="submit" id="auth-submit-btn" class="w-full mt-2 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3 rounded-xl transition shadow-md shadow-indigo-200 flex items-center justify-center gap-2">
+                    <span>Sign In</span>
+                </button>
+            </form>
+            
+            <div class="mt-5 pt-4 border-t border-slate-100 text-center">
+                <p class="text-xs text-slate-500">
+                    <span id="auth-toggle-text">Need a student account?</span>
+                    <button type="button" id="toggle-auth-btn" onclick="toggleAuthMode()" class="text-indigo-600 font-bold underline hover:text-indigo-800 ml-1 transition">
+                        Create Account
+                    </button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. ITEM DETAILS MODAL (FULL VIEW) -->
+    <div id="detail-modal" class="modal-backdrop fixed inset-0 hidden z-50 flex items-center justify-center p-4">
+        <div class="modal-content-panel bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-5 sm:p-7 relative max-h-[92vh] overflow-y-auto border border-slate-100">
+            <!-- Mobile Sheet Grab Handle -->
+            <div class="sm:hidden w-12 h-1.5 bg-slate-300 rounded-full mx-auto mb-3"></div>
+            
+            <div id="detail-modal-body">
+                <!-- Dynamically populated via openItemDetail() -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. SUPABASE BACKEND CONFIG MODAL -->
+    <div id="config-modal" class="modal-backdrop fixed inset-0 hidden z-50 flex items-center justify-center p-4">
+        <div class="modal-content-panel bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative border border-slate-100">
+            <!-- Close Button (High contrast, elevated) -->
+            <button onclick="toggleModal('config-modal', false)" 
+                    class="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 z-40 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 flex items-center justify-center transition-all hover:scale-105 active:scale-95" 
+                    title="Close (Esc)" 
+                    aria-label="Close modal">
+                <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold">
+                    ⚡
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900 brand-font">Supabase Connection</h2>
+                    <p class="text-xs text-slate-500">Configure your cloud PostgreSQL & Auth backend</p>
+                </div>
+            </div>
+
+            <div class="space-y-4 text-xs text-slate-600">
+                <p>
+                    All mock/stub data has been removed. All user accounts, listings, and photos are saved directly to your live Supabase cloud database and storage bucket.
+                </p>
+
+                <div>
+                    <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1" for="cfg-url">Supabase Project URL</label>
+                    <input type="text" id="cfg-url" placeholder="https://xyzcompany.supabase.co" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono text-xs outline-none">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1" for="cfg-key">Supabase Anon Public API Key</label>
+                    <textarea id="cfg-key" rows="2" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono text-xs outline-none"></textarea>
+                </div>
+
+                <div class="flex gap-2 pt-2">
+                    <button onclick="handleSaveConfig()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl transition">
+                        Connect Supabase
+                    </button>
+                    <button onclick="handleClearConfig()" class="px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition">
+                        Reset
+                    </button>
+                </div>
+
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80 text-[11px] text-slate-500">
+                    💡 <strong>Tip:</strong> Run the DDL script in <a href="sql/schema.sql" target="_blank" class="text-indigo-600 underline font-semibold">sql/schema.sql</a> in your Supabase SQL editor to create all tables, storage bucket, and RLS policies in one click.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. DEDICATED MY LISTINGS OVERLAY / MODAL -->
+    <div id="my-listings-modal" class="modal-backdrop fixed inset-0 hidden z-50 flex items-center justify-center p-4">
+        <div class="modal-content-panel bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-5 sm:p-7 relative max-h-[92vh] overflow-y-auto border border-slate-100 flex flex-col">
+            <!-- Mobile Sheet Grab Handle -->
+            <div class="sm:hidden w-12 h-1.5 bg-slate-300 rounded-full mx-auto mb-3"></div>
+            
+            <!-- Modal Header with inline actions (Post Item + Close Button side-by-side, never overlapping) -->
+            <div class="flex items-center justify-between gap-3 pb-4 mb-5 border-b border-slate-100">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg font-bold shrink-0">
+                        🏷️
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h2 class="text-lg sm:text-xl font-bold text-slate-900 brand-font truncate">My Campus Listings</h2>
+                            <span id="my-listings-count-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 shrink-0">0 Items</span>
+                        </div>
+                        <p class="text-xs text-slate-500 truncate hidden sm:block">Manage, edit, or delete items you have posted on campus.</p>
+                    </div>
+                </div>
+
+                <!-- Right Header Actions: Post Button + Close Button in inline flex flow -->
+                <div class="flex items-center gap-2 shrink-0">
+                    <button onclick="checkAuthAndOpenPostModal()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm shadow-indigo-200 flex items-center gap-1.5 transition whitespace-nowrap">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        <span>Post Item</span>
+                    </button>
+
+                    <button onclick="toggleModal('my-listings-modal', false)" 
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 flex items-center justify-center transition-all hover:scale-105 active:scale-95" 
+                            title="Close (Esc)" 
+                            aria-label="Close modal">
+                        <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Content / Listings Grid / Empty State -->
+            <div id="my-listings-body" class="space-y-3">
+                <!-- Dynamically populated via renderMyListings() -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. CUSTOM CONFIRM DELETE MODAL (REPLACES BROWSER CONFIRM) -->
+    <div id="delete-confirm-modal" class="modal-backdrop fixed inset-0 hidden z-50 flex items-center justify-center p-4">
+        <div class="modal-content-panel bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 relative border border-slate-100 text-center">
+            <!-- Mobile Sheet Grab Handle -->
+            <div class="sm:hidden w-12 h-1.5 bg-slate-300 rounded-full mx-auto mb-3"></div>
+            
+            <!-- Warning Icon -->
+            <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-3.5 border border-rose-100 shadow-sm text-2xl">
+                🗑️
+            </div>
+            
+            <h3 class="text-lg font-bold text-slate-900 brand-font">Delete Listing?</h3>
+            
+            <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                Are you sure you want to permanently delete <span id="delete-modal-item-title" class="font-bold text-slate-800">this listing</span>? This action removes the listing from Supabase and cannot be undone.
+            </p>
+
+            <div class="mt-6 flex items-center gap-3">
+                <button type="button" 
+                        onclick="closeDeleteConfirmModal()" 
+                        class="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold transition active:scale-95">
+                    Cancel
+                </button>
+                <button type="button" 
+                        id="confirm-delete-action-btn"
+                        class="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 active:scale-95 text-white text-xs font-bold transition shadow-md shadow-rose-200 flex items-center justify-center gap-1.5">
+                    <span>Delete</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+            <!-- Modal Content / Listings Grid / Empty State -->
+            <div id="my-listings-body" class="space-y-3">
+                <!-- Dynamically populated via renderMyListings() -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Application Logic Module (Native ES6+ CDN Architecture) -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

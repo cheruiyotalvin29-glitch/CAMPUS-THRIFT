@@ -1,0 +1,23 @@
+# Binary executables
+tailwindcss.exe
+*.exe
+
+# Temporary scratch & test artifacts
+scratch/
+test_*.html
+*.png
+*.jpg
+*.jpeg
+
+# Python environment & cache
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv/
+env/
+venv/
+
+# OS metadata
+Thumbs.db
+.DS_Store
