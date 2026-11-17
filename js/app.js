@@ -186,7 +186,7 @@ function renderItems(items) {
     if (emptyState) emptyState.classList.add('hidden');
 
     items.forEach(item => {
-        const defaultImg = 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80';
+        const hasImage = Boolean(item.image_url && typeof item.image_url === 'string' && item.image_url.trim() && item.image_url !== 'null');
         const contactLink = buildContactURI(item.contact_method, item.contact_value, item.title);
         const isOwner = currentUser && (currentUser.id === item.user_id);
         const categoryBadgeClass = getCategoryBadgeClass(item.category);
@@ -198,13 +198,17 @@ function renderItems(items) {
 
         card.innerHTML = `
             <div>
-                <!-- Image Container with Zoom effect -->
+                <!-- Image Container with Zoom effect (Stays blank if seller provided no photo) -->
                 <div class="relative h-48 w-full bg-slate-100 overflow-hidden cursor-pointer" onclick="openItemDetail('${item.id}')">
-                    <img src="${item.image_url || defaultImg}" 
-                         alt="${escapeHTML(item.title)}" 
-                         loading="lazy"
-                         onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800&q=80';"
-                         class="card-img-zoom w-full h-full object-cover">
+                    ${hasImage ? `
+                        <img src="${item.image_url}" 
+                             alt="${escapeHTML(item.title)}" 
+                             loading="lazy"
+                             onerror="this.style.display='none';"
+                             class="card-img-zoom w-full h-full object-cover">
+                    ` : `
+                        <div class="w-full h-full bg-slate-100"></div>
+                    `}
                     
                     <!-- Category Badge -->
                     <span class="absolute top-3 left-3 text-[11px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md shadow-sm ${categoryBadgeClass}">
@@ -417,11 +421,10 @@ export function renderMyListings() {
         return;
     }
 
-    const defaultImg = 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80';
-
     body.innerHTML = `
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             ${myListings.map(item => {
+                const hasImage = Boolean(item.image_url && typeof item.image_url === 'string' && item.image_url.trim() && item.image_url !== 'null');
                 const categoryBadgeClass = getCategoryBadgeClass(item.category);
                 const formattedPrice = Number(item.price).toLocaleString();
                 const dateFormatted = new Date(item.created_at || Date.now()).toLocaleDateString(undefined, {
@@ -433,11 +436,16 @@ export function renderMyListings() {
                     <div class="bg-white rounded-xl border border-slate-200/90 p-3.5 flex flex-col justify-between hover:border-indigo-300 transition shadow-sm group">
                         <div>
                             <div class="flex gap-3">
-                                <!-- Thumbnail -->
+                                <!-- Thumbnail (Stays blank if seller provided no photo) -->
                                 <div class="w-20 h-20 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0 cursor-pointer" onclick="openItemDetail('${item.id}')">
-                                    <img src="${item.image_url || defaultImg}" 
-                                         alt="${escapeHTML(item.title)}" 
-                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform">
+                                    ${hasImage ? `
+                                        <img src="${item.image_url}" 
+                                             alt="${escapeHTML(item.title)}" 
+                                             class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                                             onerror="this.style.display='none';">
+                                    ` : `
+                                        <div class="w-full h-full bg-slate-100"></div>
+                                    `}
                                 </div>
 
                                 <!-- Summary -->
@@ -797,13 +805,20 @@ export function openItemDetail(itemId) {
         year: 'numeric'
     });
 
+    const hasItemImage = Boolean(item.image_url && typeof item.image_url === 'string' && item.image_url.trim() && item.image_url !== 'null');
+
     modalBody.innerHTML = `
         <div class="space-y-5">
-            <!-- Full Item Image -->
+            <!-- Full Item Image (Stays blank if seller provided no photo) -->
             <div class="relative h-64 sm:h-80 w-full rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-inner">
-                <img src="${item.image_url || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80'}" 
-                     alt="${escapeHTML(item.title)}" 
-                     class="w-full h-full object-cover">
+                ${hasItemImage ? `
+                    <img src="${item.image_url}" 
+                         alt="${escapeHTML(item.title)}" 
+                         class="w-full h-full object-cover"
+                         onerror="this.style.display='none';">
+                ` : `
+                    <div class="w-full h-full bg-slate-100"></div>
+                `}
                 
                 <!-- Badges (Grouped on top-left, max 70% width to stay completely clear of close button) -->
                 <div class="absolute top-3.5 left-3.5 flex items-center gap-2 max-w-[70%] flex-wrap z-20 pointer-events-none">
