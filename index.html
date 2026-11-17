@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
-    <meta name="theme-color" content="#4f46e5">
+    <meta name="theme-color" content="#166534">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Campus Online Thrift Market | Student P2P Marketplace</title>
     <meta name="description" content="A decentralized peer-to-peer campus marketplace for students to buy and sell textbooks, electronics, dorm essentials, and clothes with instant WhatsApp contact.">
 
     <!-- Crisp Inline SVG Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23166534%22 width=%22100%22 height=%22100%22 rx=%2220%22/><text x=%2250%25%22 y=%2254%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22system-ui%22 font-weight=%22800%22 font-size=%2242%22>CT</text></svg>">
 
     <!-- Open Graph Social Media Previews -->
     <meta property="og:title" content="Campus Online Thrift Market">
@@ -34,7 +34,7 @@
     <!-- Pre-bundled Zero-Latency Supabase Client -->
     <script src="js/vendor/supabase.js"></script>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-indigo-100 selection:text-indigo-800">
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-emerald-100 selection:text-emerald-900">
 
     <!-- TOAST NOTIFICATION CONTAINER -->
     <div id="toast-container" aria-live="polite"></div>
@@ -61,13 +61,12 @@
             <!-- Logo & Brand Name -->
             <div class="flex items-center gap-2 sm:gap-3 min-w-0">
                 <a href="#" class="flex items-center gap-2 sm:gap-2.5 group min-w-0">
-                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-indigo-200 group-hover:scale-105 transition-transform shrink-0">
-                        <span class="text-lg sm:text-xl">🎓</span>
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-emerald-700 flex items-center justify-center text-white shadow-md shadow-emerald-200/50 group-hover:scale-105 transition-transform shrink-0">
+                        <span class="text-sm font-extrabold text-white">CT</span>
                     </div>
                     <div class="min-w-0">
                         <div class="flex items-center gap-1.5 sm:gap-2">
-                            <span class="brand-font font-extrabold text-lg sm:text-2xl tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors truncate">CampusThrift</span>
-                            <span class="hidden md:inline-flex text-[10px] font-bold uppercase tracking-wider bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full shrink-0">P2P Mart</span>
+                            <span class="brand-font font-extrabold text-lg sm:text-2xl tracking-tight text-slate-900 group-hover:text-emerald-700 transition-colors truncate">CampusThrift</span>
                         </div>
                         <p class="text-[11px] text-slate-500 hidden sm:block -mt-0.5">Student Peer-to-Peer Marketplace</p>
                     </div>
@@ -78,19 +77,18 @@
             <div id="auth-buttons" class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
                 
                 <!-- My Listings Button (Visible only on desktop when logged in; on mobile it is in bottom nav) -->
-                <button id="nav-my-listings-btn" onclick="openMyListingsModal()" class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition shadow-sm" title="View & manage your listings">
-                    <span>🏷️</span>
+                <button id="nav-my-listings-btn" onclick="openMyListingsModal()" class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition shadow-sm" title="View & manage your listings">
                     <span>My Listings</span>
                 </button>
 
                 <!-- User Profile Badge (Visible when logged in) -->
                 <button id="user-badge" onclick="openMyListingsModal()" class="hidden flex items-center gap-1.5 bg-slate-100/90 hover:bg-slate-200 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-xl border border-slate-200/90 transition text-xs font-semibold text-slate-700 shadow-sm" title="Signed in - Click to manage your listings">
-                    <span class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-[10px] sm:text-[11px] shrink-0">👤</span>
+                    <span class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-[10px] sm:text-[11px] shrink-0"><span class='text-[10px]'>●</span></span>
                     <span id="user-name-display" class="max-w-[65px] sm:max-w-[120px] truncate font-semibold text-[11px] sm:text-xs">Student</span>
                 </button>
 
                 <!-- Sell Item CTA (Primary Action) -->
-                <button id="open-post-btn" onclick="checkAuthAndOpenPostModal()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-indigo-200 flex items-center gap-1 sm:gap-1.5 transition-all shrink-0">
+                <button id="open-post-btn" onclick="checkAuthAndOpenPostModal()" class="bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-emerald-200/50 flex items-center gap-1 sm:gap-1.5 transition-all shrink-0">
                     <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path>
                     </svg>
@@ -112,42 +110,40 @@
     </header>
 
     <!-- HERO / CAMPUS BANNER -->
-    <section class="hero-gradient border-b border-indigo-50/50 py-5 sm:py-12 px-3.5 sm:px-6 lg:px-8">
+    <section class="hero-gradient border-b border-slate-200/50 py-5 sm:py-12 px-3.5 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5 sm:gap-6">
             <div class="max-w-2xl text-center md:text-left">
-                <div class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-indigo-100/80 text-indigo-800 text-[11px] sm:text-xs font-semibold mb-2 sm:mb-3">
-                    <span>✨ Save up to 70% on student essentials</span>
-                </div>
+
                 <h2 class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                    Campus Thrift, <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Reinvented.</span>
+                    Your campus marketplace for <span class="text-emerald-700">textbooks, gear & more.</span>
                 </h2>
                 <p class="mt-2 sm:mt-3 text-xs sm:text-base text-slate-600 max-w-xl">
-                    Buy, sell, and hand down verified textbooks, dorm gear, electronics, and fashion directly to students on campus. Zero fees, one-tap phone and WhatsApp copying.
+                    Buy and sell pre-owned textbooks, electronics, dorm essentials, and clothing directly with students on your campus. No fees, no middlemen.
                 </p>
 
                 <!-- Quick Feature Highlights -->
                 <div class="mt-5 flex flex-wrap justify-center md:justify-start items-center gap-4 text-xs font-medium text-slate-600">
                     <span class="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm px-2.5 py-1 rounded-md border border-slate-200/60 shadow-sm">
-                        <span class="text-emerald-500">✓</span> One-Tap Number Copy
+                        <span class="text-emerald-600">✓</span> One-Tap Number Copy
                     </span>
                     <span class="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm px-2.5 py-1 rounded-md border border-slate-200/60 shadow-sm">
-                        <span class="text-indigo-500">✓</span> Zero Commission Fees
+                        <span class="text-emerald-600">✓</span> Zero Commission Fees
                     </span>
                     <span class="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm px-2.5 py-1 rounded-md border border-slate-200/60 shadow-sm">
-                        <span class="text-violet-500">✓</span> On-Campus Handover
+                        <span class="text-emerald-600">✓</span> On-Campus Handover
                     </span>
                 </div>
             </div>
 
             <!-- Quick Action Box / Stats -->
-            <div class="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-lg shadow-indigo-100 border border-slate-200/70 w-full md:w-80 flex flex-col gap-3">
+            <div class="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-lg shadow-slate-200/60 border border-slate-200/70 w-full md:w-80 flex flex-col gap-3">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Market Overview</span>
-                    <span id="items-count-badge" class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full font-bold">Loading...</span>
+                    <span id="items-count-badge" class="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-bold">Loading...</span>
                 </div>
                 <div class="grid grid-cols-2 gap-3 pt-1">
                     <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
-                        <span class="text-2xl font-black text-indigo-600" id="stat-active-listings">--</span>
+                        <span class="text-2xl font-black text-emerald-700" id="stat-active-listings">--</span>
                         <p class="text-[11px] text-slate-500 font-medium">Active Listings</p>
                     </div>
                     <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
@@ -179,7 +175,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </div>
-                    <input type="text" id="search-input" oninput="filterItems()" placeholder="Search textbooks, laptops, mini-fridges, clothing..." class="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition">
+                    <input type="text" id="search-input" oninput="filterItems()" placeholder="Search textbooks, laptops, mini-fridges, clothing..." class="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition">
                     <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600">
                         &times;
                     </button>
@@ -189,10 +185,10 @@
                 <div class="w-full md:w-auto flex flex-wrap sm:flex-nowrap items-center gap-2.5">
                     <!-- Sort Order Dropdown -->
                     <div class="relative flex-1 sm:flex-initial">
-                        <select id="sort-filter" onchange="filterItems()" class="w-full sm:w-auto px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer transition">
-                            <option value="newest">🕒 Sort: Newest First</option>
-                            <option value="price-asc">💰 Price: Low to High</option>
-                            <option value="price-desc">💎 Price: High to Low</option>
+                        <select id="sort-filter" onchange="filterItems()" class="w-full sm:w-auto px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-600 cursor-pointer transition">
+                            <option value="newest">Newest first</option>
+                            <option value="price-asc">Price: low to high</option>
+                            <option value="price-desc">Price: high to low</option>
                         </select>
                     </div>
                 </div>
@@ -201,23 +197,23 @@
             <!-- Category Pills Bar -->
             <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs font-semibold">
                 <span class="text-slate-400 pl-1 uppercase tracking-wider text-[10px] hidden sm:inline">Category:</span>
-                <button onclick="setCategory('ALL')" class="category-pill active px-3.5 py-2 rounded-xl border border-indigo-600 bg-indigo-600 text-white transition shadow-sm whitespace-nowrap" data-category="ALL">
-                    All Categories
+                <button onclick="setCategory('ALL')" class="category-pill active px-3.5 py-2 rounded-xl border border-emerald-700 bg-emerald-700 text-white transition shadow-sm whitespace-nowrap" data-category="ALL">
+                    All
                 </button>
                 <button onclick="setCategory('Textbooks')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Textbooks">
-                    📚 Textbooks
+                    Textbooks
                 </button>
                 <button onclick="setCategory('Electronics')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Electronics">
-                    💻 Electronics
+                    Electronics
                 </button>
                 <button onclick="setCategory('Clothing')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Clothing">
-                    👕 Clothing
+                    Clothing
                 </button>
                 <button onclick="setCategory('Dorm Essentials')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Dorm Essentials">
-                    🛋️ Dorm Essentials
+                    Dorm Essentials
                 </button>
                 <button onclick="setCategory('Other')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Other">
-                    📦 Other
+                    Other
                 </button>
             </div>
         </section>
@@ -260,8 +256,8 @@
 
             <!-- Empty State View -->
             <div id="empty-state" class="hidden text-center py-16 px-4 bg-white rounded-2xl border border-dashed border-slate-300 my-4 max-w-lg mx-auto">
-                <div class="w-16 h-16 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
-                    🔍
+                <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
                 <h3 class="text-lg font-bold text-slate-800">No campus listings found</h3>
                 <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto">
@@ -271,8 +267,8 @@
                     <button onclick="resetAllFilters()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition">
                         Reset Filters
                     </button>
-                    <button onclick="checkAuthAndOpenPostModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl transition">
-                        + Sell Item Now
+                    <button onclick="checkAuthAndOpenPostModal()" class="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold rounded-xl transition">
+                        Sell an item
                     </button>
                 </div>
             </div>
@@ -283,7 +279,7 @@
     <nav id="mobile-bottom-nav" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-slate-200/80 px-1.5 flex items-center justify-between text-[10px] font-bold text-slate-500 shadow-[0_-4px_25px_rgba(0,0,0,0.06)] select-none">
         
         <!-- 1. Feed -->
-        <button onclick="scrollToFeed()" class="flex-1 flex flex-col items-center justify-center py-1.5 text-indigo-600 focus:outline-none transition-colors">
+        <button onclick="scrollToFeed()" class="flex-1 flex flex-col items-center justify-center py-1.5 text-emerald-700 focus:outline-none transition-colors">
             <span class="w-6 h-6 flex items-center justify-center mb-0.5">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
@@ -293,7 +289,7 @@
         </button>
 
         <!-- 2. Search -->
-        <button onclick="focusSearchInput()" class="flex-1 flex flex-col items-center justify-center py-1.5 hover:text-indigo-600 focus:outline-none transition-colors">
+        <button onclick="focusSearchInput()" class="flex-1 flex flex-col items-center justify-center py-1.5 hover:text-emerald-700 focus:outline-none transition-colors">
             <span class="w-6 h-6 flex items-center justify-center mb-0.5">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -304,16 +300,16 @@
 
         <!-- 3. Sell Center Action Button -->
         <div class="flex-1 flex flex-col items-center justify-center relative">
-            <button onclick="checkAuthAndOpenPostModal()" class="-mt-5 w-12 h-12 rounded-full bg-gradient-to-tr from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 active:scale-95 text-white flex items-center justify-center shadow-lg shadow-indigo-500/35 border-[3.5px] border-white transition-all focus:outline-none" aria-label="Sell Item" title="Sell an Item">
+            <button onclick="checkAuthAndOpenPostModal()" class="-mt-5 w-12 h-12 rounded-full bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 border-[3.5px] border-white transition-all focus:outline-none" aria-label="Sell Item" title="Sell an Item">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
                 </svg>
             </button>
-            <span class="text-[9px] font-bold text-indigo-600 tracking-tight mt-0.5">Sell</span>
+            <span class="text-[9px] font-bold text-emerald-700 tracking-tight mt-0.5">Sell</span>
         </div>
 
         <!-- 4. My Items -->
-        <button onclick="openMyListingsModal()" class="flex-1 flex flex-col items-center justify-center py-1.5 hover:text-indigo-600 focus:outline-none transition-colors">
+        <button onclick="openMyListingsModal()" class="flex-1 flex flex-col items-center justify-center py-1.5 hover:text-emerald-700 focus:outline-none transition-colors">
             <span class="w-6 h-6 flex items-center justify-center mb-0.5">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
@@ -323,7 +319,7 @@
         </button>
 
         <!-- 5. Account / Logout -->
-        <button onclick="handleMobileAuthAction()" class="flex-1 flex flex-col items-center justify-center py-1.5 hover:text-indigo-600 focus:outline-none transition-colors">
+        <button onclick="handleMobileAuthAction()" class="flex-1 flex flex-col items-center justify-center py-1.5 hover:text-emerald-700 focus:outline-none transition-colors">
             <span class="w-6 h-6 flex items-center justify-center mb-0.5" id="mobile-account-icon">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -355,42 +351,37 @@
                 </svg>
             </button>
             
-            <div class="flex items-center gap-3 mb-5">
-                <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg font-bold">
-                    🏷️
-                </div>
-                <div>
-                    <h2 id="post-modal-title" class="text-xl font-bold text-slate-900 brand-font">List an Item for Sale</h2>
-                    <p id="post-modal-subtitle" class="text-xs text-slate-500">Connect directly with students on campus via WhatsApp, Phone, or Email.</p>
-                </div>
+            <div class="mb-5">
+                <h2 id="post-modal-title" class="text-xl font-bold text-slate-900 brand-font">List an item for sale</h2>
+                <p id="post-modal-subtitle" class="text-xs text-slate-500 mt-1">Buyers will contact you directly via WhatsApp or phone.</p>
             </div>
             
             <form id="post-item-form" onsubmit="handlePostItem(event)" class="space-y-4">
                 
                 <!-- Title -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-title">Item Title *</label>
-                    <input type="text" id="item-title" required placeholder="e.g. Calculus: Early Transcendentals (8th Ed)" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" for="item-title">Item title</label>
+                    <input type="text" id="item-title" required placeholder="e.g. Engineering Math 3 by Stroud, good condition" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition">
                 </div>
 
                 <!-- Price & Category Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-price">Price (KSh / $) *</label>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1" for="item-price">Asking price (KES)</label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-xs font-bold text-slate-400">KSh</span>
-                            <input type="number" id="item-price" required min="0" step="any" placeholder="1500" class="w-full pl-11 pr-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                            <input type="number" id="item-price" required min="0" step="any" placeholder="1500" class="w-full pl-11 pr-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-category">Category *</label>
-                        <select id="item-category" required class="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
-                            <option value="Textbooks">📚 Textbooks</option>
-                            <option value="Electronics">💻 Electronics</option>
-                            <option value="Clothing">👕 Clothing</option>
-                            <option value="Dorm Essentials">🛋️ Dorm Essentials</option>
-                            <option value="Other">📦 Other</option>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1" for="item-category">Category</label>
+                        <select id="item-category" required class="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition">
+                            <option value="Textbooks">Textbooks</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Dorm Essentials">Dorm Essentials</option>
+                            <option value="Other">Other</option>
                         </select>
                     </div>
                 </div>
@@ -398,8 +389,8 @@
                 <!-- Condition & Campus Location -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-condition">Item Condition</label>
-                        <select id="item-condition" class="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1" for="item-condition">Condition</label>
+                        <select id="item-condition" class="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition">
                             <option value="Like New">Like New (Mint)</option>
                             <option value="Gently Used" selected>Gently Used</option>
                             <option value="Fair">Fair / Functional</option>
@@ -408,27 +399,26 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-location">Pickup Campus Location</label>
-                        <input type="text" id="item-location" placeholder="e.g. Science Library, Hall 4" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1" for="item-location">Pickup location</label>
+                        <input type="text" id="item-location" placeholder="e.g. Science Library, Hall 4" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition">
                     </div>
                 </div>
 
                 <!-- Description -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-description">Description & Details *</label>
-                    <textarea id="item-description" required rows="3" placeholder="Condition details, edition year, working status, best handover spots..." class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition"></textarea>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" for="item-description">Description</label>
+                    <textarea id="item-description" required rows="3" placeholder="Brief description — edition, condition notes, any accessories included..." class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition"></textarea>
                 </div>
 
                 <!-- Image Upload with Instant Preview -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Item Photo (Optional)</label>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Add a photo</label>
                     
                     <div id="dropzone" class="upload-dropzone rounded-xl p-4 text-center cursor-pointer relative bg-slate-50">
                         <input type="file" id="item-image" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewImage(this)">
                         
                         <div id="upload-prompt" class="space-y-1">
-                            <span class="text-2xl">📸</span>
-                            <p class="text-xs font-semibold text-slate-700">Click to upload photo or drag & drop</p>
+                            <p class="text-xs font-semibold text-slate-600">Click to upload a photo or drag & drop</p>
                             <p class="text-[11px] text-slate-400">PNG, JPG, WebP up to 5MB</p>
                         </div>
 
@@ -441,16 +431,16 @@
                 </div>
 
                 <!-- Preferred Contact Method & Target Value -->
-                <div class="bg-indigo-50/60 p-3.5 rounded-xl border border-indigo-100 space-y-3">
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-3">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-indigo-900 uppercase tracking-wider">How Buyers Reach You</span>
-                        <span class="text-[11px] text-indigo-600 font-semibold">One-Tap Copy</span>
+                        <span class="text-xs font-semibold text-slate-700">How buyers reach you</span>
+                        <span class="text-[11px] text-slate-400 font-medium">One-tap copy</span>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="block text-[11px] font-semibold text-slate-600 mb-1" for="item-contact-method">Contact Method</label>
-                            <select id="item-contact-method" required onchange="updateContactPlaceholder()" class="w-full px-3 py-2 text-xs bg-white border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <select id="item-contact-method" required onchange="updateContactPlaceholder()" class="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600 outline-none">
                                 <option value="WhatsApp" selected>WhatsApp Number</option>
                                 <option value="Phone">Phone Number</option>
                             </select>
@@ -458,17 +448,17 @@
 
                         <div>
                             <label class="block text-[11px] font-semibold text-slate-600 mb-1" for="item-contact-value">Phone / WhatsApp Number *</label>
-                            <input type="text" id="item-contact-value" required placeholder="+254712345678" class="w-full px-3 py-2 text-xs bg-white border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <input type="text" id="item-contact-value" required placeholder="+254712345678" class="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600 outline-none">
                         </div>
                     </div>
-                    <p id="contact-helper-text" class="text-[10px] text-indigo-600/80">
+                    <p id="contact-helper-text" class="text-[10px] text-slate-400">
                         Include country code or local format (e.g. +254 712 345 678 or 0712345678). Buyers will be able to copy your number with a single click.
                     </p>
                 </div>
 
                 <!-- Submit Button -->
                 <div class="pt-2">
-                    <button type="submit" id="submit-item-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3 rounded-xl transition shadow-md shadow-indigo-200 flex items-center justify-center gap-2">
+                    <button type="submit" id="submit-item-btn" class="w-full bg-emerald-700 hover:bg-emerald-800 active:scale-[0.99] text-white font-bold py-3 rounded-xl transition shadow-md shadow-emerald-200/50 flex items-center justify-center gap-2">
                         <span id="submit-item-btn-text">Publish Listing</span>
                     </button>
                 </div>
@@ -493,9 +483,6 @@
             </button>
             
             <div class="text-center mb-6">
-                <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl font-bold shadow-sm">
-                    🎓
-                </div>
                 <h2 id="auth-title" class="text-xl font-bold text-slate-900 brand-font">Student Sign In</h2>
                 <p id="auth-subtitle" class="text-xs text-slate-500 mt-1">Sign in with your student credentials to post items</p>
             </div>
@@ -505,27 +492,27 @@
                 <!-- Sign-Up Specific Fields -->
                 <div id="signup-fields" class="space-y-3 hidden">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="auth-name">Full Name *</label>
-                        <input type="text" id="auth-name" placeholder="Alex Kamau" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1" for="auth-name">Full name</label>
+                        <input type="text" id="auth-name" placeholder="Alex Kamau" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="auth-phone">Phone / WhatsApp</label>
-                        <input type="text" id="auth-phone" placeholder="+254712345678" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1" for="auth-phone">Phone number</label>
+                        <input type="text" id="auth-phone" placeholder="+254712345678" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition">
                     </div>
                 </div>
 
                 <!-- Email & Password -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="auth-email">Student Email *</label>
-                    <input type="email" id="auth-email" required placeholder="student@university.ac.ke" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" for="auth-email">Email</label>
+                    <input type="email" id="auth-email" required placeholder="student@university.ac.ke" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="auth-password">Password *</label>
-                    <input type="password" id="auth-password" required minlength="6" placeholder="••••••••" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" for="auth-password">Password</label>
+                    <input type="password" id="auth-password" required minlength="6" placeholder="••••••••" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition">
                 </div>
 
-                <button type="submit" id="auth-submit-btn" class="w-full mt-2 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3 rounded-xl transition shadow-md shadow-indigo-200 flex items-center justify-center gap-2">
+                <button type="submit" id="auth-submit-btn" class="w-full mt-2 bg-emerald-700 hover:bg-emerald-800 active:scale-[0.99] text-white font-bold py-3 rounded-xl transition shadow-md shadow-emerald-200/50 flex items-center justify-center gap-2">
                     <span>Sign In</span>
                 </button>
             </form>
@@ -533,7 +520,7 @@
             <div class="mt-5 pt-4 border-t border-slate-100 text-center">
                 <p class="text-xs text-slate-500">
                     <span id="auth-toggle-text">Need a student account?</span>
-                    <button type="button" id="toggle-auth-btn" onclick="toggleAuthMode()" class="text-indigo-600 font-bold underline hover:text-indigo-800 ml-1 transition">
+                    <button type="button" id="toggle-auth-btn" onclick="toggleAuthMode()" class="text-emerald-700 font-bold underline hover:text-emerald-800 ml-1 transition">
                         Create Account
                     </button>
                 </p>
@@ -567,9 +554,7 @@
             </button>
             
             <div class="flex items-center gap-3 mb-4">
-                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold">
-                    ⚡
-                </div>
+                
                 <div>
                     <h2 class="text-lg font-bold text-slate-900 brand-font">Supabase Connection</h2>
                     <p class="text-xs text-slate-500">Configure your cloud PostgreSQL & Auth backend</p>
@@ -582,17 +567,17 @@
                 </p>
 
                 <div>
-                    <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1" for="cfg-url">Supabase Project URL</label>
-                    <input type="text" id="cfg-url" placeholder="https://xyzcompany.supabase.co" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono text-xs outline-none">
+                    <label class="block font-semibold text-slate-600 mb-1" for="cfg-url">Supabase project URL</label>
+                    <input type="text" id="cfg-url" placeholder="https://xyzcompany.supabase.co" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-600 font-mono text-xs outline-none">
                 </div>
 
                 <div>
-                    <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1" for="cfg-key">Supabase Anon Public API Key</label>
-                    <textarea id="cfg-key" rows="2" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono text-xs outline-none"></textarea>
+                    <label class="block font-semibold text-slate-600 mb-1" for="cfg-key">Supabase anon key</label>
+                    <textarea id="cfg-key" rows="2" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-600 font-mono text-xs outline-none"></textarea>
                 </div>
 
                 <div class="flex gap-2 pt-2">
-                    <button onclick="handleSaveConfig()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl transition">
+                    <button onclick="handleSaveConfig()" class="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-xl transition">
                         Connect Supabase
                     </button>
                     <button onclick="handleClearConfig()" class="px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition">
@@ -601,7 +586,7 @@
                 </div>
 
                 <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80 text-[11px] text-slate-500">
-                    💡 <strong>Tip:</strong> Run the DDL script in <a href="sql/schema.sql" target="_blank" class="text-indigo-600 underline font-semibold">sql/schema.sql</a> in your Supabase SQL editor to create all tables, storage bucket, and RLS policies in one click.
+                    <strong>Tip:</strong> Run the DDL script in <a href="sql/schema.sql" target="_blank" class="text-emerald-700 underline font-semibold">sql/schema.sql</a> in your Supabase SQL editor to create all tables, storage bucket, and RLS policies in one click.
                 </div>
             </div>
         </div>
@@ -616,13 +601,11 @@
             <!-- Modal Header with inline actions (Post Item + Close Button side-by-side, never overlapping) -->
             <div class="flex items-center justify-between gap-3 pb-4 mb-5 border-b border-slate-100">
                 <div class="flex items-center gap-3 min-w-0">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg font-bold shrink-0">
-                        🏷️
-                    </div>
+
                     <div class="min-w-0">
                         <div class="flex items-center gap-2 flex-wrap">
                             <h2 class="text-lg sm:text-xl font-bold text-slate-900 brand-font truncate">My Campus Listings</h2>
-                            <span id="my-listings-count-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 shrink-0">0 Items</span>
+                            <span id="my-listings-count-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-slate-200 shrink-0">0 Items</span>
                         </div>
                         <p class="text-xs text-slate-500 truncate hidden sm:block">Manage, edit, or delete items you have posted on campus.</p>
                     </div>
@@ -630,7 +613,7 @@
 
                 <!-- Right Header Actions: Post Button + Close Button in inline flex flow -->
                 <div class="flex items-center gap-2 shrink-0">
-                    <button onclick="checkAuthAndOpenPostModal()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm shadow-indigo-200 flex items-center gap-1.5 transition whitespace-nowrap">
+                    <button onclick="checkAuthAndOpenPostModal()" class="bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm shadow-emerald-200/50 flex items-center gap-1.5 transition whitespace-nowrap">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
                         </svg>
@@ -662,8 +645,8 @@
             <div class="sm:hidden w-12 h-1.5 bg-slate-300 rounded-full mx-auto mb-3"></div>
             
             <!-- Warning Icon -->
-            <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-3.5 border border-rose-100 shadow-sm text-2xl">
-                🗑️
+            <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-3.5 border border-rose-100 shadow-sm">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
             </div>
             
             <h3 class="text-lg font-bold text-slate-900 brand-font">Delete Listing?</h3>

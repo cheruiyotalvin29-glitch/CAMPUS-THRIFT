@@ -215,30 +215,24 @@ function renderItems(items) {
                         ${escapeHTML(item.category)}
                     </span>
 
-                    <!-- Condition Badge -->
-                    ${item.condition ? `
-                        <span class="absolute top-3 right-3 text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-900/75 text-white backdrop-blur-sm">
-                            ${escapeHTML(item.condition)}
-                        </span>
-                    ` : ''}
 
-                    <!-- Campus Location Ribbon -->
-                    ${item.campus_location ? `
-                        <div class="absolute bottom-2 left-3 right-3 flex items-center gap-1 text-[11px] text-white bg-slate-900/60 backdrop-blur-md px-2 py-0.5 rounded-md font-medium truncate">
-                            <span>📍</span> <span class="truncate">${escapeHTML(item.campus_location)}</span>
-                        </div>
-                    ` : ''}
                 </div>
 
                 <!-- Card Body -->
                 <div class="p-4 sm:p-5">
                     <div class="flex items-start justify-between gap-2 mb-1">
-                        <h3 class="font-bold text-base text-slate-900 line-clamp-1 group-hover:text-indigo-600 transition-colors cursor-pointer" onclick="openItemDetail('${item.id}')" title="${escapeHTML(item.title)}">
+                        <h3 class="font-bold text-base text-slate-900 line-clamp-1 group-hover:text-emerald-700 transition-colors cursor-pointer" onclick="openItemDetail('${item.id}')" title="${escapeHTML(item.title)}">
                             ${escapeHTML(item.title)}
                         </h3>
                     </div>
 
-                    <p class="text-xl font-extrabold text-indigo-600 mb-2 brand-font tracking-tight">
+                    <div class="flex items-center gap-1.5 text-[11px] text-slate-400 mt-1 mb-2">
+                        ${item.condition ? `<span>${escapeHTML(item.condition)}</span>` : ''}
+                        ${item.condition && item.campus_location ? `<span>·</span>` : ''}
+                        ${item.campus_location ? `<span>${escapeHTML(item.campus_location)}</span>` : ''}
+                    </div>
+
+                    <p class="text-lg font-bold text-slate-900 mb-2 brand-font">
                         KSh ${formattedPrice}
                     </p>
 
@@ -252,9 +246,8 @@ function renderItems(items) {
             <div class="p-4 sm:p-5 pt-0 space-y-2">
                 <div class="flex items-center gap-2">
                     <button onclick="copyToClipboard('${escapeHTML(item.contact_value)}', this)" 
-                            class="flex-1 text-center bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-bold py-2.5 px-3 rounded-xl text-xs transition shadow-sm shadow-indigo-200 flex items-center justify-center gap-1.5"
+                            class="flex-1 text-center bg-emerald-700 hover:bg-emerald-800 active:scale-[0.98] text-white font-bold py-2.5 px-3 rounded-xl text-xs transition shadow-sm shadow-emerald-200/50 flex items-center justify-center gap-1.5"
                             title="Copy seller's ${escapeHTML(item.contact_method)}: ${escapeHTML(item.contact_value)}">
-                        <span>📋</span>
                         <span>Copy ${escapeHTML(item.contact_method)}</span>
                     </button>
 
@@ -267,12 +260,10 @@ function renderItems(items) {
 
                 ${isOwner ? `
                     <div class="pt-2 border-t border-slate-100 flex items-center justify-end gap-2">
-                        <button onclick="openEditItemModal('${item.id}')" class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg transition flex items-center gap-1" title="Edit this listing">
-                            <span>✏️</span>
+                        <button onclick="openEditItemModal('${item.id}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition flex items-center gap-1" title="Edit this listing">
                             <span>Edit</span>
                         </button>
                         <button onclick="handleDeleteItem('${item.id}')" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold rounded-lg transition flex items-center gap-1" title="Delete this listing">
-                            <span>🗑️</span>
                             <span>Delete</span>
                         </button>
                     </div>
@@ -296,9 +287,9 @@ function getCategoryBadgeClass(category) {
 
 function getContactIcon(method) {
     switch (method) {
-        case 'WhatsApp': return '💬';
-        case 'Phone': return '📞';
-        default: return '📞';
+        case 'WhatsApp': return '';
+        case 'Phone': return '';
+        default: return '';
     }
 }
 
@@ -346,10 +337,10 @@ export function setCategory(category) {
     document.querySelectorAll('.category-pill').forEach(btn => {
         const cat = btn.getAttribute('data-category');
         if (cat === category) {
-            btn.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
+            btn.classList.add('bg-emerald-700', 'text-white', 'border-emerald-700');
             btn.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
         } else {
-            btn.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600');
+            btn.classList.remove('bg-emerald-700', 'text-white', 'border-emerald-700');
             btn.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
         }
     });
@@ -378,16 +369,16 @@ export function renderMyListings() {
         if (countBadge) countBadge.textContent = '0 Items';
         body.innerHTML = `
             <div class="py-12 px-4 text-center">
-                <div class="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-3xl mx-auto mb-4 shadow-sm">
-                    🔒
+                <div class="w-16 h-16 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-4 shadow-sm">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                 </div>
                 <h3 class="text-base font-bold text-slate-900 brand-font">Student Sign-In Required</h3>
                 <p class="text-xs text-slate-500 mt-1.5 max-w-sm mx-auto leading-relaxed">
                     Please sign in with your student account to manage your listings, edit prices, or mark items as sold.
                 </p>
                 <div class="mt-5">
-                    <button onclick="toggleModal('my-listings-modal', false); toggleModal('auth-modal', true)" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md shadow-indigo-200 transition">
-                        Sign In Now
+                    <button onclick="toggleModal('my-listings-modal', false); toggleModal('auth-modal', true)" class="bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md shadow-emerald-200/50 transition">
+                        Sign in
                     </button>
                 </div>
             </div>
@@ -403,17 +394,17 @@ export function renderMyListings() {
     if (myListings.length === 0) {
         body.innerHTML = `
             <div class="py-12 px-4 text-center border-2 border-dashed border-slate-200 rounded-2xl">
-                <div class="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-3xl mx-auto mb-4">
-                    📦
+                <div class="w-16 h-16 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                 </div>
                 <h3 class="text-base font-bold text-slate-900 brand-font">No Active Listings Yet</h3>
                 <p class="text-xs text-slate-500 mt-1.5 max-w-sm mx-auto leading-relaxed">
                     You haven't posted any items on the campus market yet. Turn your textbooks, electronics, and dorm items into cash!
                 </p>
                 <div class="mt-5">
-                    <button onclick="checkAuthAndOpenPostModal()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md shadow-indigo-200 transition inline-flex items-center gap-1.5">
+                    <button onclick="checkAuthAndOpenPostModal()" class="bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md shadow-emerald-200/50 transition inline-flex items-center gap-1.5">
                         <span>+</span>
-                        <span>Post Your First Item</span>
+                        <span>Post your first item</span>
                     </button>
                 </div>
             </div>
@@ -433,7 +424,7 @@ export function renderMyListings() {
                 });
 
                 return `
-                    <div class="bg-white rounded-xl border border-slate-200/90 p-3.5 flex flex-col justify-between hover:border-indigo-300 transition shadow-sm group">
+                    <div class="bg-white rounded-xl border border-slate-200/90 p-3.5 flex flex-col justify-between hover:border-slate-300 transition shadow-sm group">
                         <div>
                             <div class="flex gap-3">
                                 <!-- Thumbnail (Stays blank if seller provided no photo) -->
@@ -460,14 +451,14 @@ export function renderMyListings() {
                                             </span>
                                         ` : ''}
                                     </div>
-                                    <h4 class="font-bold text-sm text-slate-900 truncate hover:text-indigo-600 cursor-pointer" onclick="openItemDetail('${item.id}')" title="${escapeHTML(item.title)}">
+                                    <h4 class="font-bold text-sm text-slate-900 truncate hover:text-emerald-700 cursor-pointer" onclick="openItemDetail('${item.id}')" title="${escapeHTML(item.title)}">
                                         ${escapeHTML(item.title)}
                                     </h4>
-                                    <p class="text-sm font-extrabold text-indigo-600 brand-font mt-0.5">
+                                    <p class="text-sm font-bold text-slate-900 brand-font mt-0.5">
                                         KSh ${formattedPrice}
                                     </p>
                                     <p class="text-[11px] text-slate-400 truncate mt-0.5">
-                                        📍 ${escapeHTML(item.campus_location || 'Main Campus')} • ${dateFormatted}
+                                        ${escapeHTML(item.campus_location || 'Main Campus')} · ${dateFormatted}
                                     </p>
                                 </div>
                             </div>
@@ -480,12 +471,10 @@ export function renderMyListings() {
                             </button>
 
                             <div class="flex items-center gap-1.5">
-                                <button onclick="openEditItemModal('${item.id}')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-lg border border-indigo-200 transition shadow-sm active:scale-95" title="Edit listing details">
-                                    <span>✏️</span>
+                                <button onclick="openEditItemModal('${item.id}')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg border border-slate-200 transition shadow-sm active:scale-95" title="Edit listing details">
                                     <span>Edit</span>
                                 </button>
                                 <button onclick="handleDeleteItem('${item.id}')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-lg border border-rose-200 transition active:scale-95" title="Delete listing permanently">
-                                    <span>🗑️</span>
                                     <span>Delete</span>
                                 </button>
                             </div>
@@ -651,7 +640,7 @@ export async function handlePostItem(event) {
             }
 
             logSupabase('DATABASE', 'Item successfully updated in Supabase items table', updatedData);
-            showToast('✅ Listing updated successfully!', 'success');
+            showToast('Listing updated successfully!', 'success');
             editingItemId = null;
         } else {
             // Step 2B: Insert new row into Supabase PostgreSQL 'items' table
@@ -682,7 +671,7 @@ export async function handlePostItem(event) {
             }
 
             logSupabase('DATABASE', 'Item successfully persisted in Supabase items table', insertedData);
-            showToast('🎉 Listing published live to Supabase!', 'success');
+            showToast('Listing published!', 'success');
         }
 
         document.getElementById('post-item-form').reset();
@@ -848,60 +837,52 @@ export function openItemDetail(itemId) {
             <div>
                 <div class="flex flex-wrap items-baseline justify-between gap-2">
                     <h2 class="text-2xl font-bold text-slate-900 brand-font">${escapeHTML(item.title)}</h2>
-                    <span class="text-2xl font-extrabold text-indigo-600 brand-font">KSh ${formattedPrice}</span>
+                    <span class="text-2xl font-extrabold text-slate-900 brand-font">KSh ${formattedPrice}</span>
                 </div>
                 
                 <div class="flex flex-wrap items-center gap-3 text-xs text-slate-500 mt-2">
-                    <span class="flex items-center gap-1">
-                        <span>📍</span> ${escapeHTML(item.campus_location || 'Main Campus')}
-                    </span>
-                    <span>•</span>
-                    <span class="flex items-center gap-1">
-                        <span>🕒</span> Posted ${dateFormatted}
-                    </span>
+                    <span>${escapeHTML(item.campus_location || 'Main Campus')}</span>
+                    <span>·</span>
+                    <span>Posted ${dateFormatted}</span>
                 </div>
             </div>
 
             <!-- Item Description -->
             <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80">
-                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Description & Condition</h4>
+                <h4 class="text-xs font-semibold text-slate-500 mb-1.5">Description</h4>
                 <p class="text-sm text-slate-700 leading-relaxed whitespace-pre-line">${escapeHTML(item.description)}</p>
             </div>
 
             <!-- Seller & Contact Channel Box -->
-            <div class="p-4 rounded-xl bg-indigo-50/70 border border-indigo-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                    <span class="text-[11px] font-bold text-indigo-900 uppercase tracking-wider block">Seller Contact Number</span>
+                    <span class="text-[11px] font-semibold text-slate-600 block">Seller contact</span>
                     <p class="text-sm font-bold text-slate-800 mt-1 flex items-center gap-2">
-                        <span>${item.contact_method === 'WhatsApp' ? '💬 WhatsApp:' : '📞 Phone:'}</span>
-                        <span class="font-mono text-indigo-700 bg-white px-2 py-0.5 rounded border border-indigo-200/60">${escapeHTML(item.contact_value)}</span>
+                        <span>${item.contact_method === 'WhatsApp' ? 'WhatsApp:' : 'Phone:'}</span>
+                        <span class="font-mono text-slate-800 bg-white px-2 py-0.5 rounded border border-slate-200">${escapeHTML(item.contact_value)}</span>
                     </p>
                 </div>
 
                 <button onclick="copyToClipboard('${escapeHTML(item.contact_value)}', this)" 
-                        class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold py-2.5 px-5 rounded-xl text-sm transition shadow-md shadow-indigo-200 flex items-center justify-center gap-2">
-                    <span>📋</span>
-                    <span>Copy ${escapeHTML(item.contact_method)} Number</span>
+                        class="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white font-bold py-2.5 px-5 rounded-xl text-sm transition shadow-md shadow-emerald-200/50 flex items-center justify-center gap-2">
+                    <span>Copy ${escapeHTML(item.contact_method)} number</span>
                 </button>
             </div>
 
             ${isOwner ? `
-                <div class="p-4 rounded-xl bg-amber-50/80 border border-amber-200/90 space-y-3">
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
-                            <span>👑</span> You Own This Listing
+                        <span class="text-xs font-semibold text-slate-600">Your listing
                         </span>
                     </div>
                     <div class="flex items-center gap-2">
                         <button onclick="openEditItemModal('${item.id}')" 
-                                class="flex-1 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition shadow-sm shadow-indigo-200 flex items-center justify-center gap-1.5">
-                            <span>✏️</span>
-                            <span>Edit Listing</span>
+                                class="flex-1 bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition shadow-sm shadow-emerald-200/50 flex items-center justify-center gap-1.5">
+                            <span>Edit listing</span>
                         </button>
                         <button onclick="handleDeleteItem('${item.id}')" 
                                 class="bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-700 font-bold py-2.5 px-4 rounded-xl text-xs transition border border-rose-200 flex items-center justify-center gap-1.5">
-                            <span>🗑️</span>
-                            <span>Delete Listing</span>
+                            <span>Delete listing</span>
                         </button>
                     </div>
                 </div>
@@ -1182,7 +1163,7 @@ function showUnconfiguredNotice() {
                 All mock/stub data has been removed. Please enter your Supabase Project URL and Public Anon Key to load live marketplace items.
             </p>
             <div class="mt-5 flex justify-center gap-3">
-                <button onclick="openConfigModal()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-md shadow-indigo-200">
+                <button onclick="openConfigModal()" class="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition shadow-md shadow-emerald-200/50">
                     Connect Supabase Now
                 </button>
             </div>
@@ -1252,17 +1233,17 @@ export async function copyToClipboard(text, btnElement) {
     if (!text) return;
     try {
         await navigator.clipboard.writeText(text);
-        showToast(`📋 Copied "${text}" to clipboard!`, 'success');
+        showToast(`Copied "${text}" to clipboard!`, 'success');
         
         if (btnElement) {
             const originalHTML = btnElement.innerHTML;
             btnElement.classList.add('bg-emerald-600');
-            btnElement.classList.remove('bg-indigo-600');
+            btnElement.classList.remove('bg-emerald-700');
             btnElement.innerHTML = `<span>✓</span><span>Copied!</span>`;
             setTimeout(() => {
                 btnElement.innerHTML = originalHTML;
                 btnElement.classList.remove('bg-emerald-600');
-                btnElement.classList.add('bg-indigo-600');
+                btnElement.classList.add('bg-emerald-700');
             }, 2000);
         }
     } catch (err) {
@@ -1275,7 +1256,7 @@ export async function copyToClipboard(text, btnElement) {
         textArea.select();
         try {
             document.execCommand('copy');
-            showToast(`📋 Copied "${text}" to clipboard!`, 'success');
+            showToast(`Copied "${text}" to clipboard!`, 'success');
         } catch (e) {
             showToast(`Contact: ${text}`, 'info');
         }
@@ -1315,12 +1296,7 @@ export function showToast(message, type = 'info') {
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
 
-    let icon = 'ℹ️';
-    if (type === 'success') icon = '✅';
-    if (type === 'error') icon = '⚠️';
-
     toast.innerHTML = `
-        <span class="text-base flex-shrink-0">${icon}</span>
         <span class="flex-grow text-xs font-medium text-slate-800">${escapeHTML(message)}</span>
     `;
 
@@ -1353,13 +1329,13 @@ export function togglePhoneFrame() {
     const text = document.getElementById('phone-mode-text');
 
     if (isFrameActive) {
-        if (icon) icon.textContent = '💻';
+        if (icon) icon.textContent = 'Desktop';
         if (text) text.textContent = 'Desktop View';
-        showToast('📱 Switched to Phone Frame Simulator view', 'info');
+        showToast('Switched to Phone Frame Simulator view', 'info');
     } else {
-        if (icon) icon.textContent = '📱';
+        if (icon) icon.textContent = 'Mobile';
         if (text) text.textContent = 'Phone Frame View';
-        showToast('💻 Expanded to Responsive Desktop view', 'info');
+        showToast('Expanded to Responsive Desktop view', 'info');
     }
 }
 
