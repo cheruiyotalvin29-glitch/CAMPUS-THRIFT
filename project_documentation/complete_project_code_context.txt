@@ -1,0 +1,3928 @@
+================================================================================
+CAMPUS ONLINE THRIFT MARKET - COMPLETE SOURCE CODE CONTEXT BUNDLE
+Repository: https://github.com/cheruiyotalvin29-glitch/CAMPUS-THRIFT
+Generated for: Academic Technical Report & AI Analysis Context
+================================================================================
+
+TABLE OF CONTENTS:
+01. index.html - Frontend Single-Page Application HTML Structure & Modals
+02. styles.css - Custom UI Stylesheets, Glassmorphism, Animations & Responsive Sheets
+03. js/config.js - Supabase Environment Configuration & API Credentials
+04. js/supabaseClient.js - Supabase Client Factory, LocalStorage Overrides & Health Audit
+05. js/auth.js - User Authentication, Session Persistence & Auth State Listener
+06. js/app.js - Core Application Logic, Item CRUD, Filters, Search & Modal Management
+07. sql/schema.sql - PostgreSQL Database Schema, Tables, Constraints & Row Level Security (RLS)
+08. sql/update_v2.sql - Database Migration v2 & Realtime Subscription Settings
+09. server.py - Local Development Multithreaded HTTP Server
+10. scripts/setup_db.py - Database Initialization and Health Check Script
+11. scripts/seed_real_items.py - Initial Campus Product Catalog Seeding Script
+12. scripts/add_trigger.py - Auth Profile Sync Trigger Deployment Script
+13. scripts/create_check_email_rpc.py - Stored Procedure RPC Deployment for User Verification
+14. scripts/set_faith_password.py - Demo User Credential Maintenance Script
+15. vercel.json - Vercel Production Deployment & Header Configuration
+16. .gitignore - Git Version Control Exclusion Rules
+17. README.md - Project Documentation, Architecture Guide & Deployment Instructions
+
+================================================================================
+
+=== FILE: index.html ===
+Description: Frontend Single-Page Application HTML Structure & Modals
+================================================================================
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="theme-color" content="#4f46e5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Campus Online Thrift Market | Student P2P Marketplace</title>
+    <meta name="description" content="A decentralized peer-to-peer campus marketplace for students to buy and sell textbooks, electronics, dorm essentials, and clothes with instant WhatsApp contact.">
+
+    <!-- Crisp Inline SVG Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+
+    <!-- Open Graph Social Media Previews -->
+    <meta property="og:title" content="Campus Online Thrift Market">
+    <meta property="og:description" content="Buy, sell, and hand down textbooks, dorm essentials, and electronics on campus with zero fees.">
+    <meta property="og:type" content="website">
+
+    <!-- Google Fonts (Non-blocking asynchronous load) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    </noscript>
+
+    <!-- Precompiled Fast Tailwind CSS -->
+    <link rel="stylesheet" href="tailwind.css">
+
+    <!-- Custom System Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Pre-bundled Zero-Latency Supabase Client -->
+    <script src="js/vendor/supabase.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-indigo-100 selection:text-indigo-800">
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" aria-live="polite"></div>
+
+    <!-- MAIN APP SHELL (Full Width Responsive on Mobile & Desktop, Phone Frame in Simulator Mode) -->
+    <div id="app-shell" class="min-h-screen flex flex-col w-full relative">
+
+        <!-- PHONE FRAME DYNAMIC ISLAND & STATUS BAR (Visible when Phone Frame View is Active) -->
+        <div id="phone-dynamic-island" class="flex items-center justify-between text-[11px] font-bold text-slate-800 select-none">
+            <span class="font-semibold text-slate-900">9:41</span>
+            <div class="w-24 h-4 bg-black rounded-full mx-auto relative flex items-center justify-end pr-2">
+                <div class="w-1.5 h-1.5 rounded-full bg-indigo-900 border border-slate-700"></div>
+            </div>
+            <div class="flex items-center gap-1.5 text-[10px] text-slate-700">
+                <span>5G</span>
+                <span>🔋</span>
+            </div>
+        </div>
+
+    <!-- TOP NAVIGATION BAR (STICKY GLASSMORPHISM) -->
+    <header class="glass-nav sticky top-0 z-40 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3.5 flex justify-between items-center gap-2 sm:gap-4">
+            
+            <!-- Logo & Brand Name -->
+            <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                <a href="#" class="flex items-center gap-2 sm:gap-2.5 group min-w-0">
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-indigo-200 group-hover:scale-105 transition-transform shrink-0">
+                        <span class="text-lg sm:text-xl">🎓</span>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-1.5 sm:gap-2">
+                            <span class="brand-font font-extrabold text-lg sm:text-2xl tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors truncate">CampusThrift</span>
+                            <span class="hidden md:inline-flex text-[10px] font-bold uppercase tracking-wider bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full shrink-0">P2P Mart</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 hidden sm:block -mt-0.5">Student Peer-to-Peer Marketplace</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Navigation Controls & Auth Buttons -->
+            <div id="auth-buttons" class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+                
+                <!-- My Listings Button (Visible only on desktop when logged in; on mobile it is in bottom nav) -->
+                <button id="nav-my-listings-btn" onclick="openMyListingsModal()" class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition shadow-sm" title="View & manage your listings">
+                    <span>🏷️</span>
+                    <span>My Listings</span>
+                </button>
+
+                <!-- User Profile Badge (Visible when logged in) -->
+                <button id="user-badge" onclick="openMyListingsModal()" class="hidden flex items-center gap-1.5 bg-slate-100/90 hover:bg-slate-200 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-xl border border-slate-200/90 transition text-xs font-semibold text-slate-700 shadow-sm" title="Signed in - Click to manage your listings">
+                    <span class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-[10px] sm:text-[11px] shrink-0">👤</span>
+                    <span id="user-name-display" class="max-w-[65px] sm:max-w-[120px] truncate font-semibold text-[11px] sm:text-xs">Student</span>
+                </button>
+
+                <!-- Sell Item CTA (Primary Action) -->
+                <button id="open-post-btn" onclick="checkAuthAndOpenPostModal()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-indigo-200 flex items-center gap-1 sm:gap-1.5 transition-all shrink-0">
+                    <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    <span class="hidden sm:inline">Sell Item</span>
+                    <span class="inline sm:hidden">Sell</span>
+                </button>
+
+                <!-- Sign In Button (Visible when logged out) -->
+                <button id="open-login-btn" onclick="toggleModal('auth-modal', true)" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold transition active:scale-95 shadow-sm shrink-0">
+                    Sign In
+                </button>
+
+                <!-- Logout Button (Visible when logged in on desktop) -->
+                <button id="logout-btn" onclick="handleLogout()" class="hidden md:inline-flex bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-200 hover:border-rose-200 px-3 py-2 rounded-xl text-xs font-semibold transition shrink-0" title="Log out">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO / CAMPUS BANNER -->
+    <section class="hero-gradient border-b border-indigo-50/50 py-5 sm:py-12 px-3.5 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5 sm:gap-6">
+            <div class="max-w-2xl text-center md:text-left">
+                <div class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-indigo-100/80 text-indigo-800 text-[11px] sm:text-xs font-semibold mb-2 sm:mb-3">
+                    <span>✨ Save up to 70% on student essentials</span>
+                </div>
+                <h2 class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                    Campus Thrift, <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Reinvented.</span>
+                </h2>
+                <p class="mt-2 sm:mt-3 text-xs sm:text-base text-slate-600 max-w-xl">
+                    Buy, sell, and hand down verified textbooks, dorm gear, electronics, and fashion directly to students on campus. Zero fees, one-tap phone and WhatsApp copying.
+                </p>
+
+                <!-- Quick Feature Highlights -->
+                <div class="mt-5 flex flex-wrap justify-center md:justify-start items-center gap-4 text-xs font-medium text-slate-600">
+                    <span class="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm px-2.5 py-1 rounded-md border border-slate-200/60 shadow-sm">
+                        <span class="text-emerald-500">✓</span> One-Tap Number Copy
+                    </span>
+                    <span class="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm px-2.5 py-1 rounded-md border border-slate-200/60 shadow-sm">
+                        <span class="text-indigo-500">✓</span> Zero Commission Fees
+                    </span>
+                    <span class="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm px-2.5 py-1 rounded-md border border-slate-200/60 shadow-sm">
+                        <span class="text-violet-500">✓</span> On-Campus Handover
+                    </span>
+                </div>
+            </div>
+
+            <!-- Quick Action Box / Stats -->
+            <div class="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-lg shadow-indigo-100 border border-slate-200/70 w-full md:w-80 flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Market Overview</span>
+                    <span id="items-count-badge" class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full font-bold">Loading...</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3 pt-1">
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                        <span class="text-2xl font-black text-indigo-600" id="stat-active-listings">--</span>
+                        <p class="text-[11px] text-slate-500 font-medium">Active Listings</p>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                        <span class="text-2xl font-black text-emerald-600">0%</span>
+                        <p class="text-[11px] text-slate-500 font-medium">Buyer Fees</p>
+                    </div>
+                </div>
+                <button onclick="checkAuthAndOpenPostModal()" class="w-full mt-1 bg-slate-900 hover:bg-slate-800 text-white font-semibold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition shadow-sm">
+                    <span>Have something to sell? Post now</span>
+                    <span>→</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN MARKETPLACE CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        
+        <!-- SEARCH, CATEGORIES & FILTER CONTROLS -->
+        <section class="mb-8 space-y-4">
+            
+            <!-- Search & Sort Bar -->
+            <div class="bg-white p-3.5 sm:p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-3 items-center justify-between">
+                
+                <!-- Keyword Search Input -->
+                <div class="relative w-full md:flex-1">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <input type="text" id="search-input" oninput="filterItems()" placeholder="Search textbooks, laptops, mini-fridges, clothing..." class="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition">
+                    <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600">
+                        &times;
+                    </button>
+                </div>
+
+                <!-- Secondary Controls: Sort Order -->
+                <div class="w-full md:w-auto flex flex-wrap sm:flex-nowrap items-center gap-2.5">
+                    <!-- Sort Order Dropdown -->
+                    <div class="relative flex-1 sm:flex-initial">
+                        <select id="sort-filter" onchange="filterItems()" class="w-full sm:w-auto px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer transition">
+                            <option value="newest">🕒 Sort: Newest First</option>
+                            <option value="price-asc">💰 Price: Low to High</option>
+                            <option value="price-desc">💎 Price: High to Low</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Pills Bar -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs font-semibold">
+                <span class="text-slate-400 pl-1 uppercase tracking-wider text-[10px] hidden sm:inline">Category:</span>
+                <button onclick="setCategory('ALL')" class="category-pill active px-3.5 py-2 rounded-xl border border-indigo-600 bg-indigo-600 text-white transition shadow-sm whitespace-nowrap" data-category="ALL">
+                    All Categories
+                </button>
+                <button onclick="setCategory('Textbooks')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Textbooks">
+                    📚 Textbooks
+                </button>
+                <button onclick="setCategory('Electronics')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Electronics">
+                    💻 Electronics
+                </button>
+                <button onclick="setCategory('Clothing')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Clothing">
+                    👕 Clothing
+                </button>
+                <button onclick="setCategory('Dorm Essentials')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Dorm Essentials">
+                    🛋️ Dorm Essentials
+                </button>
+                <button onclick="setCategory('Other')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Other">
+                    📦 Other
+                </button>
+            </div>
+        </section>
+
+        <!-- MARKETPLACE ITEM GRID -->
+        <section aria-label="Marketplace Items">
+            
+            <!-- Items Grid -->
+            <div id="items-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Dynamically populated via js/app.js -->
+            </div>
+
+            <!-- Loading Shimmer State -->
+            <div id="loading-spinner" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-4">
+                    <div class="h-44 rounded-xl skeleton-shimmer"></div>
+                    <div class="h-4 w-1/3 rounded skeleton-shimmer"></div>
+                    <div class="h-5 w-3/4 rounded skeleton-shimmer"></div>
+                    <div class="h-4 w-1/2 rounded skeleton-shimmer"></div>
+                </div>
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-4">
+                    <div class="h-44 rounded-xl skeleton-shimmer"></div>
+                    <div class="h-4 w-1/3 rounded skeleton-shimmer"></div>
+                    <div class="h-5 w-3/4 rounded skeleton-shimmer"></div>
+                    <div class="h-4 w-1/2 rounded skeleton-shimmer"></div>
+                </div>
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-4 hidden md:block">
+                    <div class="h-44 rounded-xl skeleton-shimmer"></div>
+                    <div class="h-4 w-1/3 rounded skeleton-shimmer"></div>
+                    <div class="h-5 w-3/4 rounded skeleton-shimmer"></div>
+                    <div class="h-4 w-1/2 rounded skeleton-shimmer"></div>
+                </div>
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-4 hidden lg:block">
+                    <div class="h-44 rounded-xl skeleton-shimmer"></div>
+                    <div class="h-4 w-1/3 rounded skeleton-shimmer"></div>
+                    <div class="h-5 w-3/4 rounded skeleton-shimmer"></div>
+                    <div class="h-4 w-1/2 rounded skeleton-shimmer"></div>
+                </div>
+            </div>
+
+            <!-- Empty State View -->
+            <div id="empty-state" class="hidden text-center py-16 px-4 bg-white rounded-2xl border border-dashed border-slate-300 my-4 max-w-lg mx-auto">
+                <div class="w-16 h-16 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                    🔍
+                </div>
+                <h3 class="text-lg font-bold text-slate-800">No campus listings found</h3>
+                <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto">
+                    We couldn't find anything matching your search and category filter. Try clearing your filters or be the first to sell this item!
+                </p>
+                <div class="mt-5 flex justify-center gap-3">
+                    <button onclick="resetAllFilters()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition">
+                        Reset Filters
+                    </button>
+                    <button onclick="checkAuthAndOpenPostModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl transition">
+                        + Sell Item Now
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MOBILE APP BOTTOM NAVIGATION BAR (FIXED FOR PHONES) -->
+    <nav id="mobile-bottom-nav" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-slate-200/80 px-1.5 flex items-center justify-between text-[10px] font-bold text-slate-500 shadow-[0_-4px_25px_rgba(0,0,0,0.06)] select-none">
+        
+        <!-- 1. Feed -->
+        <button onclick="scrollToFeed()" class="flex-1 flex flex-col items-center justify-center py-1.5 text-indigo-600 focus:outline-none transition-colors">
+            <span class="w-6 h-6 flex items-center justify-center mb-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+            </span>
+            <span class="tracking-tight">Feed</span>
+        </button>
+
+        <!-- 2. Search -->
+        <button onclick="focusSearchInput()" class="flex-1 flex flex-col items-center justify-center py-1.5 hover:text-indigo-600 focus:outline-none transition-colors">
+            <span class="w-6 h-6 flex items-center justify-center mb-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </span>
+            <span class="tracking-tight">Search</span>
+        </button>
+
+        <!-- 3. Sell Center Action Button -->
+        <div class="flex-1 flex flex-col items-center justify-center relative">
+            <button onclick="checkAuthAndOpenPostModal()" class="-mt-5 w-12 h-12 rounded-full bg-gradient-to-tr from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 active:scale-95 text-white flex items-center justify-center shadow-lg shadow-indigo-500/35 border-[3.5px] border-white transition-all focus:outline-none" aria-label="Sell Item" title="Sell an Item">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
+                </svg>
+            </button>
+            <span class="text-[9px] font-bold text-indigo-600 tracking-tight mt-0.5">Sell</span>
+        </div>
+
+        <!-- 4. My Items -->
+        <button onclick="openMyListingsModal()" class="flex-1 flex flex-col items-center justify-center py-1.5 hover:text-indigo-600 focus:outline-none transition-colors">
+            <span class="w-6 h-6 flex items-center justify-center mb-0.5">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                </svg>
+            </span>
+            <span class="tracking-tight whitespace-nowrap">My Items</span>
+        </button>
+
+        <!-- 5. Account / Logout -->
+        <button onclick="handleMobileAuthAction()" class="flex-1 flex flex-col items-center justify-center py-1.5 hover:text-indigo-600 focus:outline-none transition-colors">
+            <span class="w-6 h-6 flex items-center justify-center mb-0.5" id="mobile-account-icon">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+            </span>
+            <span id="mobile-account-text" class="tracking-tight">Account</span>
+        </button>
+    </nav>
+
+    </div> <!-- /#app-shell -->
+
+    <!-- ======================================================================
+         MODALS & DIALOG OVERLAYS
+         ====================================================================== -->
+
+    <!-- 1. POST ITEM FORM MODAL -->
+    <div id="post-modal" class="modal-backdrop fixed inset-0 hidden z-50 flex items-center justify-center p-4">
+        <div class="modal-content-panel bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 sm:p-7 relative max-h-[92vh] overflow-y-auto border border-slate-100">
+            <!-- Mobile Sheet Grab Handle -->
+            <div class="sm:hidden w-12 h-1.5 bg-slate-300 rounded-full mx-auto mb-3"></div>
+            
+            <!-- Close Button (High contrast, elevated) -->
+            <button onclick="toggleModal('post-modal', false)" 
+                    class="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 z-40 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 flex items-center justify-center transition-all hover:scale-105 active:scale-95" 
+                    title="Close (Esc)" 
+                    aria-label="Close modal">
+                <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            
+            <div class="flex items-center gap-3 mb-5">
+                <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg font-bold">
+                    🏷️
+                </div>
+                <div>
+                    <h2 id="post-modal-title" class="text-xl font-bold text-slate-900 brand-font">List an Item for Sale</h2>
+                    <p id="post-modal-subtitle" class="text-xs text-slate-500">Connect directly with students on campus via WhatsApp, Phone, or Email.</p>
+                </div>
+            </div>
+            
+            <form id="post-item-form" onsubmit="handlePostItem(event)" class="space-y-4">
+                
+                <!-- Title -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-title">Item Title *</label>
+                    <input type="text" id="item-title" required placeholder="e.g. Calculus: Early Transcendentals (8th Ed)" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                </div>
+
+                <!-- Price & Category Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-price">Price (KSh / $) *</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-xs font-bold text-slate-400">KSh</span>
+                            <input type="number" id="item-price" required min="0" step="any" placeholder="1500" class="w-full pl-11 pr-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-category">Category *</label>
+                        <select id="item-category" required class="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                            <option value="Textbooks">📚 Textbooks</option>
+                            <option value="Electronics">💻 Electronics</option>
+                            <option value="Clothing">👕 Clothing</option>
+                            <option value="Dorm Essentials">🛋️ Dorm Essentials</option>
+                            <option value="Other">📦 Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Condition & Campus Location -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-condition">Item Condition</label>
+                        <select id="item-condition" class="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                            <option value="Like New">Like New (Mint)</option>
+                            <option value="Gently Used" selected>Gently Used</option>
+                            <option value="Fair">Fair / Functional</option>
+                            <option value="Brand New">Brand New</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-location">Pickup Campus Location</label>
+                        <input type="text" id="item-location" placeholder="e.g. Science Library, Hall 4" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-description">Description & Details *</label>
+                    <textarea id="item-description" required rows="3" placeholder="Condition details, edition year, working status, best handover spots..." class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition"></textarea>
+                </div>
+
+                <!-- Image Upload with Instant Preview -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Item Photo (Optional)</label>
+                    
+                    <div id="dropzone" class="upload-dropzone rounded-xl p-4 text-center cursor-pointer relative bg-slate-50">
+                        <input type="file" id="item-image" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewImage(this)">
+                        
+                        <div id="upload-prompt" class="space-y-1">
+                            <span class="text-2xl">📸</span>
+                            <p class="text-xs font-semibold text-slate-700">Click to upload photo or drag & drop</p>
+                            <p class="text-[11px] text-slate-400">PNG, JPG, WebP up to 5MB</p>
+                        </div>
+
+                        <!-- Image Preview Thumbnail -->
+                        <div id="image-preview-container" class="hidden relative mt-2">
+                            <img id="image-preview" src="#" alt="Preview" class="h-36 w-full object-cover rounded-lg shadow-sm border border-slate-200">
+                            <button type="button" onclick="removeImagePreview(event)" class="absolute top-2 right-2 bg-rose-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shadow-md hover:bg-rose-700 transition">&times;</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preferred Contact Method & Target Value -->
+                <div class="bg-indigo-50/60 p-3.5 rounded-xl border border-indigo-100 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-indigo-900 uppercase tracking-wider">How Buyers Reach You</span>
+                        <span class="text-[11px] text-indigo-600 font-semibold">One-Tap Copy</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1" for="item-contact-method">Contact Method</label>
+                            <select id="item-contact-method" required onchange="updateContactPlaceholder()" class="w-full px-3 py-2 text-xs bg-white border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                                <option value="WhatsApp" selected>WhatsApp Number</option>
+                                <option value="Phone">Phone Number</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-1" for="item-contact-value">Phone / WhatsApp Number *</label>
+                            <input type="text" id="item-contact-value" required placeholder="+254712345678" class="w-full px-3 py-2 text-xs bg-white border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                        </div>
+                    </div>
+                    <p id="contact-helper-text" class="text-[10px] text-indigo-600/80">
+                        Include country code or local format (e.g. +254 712 345 678 or 0712345678). Buyers will be able to copy your number with a single click.
+                    </p>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-2">
+                    <button type="submit" id="submit-item-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3 rounded-xl transition shadow-md shadow-indigo-200 flex items-center justify-center gap-2">
+                        <span id="submit-item-btn-text">Publish Listing</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. STUDENT AUTHENTICATION MODAL -->
+    <div id="auth-modal" class="modal-backdrop fixed inset-0 hidden z-50 flex items-center justify-center p-4">
+        <div class="modal-content-panel bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 sm:p-7 relative border border-slate-100">
+            <!-- Mobile Sheet Grab Handle -->
+            <div class="sm:hidden w-12 h-1.5 bg-slate-300 rounded-full mx-auto mb-3"></div>
+            
+            <!-- Close Button (High contrast, elevated) -->
+            <button onclick="toggleModal('auth-modal', false)" 
+                    class="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 z-40 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 flex items-center justify-center transition-all hover:scale-105 active:scale-95" 
+                    title="Close (Esc)" 
+                    aria-label="Close modal">
+                <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl font-bold shadow-sm">
+                    🎓
+                </div>
+                <h2 id="auth-title" class="text-xl font-bold text-slate-900 brand-font">Student Sign In</h2>
+                <p id="auth-subtitle" class="text-xs text-slate-500 mt-1">Sign in with your student credentials to post items</p>
+            </div>
+            
+            <form id="auth-form" onsubmit="handleAuth(event)" class="space-y-3.5">
+                
+                <!-- Sign-Up Specific Fields -->
+                <div id="signup-fields" class="space-y-3 hidden">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="auth-name">Full Name *</label>
+                        <input type="text" id="auth-name" placeholder="Alex Kamau" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="auth-phone">Phone / WhatsApp</label>
+                        <input type="text" id="auth-phone" placeholder="+254712345678" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                    </div>
+                </div>
+
+                <!-- Email & Password -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="auth-email">Student Email *</label>
+                    <input type="email" id="auth-email" required placeholder="student@university.ac.ke" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="auth-password">Password *</label>
+                    <input type="password" id="auth-password" required minlength="6" placeholder="••••••••" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                </div>
+
+                <button type="submit" id="auth-submit-btn" class="w-full mt-2 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3 rounded-xl transition shadow-md shadow-indigo-200 flex items-center justify-center gap-2">
+                    <span>Sign In</span>
+                </button>
+            </form>
+            
+            <div class="mt-5 pt-4 border-t border-slate-100 text-center">
+                <p class="text-xs text-slate-500">
+                    <span id="auth-toggle-text">Need a student account?</span>
+                    <button type="button" id="toggle-auth-btn" onclick="toggleAuthMode()" class="text-indigo-600 font-bold underline hover:text-indigo-800 ml-1 transition">
+                        Create Account
+                    </button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. ITEM DETAILS MODAL (FULL VIEW) -->
+    <div id="detail-modal" class="modal-backdrop fixed inset-0 hidden z-50 flex items-center justify-center p-4">
+        <div class="modal-content-panel bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-5 sm:p-7 relative max-h-[92vh] overflow-y-auto border border-slate-100">
+            <!-- Mobile Sheet Grab Handle -->
+            <div class="sm:hidden w-12 h-1.5 bg-slate-300 rounded-full mx-auto mb-3"></div>
+            
+            <div id="detail-modal-body">
+                <!-- Dynamically populated via openItemDetail() -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. SUPABASE BACKEND CONFIG MODAL -->
+    <div id="config-modal" class="modal-backdrop fixed inset-0 hidden z-50 flex items-center justify-center p-4">
+        <div class="modal-content-panel bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative border border-slate-100">
+            <!-- Close Button (High contrast, elevated) -->
+            <button onclick="toggleModal('config-modal', false)" 
+                    class="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 z-40 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 flex items-center justify-center transition-all hover:scale-105 active:scale-95" 
+                    title="Close (Esc)" 
+                    aria-label="Close modal">
+                <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold">
+                    ⚡
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900 brand-font">Supabase Connection</h2>
+                    <p class="text-xs text-slate-500">Configure your cloud PostgreSQL & Auth backend</p>
+                </div>
+            </div>
+
+            <div class="space-y-4 text-xs text-slate-600">
+                <p>
+                    All mock/stub data has been removed. All user accounts, listings, and photos are saved directly to your live Supabase cloud database and storage bucket.
+                </p>
+
+                <div>
+                    <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1" for="cfg-url">Supabase Project URL</label>
+                    <input type="text" id="cfg-url" placeholder="https://xyzcompany.supabase.co" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono text-xs outline-none">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1" for="cfg-key">Supabase Anon Public API Key</label>
+                    <textarea id="cfg-key" rows="2" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono text-xs outline-none"></textarea>
+                </div>
+
+                <div class="flex gap-2 pt-2">
+                    <button onclick="handleSaveConfig()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl transition">
+                        Connect Supabase
+                    </button>
+                    <button onclick="handleClearConfig()" class="px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition">
+                        Reset
+                    </button>
+                </div>
+
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80 text-[11px] text-slate-500">
+                    💡 <strong>Tip:</strong> Run the DDL script in <a href="sql/schema.sql" target="_blank" class="text-indigo-600 underline font-semibold">sql/schema.sql</a> in your Supabase SQL editor to create all tables, storage bucket, and RLS policies in one click.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. DEDICATED MY LISTINGS OVERLAY / MODAL -->
+    <div id="my-listings-modal" class="modal-backdrop fixed inset-0 hidden z-50 flex items-center justify-center p-4">
+        <div class="modal-content-panel bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-5 sm:p-7 relative max-h-[92vh] overflow-y-auto border border-slate-100 flex flex-col">
+            <!-- Mobile Sheet Grab Handle -->
+            <div class="sm:hidden w-12 h-1.5 bg-slate-300 rounded-full mx-auto mb-3"></div>
+            
+            <!-- Modal Header with inline actions (Post Item + Close Button side-by-side, never overlapping) -->
+            <div class="flex items-center justify-between gap-3 pb-4 mb-5 border-b border-slate-100">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg font-bold shrink-0">
+                        🏷️
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h2 class="text-lg sm:text-xl font-bold text-slate-900 brand-font truncate">My Campus Listings</h2>
+                            <span id="my-listings-count-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 shrink-0">0 Items</span>
+                        </div>
+                        <p class="text-xs text-slate-500 truncate hidden sm:block">Manage, edit, or delete items you have posted on campus.</p>
+                    </div>
+                </div>
+
+                <!-- Right Header Actions: Post Button + Close Button in inline flex flow -->
+                <div class="flex items-center gap-2 shrink-0">
+                    <button onclick="checkAuthAndOpenPostModal()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm shadow-indigo-200 flex items-center gap-1.5 transition whitespace-nowrap">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        <span>Post Item</span>
+                    </button>
+
+                    <button onclick="toggleModal('my-listings-modal', false)" 
+                            class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-200 flex items-center justify-center transition-all hover:scale-105 active:scale-95" 
+                            title="Close (Esc)" 
+                            aria-label="Close modal">
+                        <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Content / Listings Grid / Empty State -->
+            <div id="my-listings-body" class="space-y-3">
+                <!-- Dynamically populated via renderMyListings() -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. CUSTOM CONFIRM DELETE MODAL (REPLACES BROWSER CONFIRM) -->
+    <div id="delete-confirm-modal" class="modal-backdrop fixed inset-0 hidden z-50 flex items-center justify-center p-4">
+        <div class="modal-content-panel bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 relative border border-slate-100 text-center">
+            <!-- Mobile Sheet Grab Handle -->
+            <div class="sm:hidden w-12 h-1.5 bg-slate-300 rounded-full mx-auto mb-3"></div>
+            
+            <!-- Warning Icon -->
+            <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-3.5 border border-rose-100 shadow-sm text-2xl">
+                🗑️
+            </div>
+            
+            <h3 class="text-lg font-bold text-slate-900 brand-font">Delete Listing?</h3>
+            
+            <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                Are you sure you want to permanently delete <span id="delete-modal-item-title" class="font-bold text-slate-800">this listing</span>? This action removes the listing from Supabase and cannot be undone.
+            </p>
+
+            <div class="mt-6 flex items-center gap-3">
+                <button type="button" 
+                        onclick="closeDeleteConfirmModal()" 
+                        class="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold transition active:scale-95">
+                    Cancel
+                </button>
+                <button type="button" 
+                        id="confirm-delete-action-btn"
+                        class="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 active:scale-95 text-white text-xs font-bold transition shadow-md shadow-rose-200 flex items-center justify-center gap-1.5">
+                    <span>Delete</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+            <!-- Modal Content / Listings Grid / Empty State -->
+            <div id="my-listings-body" class="space-y-3">
+                <!-- Dynamically populated via renderMyListings() -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Application Logic Module (Native ES6+ CDN Architecture) -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
+
+
+================================================================================
+
+=== FILE: styles.css ===
+Description: Custom UI Stylesheets, Glassmorphism, Animations & Responsive Sheets
+================================================================================
+/* ==========================================================================
+   CAMPUS ONLINE THRIFT MARKET - CUSTOM STYLES & DESIGN TOKENS
+   Modern, dynamic aesthetics extending Tailwind CSS
+   ========================================================================== */
+
+:root {
+    --font-heading: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --surface: #ffffff;
+    --background: #f8fafc;
+    --border-color: #e2e8f0;
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+    --ring-focus: rgba(79, 70, 229, 0.35);
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--background);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, .brand-font {
+    font-family: var(--font-heading);
+}
+
+/* --------------------------------------------------------------------------
+   Glassmorphism & Header Styling
+   -------------------------------------------------------------------------- */
+.glass-nav {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.hero-gradient {
+    background: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.08) 0%, rgba(238, 242, 255, 0.5) 90%);
+}
+
+/* --------------------------------------------------------------------------
+   Item Card Micro-Interactions
+   -------------------------------------------------------------------------- */
+.item-card {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.25s ease;
+    will-change: transform, box-shadow;
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 30px -10px rgba(79, 70, 229, 0.12), 0 8px 16px -6px rgba(0, 0, 0, 0.04);
+    border-color: rgba(99, 102, 241, 0.25);
+}
+
+.card-img-zoom {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.item-card:hover .card-img-zoom {
+    transform: scale(1.05);
+}
+
+/* Category Badge Color Coding */
+.badge-textbooks {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #dbeafe;
+}
+
+.badge-electronics {
+    background-color: #faf5ff;
+    color: #7e22ce;
+    border: 1px solid #f3e8ff;
+}
+
+.badge-clothing {
+    background-color: #fdf2f8;
+    color: #be185d;
+    border: 1px solid #fce7f3;
+}
+
+.badge-dorm {
+    background-color: #fffbeb;
+    color: #b45309;
+    border: 1px solid #fef3c7;
+}
+
+.badge-other {
+    background-color: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #dcfce7;
+}
+
+/* --------------------------------------------------------------------------
+   Modal Backdrop & Slide-in Transitions
+   -------------------------------------------------------------------------- */
+.modal-backdrop {
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.modal-backdrop.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-content-panel {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    animation: modalAppear 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Floating Close Button for Photo-Header Modals (e.g. Item Details) */
+.modal-close-floating-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 50;
+    width: 42px;
+    height: 42px;
+    border-radius: 9999px;
+    background: rgba(15, 23, 42, 0.85);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.45);
+    box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.4), 0 6px 12px -2px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease, box-shadow 0.15s ease;
+    cursor: pointer;
+}
+
+.modal-close-floating-btn:hover {
+    background: rgba(15, 23, 42, 1);
+    transform: scale(1.08);
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 14px 28px -4px rgba(0, 0, 0, 0.5);
+}
+
+.modal-close-floating-btn:active {
+    transform: scale(0.94);
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.96) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Toast Notifications System
+   -------------------------------------------------------------------------- */
+#toast-container {
+    position: fixed;
+    top: 1.25rem;
+    right: 1.25rem;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    pointer-events: none;
+    max-width: 90vw;
+    width: 380px;
+}
+
+.toast {
+    pointer-events: auto;
+    padding: 0.875rem 1.125rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.35;
+    animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.toast-success {
+    background-color: #ffffff;
+    border-left: 4px solid #10b981;
+    color: #065f46;
+}
+
+.toast-error {
+    background-color: #ffffff;
+    border-left: 4px solid #ef4444;
+    color: #991b1b;
+}
+
+.toast-info {
+    background-color: #ffffff;
+    border-left: 4px solid #4f46e5;
+    color: #3730a3;
+}
+
+@keyframes toastSlideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Loading Shimmer / Skeleton
+   -------------------------------------------------------------------------- */
+.skeleton-shimmer {
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: shimmerAnimation 1.5s infinite;
+}
+
+@keyframes shimmerAnimation {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Image Upload Dropzone
+   -------------------------------------------------------------------------- */
+.upload-dropzone {
+    border: 2px dashed #cbd5e1;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.upload-dropzone:hover, .upload-dropzone.dragover {
+    border-color: #4f46e5;
+    background-color: #f5f3ff;
+}
+
+/* --------------------------------------------------------------------------
+   Custom Scrollbar
+   -------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* --------------------------------------------------------------------------
+   Mobile Phone Optimizations & Native Bottom Sheets
+   -------------------------------------------------------------------------- */
+/* Keep upper bar spacious on phones & tablets so CampusThrift logo is never squeezed */
+@media (max-width: 767px) {
+    #nav-my-listings-btn {
+        display: none !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .glass-nav {
+        padding-left: max(0.5rem, env(safe-area-inset-left));
+        padding-right: max(0.5rem, env(safe-area-inset-right));
+    }
+    
+    #auth-buttons {
+        gap: 0.375rem;
+        flex-shrink: 0;
+    }
+
+    #logout-btn {
+        display: none !important;
+    }
+
+    /* Keep upper bar spacious on mobile so CampusThrift logo is never squeezed */
+    #nav-my-listings-btn {
+        display: none !important;
+    }
+
+    #user-badge {
+        padding: 0.25rem 0.5rem !important;
+        font-size: 0.75rem !important;
+    }
+
+    #user-name-display {
+        max-width: 65px;
+    }
+
+    .modal-backdrop {
+        align-items: flex-end !important;
+        padding: 0 !important;
+    }
+    
+    .modal-content-panel {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        border-top-left-radius: 1.5rem !important;
+        border-top-right-radius: 1.5rem !important;
+        max-height: 88vh !important;
+        padding-bottom: max(1.75rem, env(safe-area-inset-bottom)) !important;
+        animation: sheetSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    body:not(.phone-frame-active) {
+        padding-bottom: calc(5rem + env(safe-area-inset-bottom, 12px));
+    }
+
+    #mobile-bottom-nav {
+        height: 64px;
+        padding-bottom: max(0.45rem, env(safe-area-inset-bottom, 10px));
+        box-sizing: border-box;
+    }
+
+    #mobile-bottom-nav button {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+@keyframes sheetSlideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* --------------------------------------------------------------------------
+   Desktop Phone Frame Simulator Mode (iPhone 15 Pro Aesthetic)
+   -------------------------------------------------------------------------- */
+body.phone-frame-active {
+    background: #090d16 !important;
+    background-image: radial-gradient(circle at 50% 20%, rgba(99, 102, 241, 0.18) 0%, transparent 65%) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-height: 100vh !important;
+    padding: 2.5rem 1rem !important;
+    overflow-y: auto !important;
+}
+
+body.phone-frame-active #app-shell {
+    width: 393px;
+    height: 840px;
+    background: #f8fafc;
+    border-radius: 54px;
+    box-shadow: 0 0 0 12px #1e2433, 0 0 0 14px #334155, 0 25px 60px -15px rgba(0, 0, 0, 0.85);
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    border: 4px solid #000000;
+    scroll-behavior: smooth;
+}
+
+body.phone-frame-active #phone-dynamic-island {
+    display: flex !important;
+}
+
+#phone-dynamic-island {
+    display: none;
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    z-index: 55;
+    padding: 0 1.5rem;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+body.phone-frame-active #mobile-bottom-nav {
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    border-bottom-left-radius: 48px !important;
+    border-bottom-right-radius: 48px !important;
+}
+
+.max-w-\[80\%\] {
+    max-width: 80%;
+}
+
+
+================================================================================
+
+=== FILE: js/config.js ===
+Description: Supabase Environment Configuration & API Credentials
+================================================================================
+// ============================================================================
+// SUPABASE PROJECT CONFIGURATION
+// Live Supabase Backend Credentials
+// ============================================================================
+
+export const SUPABASE_CONFIG = {
+    url: 'https://opcoqdoobwnoskdttifx.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9wY29xZG9vYndub3NrZHR0aWZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyNjM2MDQsImV4cCI6MjEwODgzOTYwNH0.gL97VkbipCPNP49tE7LpIDdsuKJv7FXtX3V_WrZEsS4'
+};
+
+
+================================================================================
+
+=== FILE: js/supabaseClient.js ===
+Description: Supabase Client Factory, LocalStorage Overrides & Health Audit
+================================================================================
+// ============================================================================
+// SUPABASE CLIENT INITIALIZATION & LIVE AUDIT LOGGING MODULE
+// Campus Online Thrift Market System
+// ============================================================================
+
+import { SUPABASE_CONFIG } from './config.js';
+
+// Support both local pre-bundled client and ESM CDN fallback
+let createClientFn = window.supabase?.createClient;
+if (!createClientFn) {
+    try {
+        const mod = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
+        createClientFn = mod.createClient;
+    } catch (e) {
+        console.error('Failed to load Supabase from CDN:', e);
+    }
+}
+
+// Default live project credentials
+export const DEFAULT_SUPABASE_URL = 'https://opcoqdoobwnoskdttifx.supabase.co';
+export const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9wY29xZG9vYndub3NrZHR0aWZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyNjM2MDQsImV4cCI6MjEwODgzOTYwNH0.gL97VkbipCPNP49tE7LpIDdsuKJv7FXtX3V_WrZEsS4';
+
+/**
+ * Retrieves the active Supabase URL.
+ * Checks localStorage first, then config.js, then default.
+ * Safe against cross-origin iframe security restrictions.
+ * @returns {string}
+ */
+export function getSupabaseUrl() {
+    try {
+        const local = localStorage.getItem('CAMPUS_THRIFT_SUPABASE_URL');
+        if (local && local.trim().length > 0) return local.trim();
+    } catch (e) {
+        // Storage access restricted in some iframes
+    }
+    if (SUPABASE_CONFIG.url && SUPABASE_CONFIG.url.trim().length > 0) return SUPABASE_CONFIG.url.trim();
+    return DEFAULT_SUPABASE_URL;
+}
+
+/**
+ * Retrieves the active Supabase Anon Key.
+ * Checks localStorage first, then config.js, then default.
+ * Safe against cross-origin iframe security restrictions.
+ * @returns {string}
+ */
+export function getSupabaseAnonKey() {
+    try {
+        const local = localStorage.getItem('CAMPUS_THRIFT_SUPABASE_ANON_KEY');
+        if (local && local.trim().length > 0) return local.trim();
+    } catch (e) {
+        // Storage access restricted in some iframes
+    }
+    if (SUPABASE_CONFIG.anonKey && SUPABASE_CONFIG.anonKey.trim().length > 0) return SUPABASE_CONFIG.anonKey.trim();
+    return DEFAULT_SUPABASE_ANON_KEY;
+}
+
+/**
+ * Validates that current credentials represent a real Supabase endpoint.
+ * @returns {boolean}
+ */
+export function isSupabaseConfigured() {
+    const url = getSupabaseUrl();
+    const key = getSupabaseAnonKey();
+    return (
+        Boolean(url) &&
+        Boolean(key) &&
+        !url.includes('YOUR_SUPABASE_PROJECT_ID') &&
+        !key.includes('YOUR_SUPABASE_ANON_KEY') &&
+        url.startsWith('https://') &&
+        url.includes('.supabase.co') &&
+        key.length > 20
+    );
+}
+
+/**
+ * Saves customized Supabase credentials to localStorage.
+ * @param {string} url 
+ * @param {string} key 
+ */
+export function saveSupabaseConfig(url, key) {
+    try {
+        if (url) localStorage.setItem('CAMPUS_THRIFT_SUPABASE_URL', url.trim());
+        if (key) localStorage.setItem('CAMPUS_THRIFT_SUPABASE_ANON_KEY', key.trim());
+        logSupabase('CONFIG', 'Credentials updated in localStorage', { url: getSupabaseUrl() });
+    } catch (e) {
+        logSupabase('ERROR', 'Unable to write to localStorage (iframe sandbox restricted)', e);
+    }
+}
+
+/**
+ * Clears custom credentials from localStorage.
+ */
+export function clearSupabaseConfig() {
+    try {
+        localStorage.removeItem('CAMPUS_THRIFT_SUPABASE_URL');
+        localStorage.removeItem('CAMPUS_THRIFT_SUPABASE_ANON_KEY');
+        logSupabase('CONFIG', 'Credentials cleared from localStorage', {});
+    } catch (e) {
+        logSupabase('ERROR', 'Unable to clear localStorage', e);
+    }
+}
+
+/**
+ * Structured console audit logger for all live Supabase interactions.
+ * @param {'AUTH'|'DATABASE'|'STORAGE'|'CONFIG'|'ERROR'} category 
+ * @param {string} action 
+ * @param {any} details 
+ */
+export function logSupabase(category, action, details = {}) {
+    const timestamp = new Date().toISOString().split('T')[1].replace('Z', '');
+    const colorMap = {
+        AUTH: '#6366f1',
+        DATABASE: '#10b981',
+        STORAGE: '#f59e0b',
+        CONFIG: '#06b6d4',
+        ERROR: '#ef4444'
+    };
+    const color = colorMap[category] || '#64748b';
+    console.log(
+        `%c[SUPABASE ${category}] %c${timestamp} - ${action}`,
+        `background: ${color}; color: #ffffff; padding: 2px 6px; border-radius: 4px; font-weight: bold;`,
+        'color: inherit; font-weight: 600;',
+        details
+    );
+}
+
+// Active connection parameters
+const activeUrl = isSupabaseConfigured() ? getSupabaseUrl() : 'https://placeholder-project.supabase.co';
+const activeKey = isSupabaseConfigured() ? getSupabaseAnonKey() : 'placeholder-anon-key';
+
+// Initialize the Supabase client
+export const supabase = createClientFn ? createClientFn(activeUrl, activeKey, {
+    auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+    }
+}) : null;
+
+// Audit initial connection status
+if (isSupabaseConfigured()) {
+    logSupabase('CONFIG', 'Connected to real Supabase instance', { endpoint: getSupabaseUrl() });
+} else {
+    logSupabase('CONFIG', 'Supabase credentials missing or using placeholders', {
+        activeUrl,
+        isConfigured: false,
+        hint: 'Please provide your Supabase Project URL and Anon Key.'
+    });
+}
+
+
+================================================================================
+
+=== FILE: js/auth.js ===
+Description: User Authentication, Session Persistence & Auth State Listener
+================================================================================
+// ============================================================================
+// STUDENT AUTHENTICATION & SESSION MANAGEMENT MODULE
+// Strictly connected to Supabase Auth & PostgreSQL Profiles (No Stubs)
+// ============================================================================
+
+import { supabase, isSupabaseConfigured, logSupabase } from './supabaseClient.js';
+
+// Module internal state
+let currentUser = null;
+let currentProfile = null;
+let authChangeCallbacks = [];
+
+/**
+ * Initializes the Supabase authentication listener and retrieves any active session.
+ */
+export async function initAuth() {
+    logSupabase('AUTH', 'Initializing authentication session...');
+
+    if (!isSupabaseConfigured()) {
+        logSupabase('AUTH', 'Cannot initialize auth: Supabase is not configured yet');
+        currentUser = null;
+        currentProfile = null;
+        updateAuthUI();
+        notifyAuthSubscribers();
+        return null;
+    }
+
+    try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+            logSupabase('ERROR', 'Error fetching active Supabase session', error);
+            throw error;
+        }
+
+        if (session && session.user) {
+            currentUser = session.user;
+            logSupabase('AUTH', 'Active student session restored', {
+                id: currentUser.id,
+                email: currentUser.email,
+                role: currentUser.role
+            });
+            setTimeout(() => {
+                loadUserProfile(currentUser.id);
+            }, 0);
+        } else {
+            currentUser = null;
+            currentProfile = null;
+            logSupabase('AUTH', 'No active session found (student is logged out)');
+        }
+
+        // Attach real-time auth state listener
+        supabase.auth.onAuthStateChange((event, session) => {
+            logSupabase('AUTH', `Auth state changed: ${event}`, {
+                hasSession: Boolean(session),
+                userId: session?.user?.id
+            });
+
+            currentUser = session ? session.user : null;
+            if (!currentUser) {
+                currentProfile = null;
+            }
+
+            notifyAuthSubscribers();
+            updateAuthUI();
+
+            if (currentUser) {
+                // Defer profile fetch out of auth state change handler to avoid lock contention
+                setTimeout(async () => {
+                    await loadUserProfile(currentUser.id);
+                    notifyAuthSubscribers();
+                    updateAuthUI();
+                }, 0);
+            }
+        });
+    } catch (err) {
+        logSupabase('ERROR', 'Auth initialization error', { message: err.message });
+    }
+
+    updateAuthUI();
+    notifyAuthSubscribers();
+    return currentUser;
+}
+
+/**
+ * Registers an observer callback for authentication state changes.
+ * @param {Function} cb 
+ */
+export function onAuthStateChanged(cb) {
+    if (typeof cb === 'function') {
+        authChangeCallbacks.push(cb);
+        cb(currentUser, currentProfile);
+    }
+}
+
+function notifyAuthSubscribers() {
+    authChangeCallbacks.forEach(cb => {
+        try {
+            cb(currentUser, currentProfile);
+        } catch (e) {
+            console.error('Subscriber callback error:', e);
+        }
+    });
+}
+
+/**
+ * Returns current authenticated Supabase user or null.
+ * @returns {object|null}
+ */
+export function getCurrentUser() {
+    return currentUser;
+}
+
+/**
+ * Returns current student profile row or null.
+ * @returns {object|null}
+ */
+export function getCurrentProfile() {
+    return currentProfile;
+}
+
+/**
+ * Loads seller profile from the `profiles` table in Supabase.
+ * @param {string} userId 
+ */
+export async function loadUserProfile(userId) {
+    if (!userId || !isSupabaseConfigured()) return null;
+
+    try {
+        logSupabase('DATABASE', 'Fetching profile row from public.profiles', { userId });
+        const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', userId)
+            .single();
+
+        if (error) {
+            logSupabase('ERROR', 'Failed to retrieve profile row', error);
+            return null;
+        }
+
+        currentProfile = data;
+        logSupabase('DATABASE', 'Profile retrieved successfully', currentProfile);
+        updateAuthUI();
+        return currentProfile;
+    } catch (e) {
+        logSupabase('ERROR', 'Exception during profile load', { message: e.message });
+        return null;
+    }
+}
+
+/**
+ * Signs up a new student account strictly through Supabase Auth.
+ * @param {string} email 
+ * @param {string} password 
+ * @param {string} fullName 
+ * @param {string} phoneNumber 
+ * @param {string} campusLocation 
+ */
+export async function signUpStudent(email, password, fullName, phoneNumber = '', campusLocation = 'Main Campus') {
+    if (!isSupabaseConfigured()) {
+        throw new Error('Supabase is not configured. Please enter your project URL and Anon key first.');
+    }
+
+    if (!email || !password) {
+        throw new Error('Please enter both student email and password.');
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+
+    // 1. Proactively check if the email already exists in the database
+    try {
+        const { data: alreadyExists, error: rpcError } = await supabase.rpc('check_email_exists', {
+            email_to_check: cleanEmail
+        });
+        if (alreadyExists) {
+            logSupabase('AUTH', 'Sign-up blocked: email already registered in Supabase', { email: cleanEmail });
+            throw new Error('Email already exists. Please sign in instead.');
+        }
+    } catch (err) {
+        if (err.message && err.message.includes('already exists')) {
+            throw err;
+        }
+        // Fallback: proceed to Supabase auth signup
+    }
+
+    logSupabase('AUTH', 'Initiating Supabase student registration', { email: cleanEmail, fullName, campusLocation });
+
+    const { data, error } = await supabase.auth.signUp({
+        email: cleanEmail,
+        password,
+        options: {
+            data: {
+                full_name: fullName,
+                phone_number: phoneNumber,
+                campus_location: campusLocation
+            }
+        }
+    });
+
+    if (error) {
+        logSupabase('ERROR', 'Supabase registration failed', error);
+        if (error.message && error.message.toLowerCase().includes('rate limit')) {
+            throw new Error('Supabase email rate limit reached. Fix: In your Supabase Dashboard -> Authentication -> Providers -> Email, turn off "Confirm email".');
+        }
+        if (error.message && (
+            error.message.toLowerCase().includes('already registered') || 
+            error.message.toLowerCase().includes('already exists') || 
+            error.message.toLowerCase().includes('unique') ||
+            error.status === 400 || 
+            error.status === 422 || 
+            error.code === 'user_already_exists'
+        )) {
+            throw new Error('Email already exists. Please sign in instead.');
+        }
+        throw error;
+    }
+
+    // 2. Check for Supabase Email Enumeration Protection:
+    // When a duplicate email is signed up and protection is enabled, Supabase returns data.user with an empty identities array!
+    if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+        logSupabase('AUTH', 'Supabase returned empty identities (user already registered)', { email: cleanEmail });
+        throw new Error('Email already exists. Please sign in instead.');
+    }
+
+    logSupabase('AUTH', 'Supabase user registration created', {
+        userId: data.user?.id,
+        email: data.user?.email,
+        confirmationSent: !data.session
+    });
+
+    if (data.user) {
+        currentUser = data.user;
+        
+        // Ensure profile row exists in public.profiles
+        try {
+            logSupabase('DATABASE', 'Upserting profile row in public.profiles', {
+                id: data.user.id,
+                full_name: fullName,
+                phone_number: phoneNumber,
+                campus_location: campusLocation
+            });
+
+            const { error: profileError } = await supabase
+                .from('profiles')
+                .upsert({
+                    id: data.user.id,
+                    full_name: fullName || 'Campus Student',
+                    phone_number: phoneNumber || '',
+                    campus_location: campusLocation || 'Main Campus'
+                });
+
+            if (profileError) {
+                logSupabase('ERROR', 'Profile upsert returned error', profileError);
+            } else {
+                logSupabase('DATABASE', 'Profile upsert succeeded');
+            }
+        } catch (err) {
+            logSupabase('ERROR', 'Profile creation exception', { message: err.message });
+        }
+
+        await loadUserProfile(currentUser.id);
+    }
+
+    updateAuthUI();
+    notifyAuthSubscribers();
+    return data;
+}
+
+/**
+ * Authenticates an existing student strictly through Supabase Auth.
+ * @param {string} email 
+ * @param {string} password 
+ */
+export async function signInStudent(email, password) {
+    if (!isSupabaseConfigured()) {
+        throw new Error('Supabase is not configured. Please enter your project URL and Anon key first.');
+    }
+
+    if (!email || !password) {
+        throw new Error('Please enter both email and password.');
+    }
+
+    logSupabase('AUTH', 'Attempting student sign-in with password', { email });
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+    });
+
+    if (error) {
+        logSupabase('ERROR', 'Supabase sign-in failed', error);
+        throw error;
+    }
+
+    currentUser = data.user;
+    logSupabase('AUTH', 'Student successfully signed in to Supabase', {
+        userId: currentUser.id,
+        email: currentUser.email
+    });
+
+    await loadUserProfile(currentUser.id);
+
+    updateAuthUI();
+    notifyAuthSubscribers();
+    return data;
+}
+
+/**
+ * Signs out the current student session from Supabase.
+ */
+export async function signOutStudent() {
+    if (isSupabaseConfigured()) {
+        logSupabase('AUTH', 'Signing out student session from Supabase...');
+        try {
+            const { error } = await supabase.auth.signOut();
+            if (error) logSupabase('ERROR', 'Supabase sign-out warning', error);
+        } catch (e) {
+            logSupabase('ERROR', 'Sign-out exception', { message: e.message });
+        }
+    }
+
+    currentUser = null;
+    currentProfile = null;
+    logSupabase('AUTH', 'Session cleared, student signed out');
+
+    updateAuthUI();
+    notifyAuthSubscribers();
+}
+
+/**
+ * Dynamically updates UI control buttons in navigation.
+ */
+export function updateAuthUI() {
+    const openLoginBtn = document.getElementById('open-login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const userBadge = document.getElementById('user-badge');
+    const userNameSpan = document.getElementById('user-name-display');
+    const navMyListingsBtn = document.getElementById('nav-my-listings-btn');
+
+    if (currentUser) {
+        if (openLoginBtn) openLoginBtn.classList.add('hidden');
+        if (logoutBtn) logoutBtn.classList.remove('hidden');
+        if (userBadge) userBadge.classList.remove('hidden');
+        if (navMyListingsBtn) navMyListingsBtn.classList.remove('hidden');
+        if (userNameSpan) {
+            const displayName = currentProfile?.full_name || currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'Student';
+            userNameSpan.textContent = displayName;
+        }
+    } else {
+        if (openLoginBtn) openLoginBtn.classList.remove('hidden');
+        if (logoutBtn) logoutBtn.classList.add('hidden');
+        if (userBadge) userBadge.classList.add('hidden');
+        if (navMyListingsBtn) navMyListingsBtn.classList.add('hidden');
+    }
+
+    const mobileAccountText = document.getElementById('mobile-account-text');
+    const mobileAccountIcon = document.getElementById('mobile-account-icon');
+    if (mobileAccountText) {
+        mobileAccountText.textContent = currentUser ? 'Logout' : 'Account';
+    }
+    if (mobileAccountIcon) {
+        mobileAccountIcon.innerHTML = currentUser 
+            ? `<svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>`
+            : `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>`;
+    }
+}
+
+
+================================================================================
+
+=== FILE: js/app.js ===
+Description: Core Application Logic, Item CRUD, Filters, Search & Modal Management
+================================================================================
+// ============================================================================
+// MAIN APPLICATION ENGINE & DOM INTERACTION CONTROLLER
+// Strict Supabase Integration (No Stubs, 100% Real PostgreSQL & Storage Data)
+// ============================================================================
+
+import { 
+    supabase, 
+    isSupabaseConfigured, 
+    getSupabaseUrl, 
+    getSupabaseAnonKey, 
+    saveSupabaseConfig, 
+    clearSupabaseConfig,
+    logSupabase 
+} from './supabaseClient.js';
+
+import { 
+    initAuth, 
+    getCurrentUser, 
+    getCurrentProfile, 
+    signUpStudent, 
+    signInStudent, 
+    signOutStudent, 
+    onAuthStateChanged 
+} from './auth.js';
+
+// ----------------------------------------------------------------------------
+// GLOBAL APPLICATION STATE
+// ----------------------------------------------------------------------------
+let allItems = [];
+let activeCategory = 'ALL';
+let isSignUpMode = false;
+let editingItemId = null;
+let pendingDeleteItemId = null;
+
+// ----------------------------------------------------------------------------
+// INITIALIZATION ON DOM LOAD
+// ----------------------------------------------------------------------------
+window.addEventListener('DOMContentLoaded', () => {
+    logSupabase('CONFIG', 'DOM loaded. Initializing Campus Online Thrift Market application...');
+
+    // 1. Update Backend Status indicator pill immediately
+    updateBackendStatusBadge();
+
+    // 2. Fetch Marketplace Items Feed strictly from Supabase immediately
+    fetchItems().catch(err => {
+        logSupabase('ERROR', 'Error fetching marketplace items', err);
+    });
+
+    // 3. Initialize Authentication concurrently without blocking feed rendering
+    initAuth().catch(err => {
+        logSupabase('ERROR', 'Error initializing auth', err);
+    });
+
+    // 4. Register auth state observer
+    onAuthStateChanged((user, profile) => {
+        // Refresh My Listings overlay if open
+        const myListingsModal = document.getElementById('my-listings-modal');
+        if (myListingsModal && !myListingsModal.classList.contains('hidden')) {
+            renderMyListings();
+        }
+    });
+
+    // 5. Expose functions to window object for inline HTML event triggers
+    window.toggleModal = toggleModal;
+    window.checkAuthAndOpenPostModal = checkAuthAndOpenPostModal;
+    window.openEditItemModal = openEditItemModal;
+    window.openMyListingsModal = openMyListingsModal;
+    window.renderMyListings = renderMyListings;
+    window.handleLogout = handleLogout;
+    window.handleAuth = handleAuth;
+    window.toggleAuthMode = toggleAuthMode;
+    window.handlePostItem = handlePostItem;
+    window.filterItems = filterItems;
+    window.setCategory = setCategory;
+    window.clearSearch = clearSearch;
+    window.resetAllFilters = resetAllFilters;
+    window.openItemDetail = openItemDetail;
+    window.handleDeleteItem = handleDeleteItem;
+    window.previewImage = previewImage;
+    window.removeImagePreview = removeImagePreview;
+    window.updateContactPlaceholder = updateContactPlaceholder;
+    window.openConfigModal = openConfigModal;
+    window.handleSaveConfig = handleSaveConfig;
+    window.handleClearConfig = handleClearConfig;
+    window.copyToClipboard = copyToClipboard;
+    window.togglePhoneFrame = togglePhoneFrame;
+    window.scrollToFeed = scrollToFeed;
+    window.focusSearchInput = focusSearchInput;
+    window.handleMobileAuthAction = handleMobileAuthAction;
+    window.closeAllModals = closeAllModals;
+    window.openDeleteConfirmModal = openDeleteConfirmModal;
+    window.closeDeleteConfirmModal = closeDeleteConfirmModal;
+    window.executeDeleteConfirmedItem = executeDeleteConfirmedItem;
+
+    const confirmDeleteBtn = document.getElementById('confirm-delete-action-btn');
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', executeDeleteConfirmedItem);
+    }
+
+    // 6. Global Escape key and backdrop-click dismiss handlers for all modals
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' || e.key === 'Esc') {
+            closeAllModals();
+        }
+    });
+
+    document.querySelectorAll('.modal-backdrop').forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                toggleModal(modal.id, false);
+            }
+        });
+    });
+});
+
+// ----------------------------------------------------------------------------
+// 1. DATA FETCHING & RENDERING ENGINE (STRICT SUPABASE POSTGRESQL)
+// ----------------------------------------------------------------------------
+
+/**
+ * Retrieves marketplace listings strictly from the Supabase `items` table.
+ */
+export async function fetchItems() {
+    const spinner = document.getElementById('loading-spinner');
+    if (spinner) spinner.classList.remove('hidden');
+
+    if (!isSupabaseConfigured()) {
+        logSupabase('DATABASE', 'Supabase credentials not configured. Skipping remote fetch.');
+        if (spinner) spinner.classList.add('hidden');
+        allItems = [];
+        updateStats(0);
+        renderItems([]);
+        showUnconfiguredNotice();
+        return;
+    }
+
+    try {
+        logSupabase('DATABASE', 'Querying public.items (SELECT * ORDER BY created_at DESC)...');
+        const startTime = performance.now();
+
+        const { data, error } = await supabase
+            .from('items')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        const duration = Math.round(performance.now() - startTime);
+
+        if (error) {
+            logSupabase('ERROR', `Supabase query failed after ${duration}ms`, error);
+            showToast('Database error: ' + error.message, 'error');
+            allItems = [];
+        } else {
+            allItems = data || [];
+            logSupabase('DATABASE', `Successfully fetched ${allItems.length} listings in ${duration}ms`, {
+                itemCount: allItems.length,
+                records: allItems
+            });
+        }
+    } catch (err) {
+        logSupabase('ERROR', 'Unexpected exception during fetchItems', { message: err.message });
+        allItems = [];
+    } finally {
+        if (spinner) spinner.classList.add('hidden');
+        updateStats();
+        filterItems();
+    }
+}
+
+/**
+ * Renders real marketplace cards into the DOM.
+ * @param {Array} items 
+ */
+function renderItems(items) {
+    const grid = document.getElementById('items-grid');
+    const emptyState = document.getElementById('empty-state');
+    const currentUser = getCurrentUser();
+
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    if (!items || items.length === 0) {
+        if (emptyState) emptyState.classList.remove('hidden');
+        return;
+    }
+
+    if (emptyState) emptyState.classList.add('hidden');
+
+    items.forEach(item => {
+        const hasImage = Boolean(item.image_url && typeof item.image_url === 'string' && item.image_url.trim() && item.image_url !== 'null');
+        const contactLink = buildContactURI(item.contact_method, item.contact_value, item.title);
+        const isOwner = currentUser && (currentUser.id === item.user_id);
+        const categoryBadgeClass = getCategoryBadgeClass(item.category);
+        const formattedPrice = Number(item.price).toLocaleString();
+
+        const card = document.createElement('article');
+        card.className = 'item-card bg-white rounded-2xl border border-slate-200/80 overflow-hidden flex flex-col justify-between shadow-sm relative group';
+        card.setAttribute('data-id', item.id);
+
+        card.innerHTML = `
+            <div>
+                <!-- Image Container with Zoom effect (Stays blank if seller provided no photo) -->
+                <div class="relative h-48 w-full bg-slate-100 overflow-hidden cursor-pointer" onclick="openItemDetail('${item.id}')">
+                    ${hasImage ? `
+                        <img src="${item.image_url}" 
+                             alt="${escapeHTML(item.title)}" 
+                             loading="lazy"
+                             onerror="this.style.display='none';"
+                             class="card-img-zoom w-full h-full object-cover">
+                    ` : `
+                        <div class="w-full h-full bg-slate-100"></div>
+                    `}
+                    
+                    <!-- Category Badge -->
+                    <span class="absolute top-3 left-3 text-[11px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md shadow-sm ${categoryBadgeClass}">
+                        ${escapeHTML(item.category)}
+                    </span>
+
+                    <!-- Condition Badge -->
+                    ${item.condition ? `
+                        <span class="absolute top-3 right-3 text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-900/75 text-white backdrop-blur-sm">
+                            ${escapeHTML(item.condition)}
+                        </span>
+                    ` : ''}
+
+                    <!-- Campus Location Ribbon -->
+                    ${item.campus_location ? `
+                        <div class="absolute bottom-2 left-3 right-3 flex items-center gap-1 text-[11px] text-white bg-slate-900/60 backdrop-blur-md px-2 py-0.5 rounded-md font-medium truncate">
+                            <span>📍</span> <span class="truncate">${escapeHTML(item.campus_location)}</span>
+                        </div>
+                    ` : ''}
+                </div>
+
+                <!-- Card Body -->
+                <div class="p-4 sm:p-5">
+                    <div class="flex items-start justify-between gap-2 mb-1">
+                        <h3 class="font-bold text-base text-slate-900 line-clamp-1 group-hover:text-indigo-600 transition-colors cursor-pointer" onclick="openItemDetail('${item.id}')" title="${escapeHTML(item.title)}">
+                            ${escapeHTML(item.title)}
+                        </h3>
+                    </div>
+
+                    <p class="text-xl font-extrabold text-indigo-600 mb-2 brand-font tracking-tight">
+                        KSh ${formattedPrice}
+                    </p>
+
+                    <p class="text-slate-500 text-xs line-clamp-2 leading-relaxed">
+                        ${escapeHTML(item.description)}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card Actions Footer -->
+            <div class="p-4 sm:p-5 pt-0 space-y-2">
+                <div class="flex items-center gap-2">
+                    <button onclick="copyToClipboard('${escapeHTML(item.contact_value)}', this)" 
+                            class="flex-1 text-center bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-bold py-2.5 px-3 rounded-xl text-xs transition shadow-sm shadow-indigo-200 flex items-center justify-center gap-1.5"
+                            title="Copy seller's ${escapeHTML(item.contact_method)}: ${escapeHTML(item.contact_value)}">
+                        <span>📋</span>
+                        <span>Copy ${escapeHTML(item.contact_method)}</span>
+                    </button>
+
+                    <button onclick="openItemDetail('${item.id}')" 
+                            class="px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition"
+                            title="View full item details">
+                        View
+                    </button>
+                </div>
+
+                ${isOwner ? `
+                    <div class="pt-2 border-t border-slate-100 flex items-center justify-end gap-2">
+                        <button onclick="openEditItemModal('${item.id}')" class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg transition flex items-center gap-1" title="Edit this listing">
+                            <span>✏️</span>
+                            <span>Edit</span>
+                        </button>
+                        <button onclick="handleDeleteItem('${item.id}')" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold rounded-lg transition flex items-center gap-1" title="Delete this listing">
+                            <span>🗑️</span>
+                            <span>Delete</span>
+                        </button>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+
+        grid.appendChild(card);
+    });
+}
+
+function getCategoryBadgeClass(category) {
+    switch (category) {
+        case 'Textbooks': return 'badge-textbooks';
+        case 'Electronics': return 'badge-electronics';
+        case 'Clothing': return 'badge-clothing';
+        case 'Dorm Essentials': return 'badge-dorm';
+        default: return 'badge-other';
+    }
+}
+
+function getContactIcon(method) {
+    switch (method) {
+        case 'WhatsApp': return '💬';
+        case 'Phone': return '📞';
+        default: return '📞';
+    }
+}
+
+// ----------------------------------------------------------------------------
+// 2. CLIENT-SIDE SEARCH, CATEGORY & SORT FILTERING
+// ----------------------------------------------------------------------------
+
+export function filterItems() {
+    const searchInput = document.getElementById('search-input');
+    const query = (searchInput?.value || '').toLowerCase().trim();
+    const clearBtn = document.getElementById('clear-search-btn');
+    const sortFilter = document.getElementById('sort-filter')?.value || 'newest';
+    const currentUser = getCurrentUser();
+
+    if (clearBtn) {
+        clearBtn.classList.toggle('hidden', query.length === 0);
+    }
+
+    let filtered = allItems.filter(item => {
+        const titleMatch = (item.title || '').toLowerCase().includes(query);
+        const descMatch = (item.description || '').toLowerCase().includes(query);
+        const locationMatch = (item.campus_location || '').toLowerCase().includes(query);
+        const matchesQuery = !query || titleMatch || descMatch || locationMatch;
+
+        const matchesCategory = (activeCategory === 'ALL') || (item.category === activeCategory);
+
+        return matchesQuery && matchesCategory;
+    });
+
+    if (sortFilter === 'price-asc') {
+        filtered.sort((a, b) => Number(a.price) - Number(b.price));
+    } else if (sortFilter === 'price-desc') {
+        filtered.sort((a, b) => Number(b.price) - Number(a.price));
+    } else {
+        filtered.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+    }
+
+    renderItems(filtered);
+    updateStats(filtered.length);
+}
+
+export function setCategory(category) {
+    activeCategory = category;
+
+    document.querySelectorAll('.category-pill').forEach(btn => {
+        const cat = btn.getAttribute('data-category');
+        if (cat === category) {
+            btn.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
+            btn.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
+        } else {
+            btn.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600');
+            btn.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
+        }
+    });
+
+    filterItems();
+}
+
+/**
+ * Opens the dedicated My Listings overlay.
+ */
+export function openMyListingsModal() {
+    renderMyListings();
+    toggleModal('my-listings-modal', true);
+}
+
+/**
+ * Dynamically populates the My Listings overlay.
+ */
+export function renderMyListings() {
+    const body = document.getElementById('my-listings-body');
+    const countBadge = document.getElementById('my-listings-count-badge');
+    if (!body) return;
+
+    const currentUser = getCurrentUser();
+    if (!currentUser) {
+        if (countBadge) countBadge.textContent = '0 Items';
+        body.innerHTML = `
+            <div class="py-12 px-4 text-center">
+                <div class="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-3xl mx-auto mb-4 shadow-sm">
+                    🔒
+                </div>
+                <h3 class="text-base font-bold text-slate-900 brand-font">Student Sign-In Required</h3>
+                <p class="text-xs text-slate-500 mt-1.5 max-w-sm mx-auto leading-relaxed">
+                    Please sign in with your student account to manage your listings, edit prices, or mark items as sold.
+                </p>
+                <div class="mt-5">
+                    <button onclick="toggleModal('my-listings-modal', false); toggleModal('auth-modal', true)" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md shadow-indigo-200 transition">
+                        Sign In Now
+                    </button>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    const myListings = allItems.filter(item => String(item.user_id) === String(currentUser.id));
+    if (countBadge) {
+        countBadge.textContent = `${myListings.length} Item${myListings.length === 1 ? '' : 's'}`;
+    }
+
+    if (myListings.length === 0) {
+        body.innerHTML = `
+            <div class="py-12 px-4 text-center border-2 border-dashed border-slate-200 rounded-2xl">
+                <div class="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-3xl mx-auto mb-4">
+                    📦
+                </div>
+                <h3 class="text-base font-bold text-slate-900 brand-font">No Active Listings Yet</h3>
+                <p class="text-xs text-slate-500 mt-1.5 max-w-sm mx-auto leading-relaxed">
+                    You haven't posted any items on the campus market yet. Turn your textbooks, electronics, and dorm items into cash!
+                </p>
+                <div class="mt-5">
+                    <button onclick="checkAuthAndOpenPostModal()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md shadow-indigo-200 transition inline-flex items-center gap-1.5">
+                        <span>+</span>
+                        <span>Post Your First Item</span>
+                    </button>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    body.innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            ${myListings.map(item => {
+                const hasImage = Boolean(item.image_url && typeof item.image_url === 'string' && item.image_url.trim() && item.image_url !== 'null');
+                const categoryBadgeClass = getCategoryBadgeClass(item.category);
+                const formattedPrice = Number(item.price).toLocaleString();
+                const dateFormatted = new Date(item.created_at || Date.now()).toLocaleDateString(undefined, {
+                    month: 'short',
+                    day: 'numeric'
+                });
+
+                return `
+                    <div class="bg-white rounded-xl border border-slate-200/90 p-3.5 flex flex-col justify-between hover:border-indigo-300 transition shadow-sm group">
+                        <div>
+                            <div class="flex gap-3">
+                                <!-- Thumbnail (Stays blank if seller provided no photo) -->
+                                <div class="w-20 h-20 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0 cursor-pointer" onclick="openItemDetail('${item.id}')">
+                                    ${hasImage ? `
+                                        <img src="${item.image_url}" 
+                                             alt="${escapeHTML(item.title)}" 
+                                             class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                                             onerror="this.style.display='none';">
+                                    ` : `
+                                        <div class="w-full h-full bg-slate-100"></div>
+                                    `}
+                                </div>
+
+                                <!-- Summary -->
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center gap-1.5 mb-1">
+                                        <span class="text-[10px] font-bold px-2 py-0.5 rounded ${categoryBadgeClass}">
+                                            ${escapeHTML(item.category)}
+                                        </span>
+                                        ${item.condition ? `
+                                            <span class="text-[10px] font-medium text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+                                                ${escapeHTML(item.condition)}
+                                            </span>
+                                        ` : ''}
+                                    </div>
+                                    <h4 class="font-bold text-sm text-slate-900 truncate hover:text-indigo-600 cursor-pointer" onclick="openItemDetail('${item.id}')" title="${escapeHTML(item.title)}">
+                                        ${escapeHTML(item.title)}
+                                    </h4>
+                                    <p class="text-sm font-extrabold text-indigo-600 brand-font mt-0.5">
+                                        KSh ${formattedPrice}
+                                    </p>
+                                    <p class="text-[11px] text-slate-400 truncate mt-0.5">
+                                        📍 ${escapeHTML(item.campus_location || 'Main Campus')} • ${dateFormatted}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Controls -->
+                        <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <button onclick="openItemDetail('${item.id}')" class="text-xs font-semibold text-slate-600 hover:text-slate-900 px-2 py-1 rounded hover:bg-slate-100 transition">
+                                View
+                            </button>
+
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="openEditItemModal('${item.id}')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-lg border border-indigo-200 transition shadow-sm active:scale-95" title="Edit listing details">
+                                    <span>✏️</span>
+                                    <span>Edit</span>
+                                </button>
+                                <button onclick="handleDeleteItem('${item.id}')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-lg border border-rose-200 transition active:scale-95" title="Delete listing permanently">
+                                    <span>🗑️</span>
+                                    <span>Delete</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('')}
+        </div>
+    `;
+}
+
+export function clearSearch() {
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        searchInput.value = '';
+        filterItems();
+    }
+}
+
+export function resetAllFilters() {
+    clearSearch();
+    setCategory('ALL');
+    const sort = document.getElementById('sort-filter');
+    if (sort) sort.value = 'newest';
+    filterItems();
+    showToast('Filters reset.', 'info');
+}
+
+function updateStats(count = allItems.length) {
+    const statListing = document.getElementById('stat-active-listings');
+    const badge = document.getElementById('items-count-badge');
+    if (statListing) statListing.textContent = allItems.length;
+    if (badge) badge.textContent = `${count} active item${count === 1 ? '' : 's'}`;
+}
+
+// ----------------------------------------------------------------------------
+// 3. CONTACT URI GENERATION (WhatsApp, Email, Phone)
+// ----------------------------------------------------------------------------
+
+export function buildContactURI(method, value, title) {
+    const safeTitle = title || 'your campus thrift listing';
+    const encodedTitle = encodeURIComponent(safeTitle);
+
+    if (method === 'WhatsApp') {
+        const cleanNumber = (value || '').replace(/[^0-9]/g, '');
+        const message = encodeURIComponent(`Hi! I'm a student interested in your campus thrift listing: "${safeTitle}". Is it still available?`);
+        return `https://wa.me/${cleanNumber}?text=${message}`;
+    } else if (method === 'Email') {
+        const subject = encodeURIComponent(`Campus Thrift Inquiry: ${safeTitle}`);
+        const body = encodeURIComponent(`Hi,\n\nI saw your listing for "${safeTitle}" on Campus Thrift Market and would like to arrange purchase and campus handover.\n\nThanks!`);
+        return `mailto:${value}?subject=${subject}&body=${body}`;
+    } else {
+        const cleanPhone = (value || '').trim();
+        return `tel:${cleanPhone}`;
+    }
+}
+
+// ----------------------------------------------------------------------------
+// 4. ITEM CREATION PIPELINE & STORAGE UPLOAD (STRICT SUPABASE)
+// ----------------------------------------------------------------------------
+
+export async function handlePostItem(event) {
+    event.preventDefault();
+
+    if (!isSupabaseConfigured()) {
+        showToast('Supabase is not configured yet. Please enter your project credentials.', 'error');
+        openConfigModal();
+        return;
+    }
+
+    const currentUser = getCurrentUser();
+    if (!currentUser) {
+        showToast('Please sign in before posting or editing an item.', 'error');
+        toggleModal('post-modal', false);
+        toggleModal('auth-modal', true);
+        return;
+    }
+
+    const submitBtn = document.getElementById('submit-item-btn');
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+            ${editingItemId ? 'Saving Changes...' : 'Uploading to Supabase...'}
+        `;
+    }
+
+    const title = document.getElementById('item-title').value.trim();
+    const price = parseFloat(document.getElementById('item-price').value);
+    const category = document.getElementById('item-category').value;
+    const condition = document.getElementById('item-condition').value;
+    const location = document.getElementById('item-location').value.trim() || 'Main Campus';
+    const description = document.getElementById('item-description').value.trim();
+    const contactMethod = document.getElementById('item-contact-method').value;
+    const contactValue = document.getElementById('item-contact-value').value.trim();
+    const imageInput = document.getElementById('item-image');
+    const imageFile = imageInput && imageInput.files ? imageInput.files[0] : null;
+
+    let imageUrl = null;
+
+    try {
+        // Step 1: Upload Image to Supabase Cloud Storage bucket 'item-images' if a new file was chosen
+        if (imageFile) {
+            const fileExt = imageFile.name.split('.').pop();
+            const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
+            const filePath = `items/${fileName}`;
+
+            logSupabase('STORAGE', `Uploading item image to Supabase Storage bucket 'item-images'`, {
+                filePath,
+                fileSize: imageFile.size,
+                fileType: imageFile.type
+            });
+
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('item-images')
+                .upload(filePath, imageFile, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+
+            if (uploadError) {
+                logSupabase('ERROR', 'Supabase image upload failed', uploadError);
+                throw new Error(`Storage upload failed: ${uploadError.message}. Make sure 'item-images' bucket is created.`);
+            }
+
+            const { data: urlData } = supabase.storage.from('item-images').getPublicUrl(filePath);
+            imageUrl = urlData.publicUrl;
+            logSupabase('STORAGE', 'Image uploaded successfully. Public URL generated', { imageUrl });
+        }
+
+        if (editingItemId) {
+            // Step 2A: Update existing row in Supabase PostgreSQL 'items' table
+            const updatePayload = {
+                title,
+                price,
+                category,
+                condition,
+                campus_location: location,
+                description,
+                contact_method: contactMethod,
+                contact_value: contactValue
+            };
+            if (imageUrl) {
+                updatePayload.image_url = imageUrl;
+            }
+
+            logSupabase('DATABASE', `Updating item ${editingItemId} in public.items`, updatePayload);
+
+            const { data: updatedData, error: updateError } = await supabase
+                .from('items')
+                .update(updatePayload)
+                .eq('id', editingItemId)
+                .eq('user_id', currentUser.id)
+                .select()
+                .single();
+
+            if (updateError) {
+                logSupabase('ERROR', 'Supabase item update failed', updateError);
+                throw updateError;
+            }
+
+            logSupabase('DATABASE', 'Item successfully updated in Supabase items table', updatedData);
+            showToast('✅ Listing updated successfully!', 'success');
+            editingItemId = null;
+        } else {
+            // Step 2B: Insert new row into Supabase PostgreSQL 'items' table
+            const itemRecord = {
+                user_id: currentUser.id,
+                title,
+                price,
+                category,
+                condition,
+                campus_location: location,
+                description,
+                image_url: imageUrl,
+                contact_method: contactMethod,
+                contact_value: contactValue
+            };
+
+            logSupabase('DATABASE', 'Inserting item row into public.items', itemRecord);
+
+            const { data: insertedData, error: insertError } = await supabase
+                .from('items')
+                .insert([itemRecord])
+                .select()
+                .single();
+
+            if (insertError) {
+                logSupabase('ERROR', 'Supabase item insertion failed', insertError);
+                throw insertError;
+            }
+
+            logSupabase('DATABASE', 'Item successfully persisted in Supabase items table', insertedData);
+            showToast('🎉 Listing published live to Supabase!', 'success');
+        }
+
+        document.getElementById('post-item-form').reset();
+        removeImagePreview();
+        toggleModal('post-modal', false);
+        await fetchItems();
+        renderMyListings();
+    } catch (err) {
+        logSupabase('ERROR', 'Error during item creation/update pipeline', { message: err.message });
+        showToast('Error saving listing: ' + err.message, 'error');
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<span id="submit-item-btn-text">${editingItemId ? 'Save Changes' : 'Publish Listing'}</span>`;
+        }
+    }
+}
+
+/**
+ * Opens custom delete confirmation dialog for a listing (replaces browser confirm).
+ * @param {string} itemId 
+ */
+export function openDeleteConfirmModal(itemId) {
+    const item = allItems.find(i => String(i.id) === String(itemId));
+    if (!item) return;
+
+    pendingDeleteItemId = itemId;
+
+    const titleEl = document.getElementById('delete-modal-item-title');
+    if (titleEl) {
+        titleEl.textContent = `"${item.title}"`;
+    }
+
+    const confirmBtn = document.getElementById('confirm-delete-action-btn');
+    if (confirmBtn) {
+        confirmBtn.disabled = false;
+        confirmBtn.innerHTML = `<span>Delete</span>`;
+    }
+
+    toggleModal('delete-confirm-modal', true);
+}
+
+export function closeDeleteConfirmModal() {
+    pendingDeleteItemId = null;
+    toggleModal('delete-confirm-modal', false);
+}
+
+export async function executeDeleteConfirmedItem() {
+    if (!pendingDeleteItemId) return;
+    const itemId = pendingDeleteItemId;
+
+    const confirmBtn = document.getElementById('confirm-delete-action-btn');
+    if (confirmBtn) {
+        confirmBtn.disabled = true;
+        confirmBtn.innerHTML = `
+            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+            Deleting...
+        `;
+    }
+
+    try {
+        logSupabase('DATABASE', `Executing DELETE FROM public.items WHERE id = '${itemId}'`);
+        const { error } = await supabase
+            .from('items')
+            .delete()
+            .eq('id', itemId);
+
+        if (error) {
+            logSupabase('ERROR', 'Supabase item deletion failed', error);
+            throw error;
+        }
+
+        logSupabase('DATABASE', `Item ${itemId} deleted successfully from Supabase`);
+        showToast('Listing removed permanently.', 'info');
+
+        closeDeleteConfirmModal();
+        toggleModal('detail-modal', false);
+
+        await fetchItems();
+        renderMyListings();
+    } catch (err) {
+        showToast('Could not delete listing: ' + err.message, 'error');
+        if (confirmBtn) {
+            confirmBtn.disabled = false;
+            confirmBtn.innerHTML = `<span>Delete</span>`;
+        }
+    }
+}
+
+/**
+ * Handles deleting an item strictly from Supabase via custom UI confirmation dialog.
+ * @param {string} itemId 
+ */
+export function handleDeleteItem(itemId) {
+    openDeleteConfirmModal(itemId);
+}
+
+// ----------------------------------------------------------------------------
+// 5. ITEM DETAIL MODAL VIEW
+// ----------------------------------------------------------------------------
+
+export function openItemDetail(itemId) {
+    const item = allItems.find(i => String(i.id) === String(itemId));
+    if (!item) return;
+
+    const modalBody = document.getElementById('detail-modal-body');
+    if (!modalBody) return;
+
+    const currentUser = getCurrentUser();
+    const isOwner = currentUser && (currentUser.id === item.user_id);
+    const contactLink = buildContactURI(item.contact_method, item.contact_value, item.title);
+    const categoryBadgeClass = getCategoryBadgeClass(item.category);
+    const formattedPrice = Number(item.price).toLocaleString();
+    const dateFormatted = new Date(item.created_at || Date.now()).toLocaleDateString(undefined, {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+    });
+
+    const hasItemImage = Boolean(item.image_url && typeof item.image_url === 'string' && item.image_url.trim() && item.image_url !== 'null');
+
+    modalBody.innerHTML = `
+        <div class="space-y-5">
+            <!-- Full Item Image (Stays blank if seller provided no photo) -->
+            <div class="relative h-64 sm:h-80 w-full rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-inner">
+                ${hasItemImage ? `
+                    <img src="${item.image_url}" 
+                         alt="${escapeHTML(item.title)}" 
+                         class="w-full h-full object-cover"
+                         onerror="this.style.display='none';">
+                ` : `
+                    <div class="w-full h-full bg-slate-100"></div>
+                `}
+                
+                <!-- Badges (Grouped on top-left, max 70% width to stay completely clear of close button) -->
+                <div class="absolute top-3.5 left-3.5 flex items-center gap-2 max-w-[70%] flex-wrap z-20 pointer-events-none">
+                    <span class="text-xs font-bold px-3 py-1 rounded-lg backdrop-blur-md shadow-sm ${categoryBadgeClass}">
+                        ${escapeHTML(item.category)}
+                    </span>
+
+                    ${item.condition ? `
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-900/80 text-white backdrop-blur-sm shadow-sm">
+                            ${escapeHTML(item.condition)}
+                        </span>
+                    ` : ''}
+                </div>
+
+                <!-- Floating Close Button (Top-Right: High contrast, elevated, floating squarely inside photo with 14px inset) -->
+                <button onclick="toggleModal('detail-modal', false)" 
+                        class="modal-close-floating-btn" 
+                        title="Close (Esc)" 
+                        aria-label="Close modal">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Details Header -->
+            <div>
+                <div class="flex flex-wrap items-baseline justify-between gap-2">
+                    <h2 class="text-2xl font-bold text-slate-900 brand-font">${escapeHTML(item.title)}</h2>
+                    <span class="text-2xl font-extrabold text-indigo-600 brand-font">KSh ${formattedPrice}</span>
+                </div>
+                
+                <div class="flex flex-wrap items-center gap-3 text-xs text-slate-500 mt-2">
+                    <span class="flex items-center gap-1">
+                        <span>📍</span> ${escapeHTML(item.campus_location || 'Main Campus')}
+                    </span>
+                    <span>•</span>
+                    <span class="flex items-center gap-1">
+                        <span>🕒</span> Posted ${dateFormatted}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Item Description -->
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Description & Condition</h4>
+                <p class="text-sm text-slate-700 leading-relaxed whitespace-pre-line">${escapeHTML(item.description)}</p>
+            </div>
+
+            <!-- Seller & Contact Channel Box -->
+            <div class="p-4 rounded-xl bg-indigo-50/70 border border-indigo-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                    <span class="text-[11px] font-bold text-indigo-900 uppercase tracking-wider block">Seller Contact Number</span>
+                    <p class="text-sm font-bold text-slate-800 mt-1 flex items-center gap-2">
+                        <span>${item.contact_method === 'WhatsApp' ? '💬 WhatsApp:' : '📞 Phone:'}</span>
+                        <span class="font-mono text-indigo-700 bg-white px-2 py-0.5 rounded border border-indigo-200/60">${escapeHTML(item.contact_value)}</span>
+                    </p>
+                </div>
+
+                <button onclick="copyToClipboard('${escapeHTML(item.contact_value)}', this)" 
+                        class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold py-2.5 px-5 rounded-xl text-sm transition shadow-md shadow-indigo-200 flex items-center justify-center gap-2">
+                    <span>📋</span>
+                    <span>Copy ${escapeHTML(item.contact_method)} Number</span>
+                </button>
+            </div>
+
+            ${isOwner ? `
+                <div class="p-4 rounded-xl bg-amber-50/80 border border-amber-200/90 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
+                            <span>👑</span> You Own This Listing
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="openEditItemModal('${item.id}')" 
+                                class="flex-1 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition shadow-sm shadow-indigo-200 flex items-center justify-center gap-1.5">
+                            <span>✏️</span>
+                            <span>Edit Listing</span>
+                        </button>
+                        <button onclick="handleDeleteItem('${item.id}')" 
+                                class="bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-700 font-bold py-2.5 px-4 rounded-xl text-xs transition border border-rose-200 flex items-center justify-center gap-1.5">
+                            <span>🗑️</span>
+                            <span>Delete Listing</span>
+                        </button>
+                    </div>
+                </div>
+            ` : ''}
+
+            <!-- Bottom Modal Footer Navigation -->
+            <div class="pt-2 flex items-center justify-between border-t border-slate-100">
+                <button onclick="toggleModal('detail-modal', false)" 
+                        class="text-xs font-semibold text-slate-500 hover:text-slate-800 px-3 py-2 rounded-lg hover:bg-slate-100 transition flex items-center gap-1.5 active:scale-95">
+                    <span>✕</span>
+                    <span>Close Details</span>
+                </button>
+                <span class="text-[11px] text-slate-400">Click outside or press Esc</span>
+            </div>
+        </div>
+    `;
+
+    toggleModal('detail-modal', true);
+}
+
+// ----------------------------------------------------------------------------
+// 6. STUDENT AUTHENTICATION FLOW
+// ----------------------------------------------------------------------------
+
+export async function handleAuth(event) {
+    event.preventDefault();
+    const email = document.getElementById('auth-email').value.trim();
+    const password = document.getElementById('auth-password').value;
+    const name = document.getElementById('auth-name').value.trim();
+    const phone = document.getElementById('auth-phone').value.trim();
+    const submitBtn = document.getElementById('auth-submit-btn');
+
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerText = isSignUpMode ? 'Registering with Supabase...' : 'Signing in with Supabase...';
+    }
+
+    try {
+        if (isSignUpMode) {
+            await signUpStudent(email, password, name, phone);
+            showToast('Student account registered in Supabase! You can now post listings.', 'success');
+        } else {
+            await signInStudent(email, password);
+            showToast('Welcome back! Signed in to Supabase successfully.', 'success');
+        }
+        toggleModal('auth-modal', false);
+        await fetchItems();
+    } catch (err) {
+        showToast(err.message, 'error');
+        // If email already exists during sign up, switch to Sign In mode for seamless experience
+        if (isSignUpMode && err.message && err.message.toLowerCase().includes('already exists')) {
+            toggleAuthMode();
+            const emailInput = document.getElementById('auth-email');
+            const pwdInput = document.getElementById('auth-password');
+            if (emailInput) emailInput.value = email;
+            if (pwdInput) {
+                pwdInput.value = '';
+                pwdInput.focus();
+            }
+        }
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = isSignUpMode ? 'Create Account' : 'Sign In';
+        }
+    }
+}
+
+export function toggleAuthMode() {
+    isSignUpMode = !isSignUpMode;
+    const title = document.getElementById('auth-title');
+    const subtitle = document.getElementById('auth-subtitle');
+    const submitBtn = document.getElementById('auth-submit-btn');
+    const signupFields = document.getElementById('signup-fields');
+    const toggleText = document.getElementById('auth-toggle-text');
+    const toggleBtn = document.getElementById('toggle-auth-btn');
+
+    if (isSignUpMode) {
+        if (title) title.innerText = 'Student Registration';
+        if (subtitle) subtitle.innerText = 'Create your free account to sell items on campus';
+        if (submitBtn) submitBtn.innerText = 'Create Account';
+        if (signupFields) signupFields.classList.remove('hidden');
+        if (toggleText) toggleText.innerText = 'Already have an account?';
+        if (toggleBtn) toggleBtn.innerText = 'Sign In';
+    } else {
+        if (title) title.innerText = 'Student Sign In';
+        if (subtitle) subtitle.innerText = 'Sign in with your student credentials to post items';
+        if (submitBtn) submitBtn.innerText = 'Sign In';
+        if (signupFields) signupFields.classList.add('hidden');
+        if (toggleText) toggleText.innerText = 'Need a student account?';
+        if (toggleBtn) toggleBtn.innerText = 'Create Account';
+    }
+}
+
+export async function handleLogout() {
+    await signOutStudent();
+    showToast('Signed out of Supabase successfully.', 'info');
+    filterItems();
+}
+
+export function checkAuthAndOpenPostModal() {
+    if (!isSupabaseConfigured()) {
+        showToast('Please configure your Supabase connection first.', 'error');
+        openConfigModal();
+        return;
+    }
+
+    const user = getCurrentUser();
+    if (!user) {
+        showToast('Please sign in or create an account to post items.', 'info');
+        toggleModal('auth-modal', true);
+        return;
+    }
+
+    // Reset edit state to create new item
+    editingItemId = null;
+    const form = document.getElementById('post-item-form');
+    if (form) form.reset();
+    removeImagePreview();
+
+    // Auto-fill student contact number if available from profile
+    const profile = getCurrentProfile();
+    const contactValueInput = document.getElementById('item-contact-value');
+    if (profile && profile.phone_number && contactValueInput && !contactValueInput.value) {
+        contactValueInput.value = profile.phone_number;
+    }
+    const locationInput = document.getElementById('item-location');
+    if (profile && profile.campus_location && locationInput && !locationInput.value) {
+        locationInput.value = profile.campus_location;
+    }
+
+    const titleEl = document.getElementById('post-modal-title');
+    const subtitleEl = document.getElementById('post-modal-subtitle');
+    const btnTextEl = document.getElementById('submit-item-btn-text');
+
+    if (titleEl) titleEl.textContent = 'List an Item for Sale';
+    if (subtitleEl) subtitleEl.textContent = 'Connect directly with students on campus via WhatsApp, Phone, or Email.';
+    if (btnTextEl) btnTextEl.textContent = 'Publish Listing';
+
+    // Close My Listings overlay if open so user can post cleanly
+    toggleModal('my-listings-modal', false);
+    toggleModal('post-modal', true);
+}
+
+/**
+ * Opens the post/edit modal in Edit Mode for an existing listing.
+ * @param {string} itemId 
+ */
+export function openEditItemModal(itemId) {
+    const item = allItems.find(i => String(i.id) === String(itemId));
+    if (!item) {
+        showToast('Item not found', 'error');
+        return;
+    }
+
+    const currentUser = getCurrentUser();
+    if (!currentUser || currentUser.id !== item.user_id) {
+        showToast('Only the seller who created this listing can edit it.', 'error');
+        return;
+    }
+
+    editingItemId = itemId;
+
+    // Prepopulate form fields
+    const titleInput = document.getElementById('item-title');
+    const priceInput = document.getElementById('item-price');
+    const categoryInput = document.getElementById('item-category');
+    const conditionInput = document.getElementById('item-condition');
+    const locationInput = document.getElementById('item-location');
+    const descriptionInput = document.getElementById('item-description');
+    const contactMethodInput = document.getElementById('item-contact-method');
+    const contactValueInput = document.getElementById('item-contact-value');
+
+    if (titleInput) titleInput.value = item.title || '';
+    if (priceInput) priceInput.value = item.price || '';
+    if (categoryInput) categoryInput.value = item.category || 'Other';
+    if (conditionInput) conditionInput.value = item.condition || 'Gently Used';
+    if (locationInput) locationInput.value = item.campus_location || '';
+    if (descriptionInput) descriptionInput.value = item.description || '';
+    if (contactMethodInput) contactMethodInput.value = item.contact_method || 'WhatsApp';
+    if (contactValueInput) contactValueInput.value = item.contact_value || '';
+
+    // Image preview handling
+    const previewContainer = document.getElementById('image-preview-container');
+    const previewImageEl = document.getElementById('image-preview');
+    const uploadPrompt = document.getElementById('upload-prompt');
+    const imageInput = document.getElementById('item-image');
+    if (imageInput) imageInput.value = '';
+
+    if (item.image_url && previewContainer && previewImageEl && uploadPrompt) {
+        previewImageEl.src = item.image_url;
+        previewContainer.classList.remove('hidden');
+        uploadPrompt.classList.add('hidden');
+    } else {
+        removeImagePreview();
+    }
+
+    // Update modal headings and submit button text
+    const titleEl = document.getElementById('post-modal-title');
+    const subtitleEl = document.getElementById('post-modal-subtitle');
+    const btnTextEl = document.getElementById('submit-item-btn-text');
+
+    if (titleEl) titleEl.textContent = 'Edit Campus Listing';
+    if (subtitleEl) subtitleEl.textContent = 'Update price, location, condition, description, or contact information.';
+    if (btnTextEl) btnTextEl.textContent = 'Save Changes';
+
+    // Close other overlays and open post modal in edit mode
+    toggleModal('detail-modal', false);
+    toggleModal('my-listings-modal', false);
+    toggleModal('post-modal', true);
+}
+
+// ----------------------------------------------------------------------------
+// 7. SUPABASE CONFIGURATION MODAL & STATUS
+// ----------------------------------------------------------------------------
+
+export function openConfigModal() {
+    const urlInput = document.getElementById('cfg-url');
+    const keyInput = document.getElementById('cfg-key');
+    if (urlInput) urlInput.value = isSupabaseConfigured() ? getSupabaseUrl() : (getSupabaseUrl() === 'https://YOUR_SUPABASE_PROJECT_ID.supabase.co' ? '' : getSupabaseUrl());
+    if (keyInput) keyInput.value = isSupabaseConfigured() ? getSupabaseAnonKey() : (getSupabaseAnonKey() === 'YOUR_SUPABASE_ANON_KEY' ? '' : getSupabaseAnonKey());
+    toggleModal('config-modal', true);
+}
+
+export function handleSaveConfig() {
+    const url = document.getElementById('cfg-url').value.trim();
+    const key = document.getElementById('cfg-key').value.trim();
+
+    if (!url || !key) {
+        showToast('Please provide both the Supabase URL and Anon Key.', 'error');
+        return;
+    }
+
+    if (!url.startsWith('https://') || !url.includes('.supabase.co')) {
+        showToast('Please enter a valid Supabase URL (e.g. https://xyz.supabase.co)', 'error');
+        return;
+    }
+
+    saveSupabaseConfig(url, key);
+    showToast('Supabase credentials saved! Connecting to live backend...', 'success');
+    setTimeout(() => window.location.reload(), 600);
+}
+
+export function handleClearConfig() {
+    clearSupabaseConfig();
+    showToast('Cleared Supabase credentials from local storage. Reloading...', 'info');
+    setTimeout(() => window.location.reload(), 600);
+}
+
+function updateBackendStatusBadge() {
+    const statusText = document.getElementById('backend-status-text');
+    const statusPill = document.getElementById('backend-status-pill');
+
+    if (isSupabaseConfigured()) {
+        if (statusText) statusText.textContent = 'Supabase Connected';
+        if (statusPill) {
+            statusPill.classList.remove('bg-rose-50', 'text-rose-700', 'border-rose-200');
+            statusPill.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+        }
+    } else {
+        if (statusText) statusText.textContent = 'Supabase: Enter API Key';
+        if (statusPill) {
+            statusPill.classList.remove('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+            statusPill.classList.add('bg-rose-50', 'text-rose-700', 'border-rose-200');
+        }
+    }
+}
+
+function showUnconfiguredNotice() {
+    const emptyState = document.getElementById('empty-state');
+    if (emptyState) {
+        emptyState.innerHTML = `
+            <div class="w-16 h-16 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
+                ⚡
+            </div>
+            <h3 class="text-lg font-bold text-slate-800">Supabase Not Connected</h3>
+            <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto">
+                All mock/stub data has been removed. Please enter your Supabase Project URL and Public Anon Key to load live marketplace items.
+            </p>
+            <div class="mt-5 flex justify-center gap-3">
+                <button onclick="openConfigModal()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-md shadow-indigo-200">
+                    Connect Supabase Now
+                </button>
+            </div>
+        `;
+        emptyState.classList.remove('hidden');
+    }
+}
+
+// ----------------------------------------------------------------------------
+// 8. IMAGE PREVIEW & FORM UTILITIES
+// ----------------------------------------------------------------------------
+
+export function previewImage(input) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        if (file.size > 5 * 1024 * 1024) {
+            showToast('Image file size must be less than 5MB.', 'error');
+            input.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById('image-preview');
+            const previewContainer = document.getElementById('image-preview-container');
+            const uploadPrompt = document.getElementById('upload-prompt');
+            
+            if (preview) preview.src = e.target.result;
+            if (previewContainer) previewContainer.classList.remove('hidden');
+            if (uploadPrompt) uploadPrompt.classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+export function removeImagePreview(event) {
+    if (event) event.stopPropagation();
+    const imageInput = document.getElementById('item-image');
+    const previewContainer = document.getElementById('image-preview-container');
+    const uploadPrompt = document.getElementById('upload-prompt');
+    
+    if (imageInput) imageInput.value = '';
+    if (previewContainer) previewContainer.classList.add('hidden');
+    if (uploadPrompt) uploadPrompt.classList.remove('hidden');
+}
+
+export function updateContactPlaceholder() {
+    const method = document.getElementById('item-contact-method').value;
+    const input = document.getElementById('item-contact-value');
+    const helper = document.getElementById('contact-helper-text');
+
+    if (method === 'WhatsApp') {
+        input.placeholder = '+254712345678';
+        helper.textContent = 'Enter WhatsApp number (e.g. +254 712 345 678). Buyers will copy your number with one click.';
+    } else {
+        input.placeholder = '+254712345678';
+        helper.textContent = 'Enter phone number for direct voice calls. Buyers will copy your number with one click.';
+    }
+}
+
+/**
+ * Automatically copies phone or WhatsApp contact number to clipboard.
+ * @param {string} text 
+ * @param {HTMLElement} btnElement 
+ */
+export async function copyToClipboard(text, btnElement) {
+    if (!text) return;
+    try {
+        await navigator.clipboard.writeText(text);
+        showToast(`📋 Copied "${text}" to clipboard!`, 'success');
+        
+        if (btnElement) {
+            const originalHTML = btnElement.innerHTML;
+            btnElement.classList.add('bg-emerald-600');
+            btnElement.classList.remove('bg-indigo-600');
+            btnElement.innerHTML = `<span>✓</span><span>Copied!</span>`;
+            setTimeout(() => {
+                btnElement.innerHTML = originalHTML;
+                btnElement.classList.remove('bg-emerald-600');
+                btnElement.classList.add('bg-indigo-600');
+            }, 2000);
+        }
+    } catch (err) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.opacity = '0';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            showToast(`📋 Copied "${text}" to clipboard!`, 'success');
+        } catch (e) {
+            showToast(`Contact: ${text}`, 'info');
+        }
+        document.body.removeChild(textArea);
+    }
+}
+
+// ----------------------------------------------------------------------------
+// 9. MODALS & TOAST NOTIFICATION SYSTEM
+// ----------------------------------------------------------------------------
+
+export function toggleModal(modalId, show) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+
+    if (show) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    } else {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+}
+
+export function closeAllModals() {
+    pendingDeleteItemId = null;
+    const activeModals = document.querySelectorAll('.modal-backdrop:not(.hidden)');
+    activeModals.forEach(modal => {
+        toggleModal(modal.id, false);
+    });
+}
+
+export function showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+
+    let icon = 'ℹ️';
+    if (type === 'success') icon = '✅';
+    if (type === 'error') icon = '⚠️';
+
+    toast.innerHTML = `
+        <span class="text-base flex-shrink-0">${icon}</span>
+        <span class="flex-grow text-xs font-medium text-slate-800">${escapeHTML(message)}</span>
+    `;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => toast.remove(), 300);
+    }, 4000);
+}
+
+function escapeHTML(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+// ----------------------------------------------------------------------------
+// 10. PHONE FRAME & MOBILE APP INTERACTIONS
+// ----------------------------------------------------------------------------
+
+export function togglePhoneFrame() {
+    const isFrameActive = document.body.classList.toggle('phone-frame-active');
+    const icon = document.getElementById('phone-mode-icon');
+    const text = document.getElementById('phone-mode-text');
+
+    if (isFrameActive) {
+        if (icon) icon.textContent = '💻';
+        if (text) text.textContent = 'Desktop View';
+        showToast('📱 Switched to Phone Frame Simulator view', 'info');
+    } else {
+        if (icon) icon.textContent = '📱';
+        if (text) text.textContent = 'Phone Frame View';
+        showToast('💻 Expanded to Responsive Desktop view', 'info');
+    }
+}
+
+export function scrollToFeed() {
+    const feed = document.getElementById('items-grid');
+    if (feed) {
+        feed.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+export function focusSearchInput() {
+    const input = document.getElementById('search-input');
+    if (input) {
+        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => input.focus(), 250);
+    }
+}
+
+export function handleMobileAuthAction() {
+    const currentUser = getCurrentUser();
+    if (currentUser) {
+        handleLogout();
+    } else {
+        toggleModal('auth-modal', true);
+    }
+}
+
+
+================================================================================
+
+=== FILE: sql/schema.sql ===
+Description: PostgreSQL Database Schema, Tables, Constraints & Row Level Security (RLS)
+================================================================================
+-- ============================================================================
+-- CAMPUS ONLINE THRIFT MARKET - COMPLETE DATABASE INITIALIZATION SCRIPT
+-- PostgreSQL DDL for Supabase BaaS (Production-Grade, Strict Schema)
+-- ============================================================================
+
+-- 1. Enable UUID Extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- 2. Create User Profiles Table (Extends Supabase Auth Schema)
+CREATE TABLE IF NOT EXISTS public.profiles (
+    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    full_name TEXT NOT NULL,
+    phone_number TEXT NOT NULL DEFAULT '',
+    campus_location TEXT DEFAULT 'Main Campus',
+    avatar_url TEXT DEFAULT '',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 3. Create Items Table for Marketplace Listings
+CREATE TABLE IF NOT EXISTS public.items (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    price NUMERIC NOT NULL CHECK (price >= 0),
+    category TEXT NOT NULL CHECK (category IN ('Textbooks', 'Electronics', 'Clothing', 'Dorm Essentials', 'Other')),
+    condition TEXT DEFAULT 'Gently Used' CHECK (condition IN ('Brand New', 'Like New', 'Gently Used', 'Fair')),
+    campus_location TEXT DEFAULT 'Main Campus',
+    image_url TEXT,
+    contact_method TEXT NOT NULL CHECK (contact_method IN ('WhatsApp', 'Phone')),
+    contact_value TEXT NOT NULL, -- Target phone number or WhatsApp number
+    is_sold BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 4. Enable Row Level Security (RLS) on All Tables
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.items ENABLE ROW LEVEL SECURITY;
+
+-- 5. Row Level Security Policies for `profiles`
+DROP POLICY IF EXISTS "Public profiles are viewable by everyone" ON public.profiles;
+DROP POLICY IF EXISTS "Users can insert their own profile" ON public.profiles;
+DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;
+
+-- Allow public read access to seller profiles
+CREATE POLICY "Public profiles are viewable by everyone" 
+ON public.profiles FOR SELECT 
+USING (true);
+
+-- Allow authenticated users to insert their own profile record
+CREATE POLICY "Users can insert their own profile" 
+ON public.profiles FOR INSERT 
+WITH CHECK (auth.uid() = id);
+
+-- Allow users to modify only their own profile record
+CREATE POLICY "Users can update their own profile" 
+ON public.profiles FOR UPDATE 
+USING (auth.uid() = id);
+
+-- 6. Row Level Security Policies for `items`
+DROP POLICY IF EXISTS "Items are viewable by everyone" ON public.items;
+DROP POLICY IF EXISTS "Authenticated users can create items" ON public.items;
+DROP POLICY IF EXISTS "Users can update their own items" ON public.items;
+DROP POLICY IF EXISTS "Users can delete their own items" ON public.items;
+
+-- Allow open public read access to all posted marketplace listings
+CREATE POLICY "Items are viewable by everyone" 
+ON public.items FOR SELECT 
+USING (true);
+
+-- Allow logged-in students to create new listings tied strictly to their auth ID
+CREATE POLICY "Authenticated users can create items" 
+ON public.items FOR INSERT 
+WITH CHECK (
+    auth.role() = 'authenticated' 
+    AND auth.uid() = user_id
+);
+
+-- Allow sellers to modify only their own active listings
+CREATE POLICY "Users can update their own items" 
+ON public.items FOR UPDATE 
+USING (auth.uid() = user_id);
+
+-- Allow sellers to delete only their own listings
+CREATE POLICY "Users can delete their own items" 
+ON public.items FOR DELETE 
+USING (auth.uid() = user_id);
+
+-- 7. Configure Supabase Storage Bucket for Uploaded Item Images
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('item-images', 'item-images', true)
+ON CONFLICT (id) DO UPDATE SET public = true;
+
+-- Storage RLS Policies
+DROP POLICY IF EXISTS "Public access to item images" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated users can upload item images" ON storage.objects;
+DROP POLICY IF EXISTS "Users can update their own uploaded images" ON storage.objects;
+DROP POLICY IF EXISTS "Users can delete their own uploaded images" ON storage.objects;
+
+-- Allow public read access to images stored in the 'item-images' bucket
+CREATE POLICY "Public access to item images" 
+ON storage.objects FOR SELECT 
+USING (bucket_id = 'item-images');
+
+-- Allow authenticated users to upload images into 'item-images'
+CREATE POLICY "Authenticated users can upload item images" 
+ON storage.objects FOR INSERT 
+WITH CHECK (
+    bucket_id = 'item-images' 
+    AND auth.role() = 'authenticated'
+);
+
+-- Allow image owners to update their uploaded images
+CREATE POLICY "Users can update their own uploaded images" 
+ON storage.objects FOR UPDATE 
+USING (
+    bucket_id = 'item-images' 
+    AND auth.uid() = owner
+);
+
+-- Allow image owners to delete their uploaded images
+CREATE POLICY "Users can delete their own uploaded images" 
+ON storage.objects FOR DELETE 
+USING (
+    bucket_id = 'item-images' 
+    AND auth.uid() = owner
+);
+
+-- 8. Automated Trigger: Automatically Create Profile on User Sign Up (Security Definer)
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO public.profiles (id, full_name, phone_number, campus_location)
+    VALUES (
+        new.id,
+        COALESCE(new.raw_user_meta_data->>'full_name', split_part(new.email, '@', 1)),
+        COALESCE(new.raw_user_meta_data->>'phone_number', ''),
+        COALESCE(new.raw_user_meta_data->>'campus_location', 'Main Campus')
+    )
+    ON CONFLICT (id) DO UPDATE SET
+        full_name = COALESCE(EXCLUDED.full_name, public.profiles.full_name),
+        phone_number = COALESCE(EXCLUDED.phone_number, public.profiles.phone_number),
+        campus_location = COALESCE(EXCLUDED.campus_location, public.profiles.campus_location);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Recreate trigger
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+-- 9. Automated Trigger: Instant Email Confirmation (No Confirmation Required!)
+CREATE OR REPLACE FUNCTION public.auto_confirm_new_user()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    NEW.email_confirmed_at = COALESCE(NEW.email_confirmed_at, NOW());
+    RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS on_auth_user_auto_confirm ON auth.users;
+CREATE TRIGGER on_auth_user_auto_confirm
+    BEFORE INSERT ON auth.users
+    FOR EACH ROW EXECUTE FUNCTION public.auto_confirm_new_user();
+
+-- 10. Update existing unconfirmed users and apply schema migrations for existing tables
+UPDATE auth.users SET email_confirmed_at = NOW() WHERE email_confirmed_at IS NULL;
+
+-- Safe migration for existing tables:
+ALTER TABLE public.items ADD COLUMN IF NOT EXISTS campus_location TEXT DEFAULT 'Main Campus';
+UPDATE public.items SET contact_method = 'WhatsApp' WHERE contact_method = 'Email';
+ALTER TABLE public.items DROP CONSTRAINT IF EXISTS items_contact_method_check;
+ALTER TABLE public.items ADD CONSTRAINT items_contact_method_check 
+    CHECK (contact_method IN ('WhatsApp', 'Phone'));
+
+-- 11. RPC Helper: Check If Email Already Exists (Prevents Duplicate Sign-Ups)
+CREATE OR REPLACE FUNCTION public.check_email_exists(email_to_check TEXT)
+RETURNS BOOLEAN
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, auth
+AS $$
+BEGIN
+    RETURN EXISTS (
+        SELECT 1 FROM auth.users 
+        WHERE LOWER(email) = LOWER(TRIM(email_to_check))
+    );
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.check_email_exists(TEXT) TO anon, authenticated, service_role;
+
+
+================================================================================
+
+=== FILE: sql/update_v2.sql ===
+Description: Database Migration v2 & Realtime Subscription Settings
+================================================================================
+-- ============================================================================
+-- CAMPUS THRIFT MARKET - MIGRATION UPDATE V2
+-- Run this in your Supabase SQL Editor to update an existing database:
+-- 1. Cleans up any legacy 'Email' contact entries to 'WhatsApp'
+-- 2. Enforces contact_method constraint strictly to ('WhatsApp', 'Phone')
+-- 3. Ensures campus_location column exists
+-- 4. Installs the auto-confirm trigger so student sign-ups are instant!
+-- ============================================================================
+
+-- 1. Ensure campus_location column exists on items
+ALTER TABLE public.items ADD COLUMN IF NOT EXISTS campus_location TEXT DEFAULT 'Main Campus';
+
+-- 2. Update any legacy listings with 'Email' to 'WhatsApp'
+UPDATE public.items 
+SET contact_method = 'WhatsApp' 
+WHERE contact_method = 'Email';
+
+-- 3. Enforce constraint to only allow ('WhatsApp', 'Phone')
+ALTER TABLE public.items DROP CONSTRAINT IF EXISTS items_contact_method_check;
+ALTER TABLE public.items ADD CONSTRAINT items_contact_method_check 
+    CHECK (contact_method IN ('WhatsApp', 'Phone'));
+
+-- 4. Auto-Confirm Trigger: Makes all student signups instant without email confirmation wait!
+CREATE OR REPLACE FUNCTION public.auto_confirm_new_user()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    NEW.email_confirmed_at = COALESCE(NEW.email_confirmed_at, NOW());
+    RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS on_auth_user_auto_confirm ON auth.users;
+CREATE TRIGGER on_auth_user_auto_confirm
+    BEFORE INSERT ON auth.users
+    FOR EACH ROW EXECUTE FUNCTION public.auto_confirm_new_user();
+
+-- 5. Confirm any existing unconfirmed users
+UPDATE auth.users SET email_confirmed_at = NOW() WHERE email_confirmed_at IS NULL;
+
+-- 6. Helper RPC Function to check if an email is already registered
+CREATE OR REPLACE FUNCTION public.check_email_exists(email_to_check TEXT)
+RETURNS BOOLEAN
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, auth
+AS $$
+BEGIN
+    RETURN EXISTS (
+        SELECT 1 FROM auth.users 
+        WHERE LOWER(email) = LOWER(TRIM(email_to_check))
+    );
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.check_email_exists(TEXT) TO anon, authenticated, service_role;
+
+
+================================================================================
+
+=== FILE: server.py ===
+Description: Local Development Multithreaded HTTP Server
+================================================================================
+import http.server
+import socketserver
+import sys
+
+class RobustHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
+    def end_headers(self):
+        self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        self.send_header('Pragma', 'no-cache')
+        self.send_header('Expires', '0')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        super().end_headers()
+
+    def log_message(self, format, *args):
+        sys.stderr.write(f"[{self.log_date_time_string()}] {format % args}\n")
+        sys.stderr.flush()
+
+class ThreadingServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
+    daemon_threads = True
+    allow_reuse_address = True
+
+if __name__ == '__main__':
+    port = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
+    server_address = ('0.0.0.0', port)
+    httpd = ThreadingServer(server_address, RobustHTTPRequestHandler)
+    print(f"Robust HTTP Server running at http://127.0.0.1:{port} and http://localhost:{port}", flush=True)
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        pass
+
+
+================================================================================
+
+=== FILE: scripts/setup_db.py ===
+Description: Database Initialization and Health Check Script
+================================================================================
+import psycopg2
+
+host = 'aws-0-eu-north-1.pooler.supabase.com'
+user = 'postgres.opcoqdoobwnoskdttifx'
+password = 'Notebook1!@123456789q'
+
+print("Connecting to Supabase PostgreSQL at", host, "...")
+conn = psycopg2.connect(host=host, user=user, password=password, dbname='postgres', port=6543)
+conn.autocommit = True
+cur = conn.cursor()
+
+print("Reading sql/schema.sql...")
+with open('sql/schema.sql', 'r', encoding='utf-8') as f:
+    sql = f.read()
+
+print("Executing DDL in Supabase...")
+cur.execute(sql)
+print("SUCCESS: schema.sql executed successfully!")
+
+print("Confirming pending emails in auth.users...")
+cur.execute("UPDATE auth.users SET email_confirmed_at = NOW() WHERE email_confirmed_at IS NULL;")
+print("SUCCESS: Email confirmed for registered users!")
+
+cur.execute("SELECT id, name, public FROM storage.buckets;")
+print("Storage Buckets:", cur.fetchall())
+
+cur.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_name;")
+print("Public Tables:", [r[0] for r in cur.fetchall()])
+
+# Check columns of items table
+cur.execute("SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'items' ORDER BY ordinal_position;")
+print("Columns in items:", cur.fetchall())
+
+conn.close()
+print("All database checks passed!")
+
+
+================================================================================
+
+=== FILE: scripts/seed_real_items.py ===
+Description: Initial Campus Product Catalog Seeding Script
+================================================================================
+import psycopg2
+import json
+
+host = 'aws-0-eu-north-1.pooler.supabase.com'
+user = 'postgres.opcoqdoobwnoskdttifx'
+password = 'Notebook1!@123456789q'
+
+conn = psycopg2.connect(host=host, user=user, password=password, dbname='postgres', port=6543)
+conn.autocommit = True
+cur = conn.cursor()
+
+# Get existing student profile ID
+cur.execute("SELECT id FROM public.profiles LIMIT 1;")
+row = cur.fetchone()
+if not row:
+    print("No profiles found!")
+    exit(1)
+
+seller_id = row[0]
+print("Using seller profile ID:", seller_id)
+
+sample_items = [
+    (
+        seller_id,
+        "TI-84 Plus CE Graphing Calculator",
+        "Color screen graphing calculator in excellent condition with USB charging cable and sliding hard case. Pre-loaded with statistics tools.",
+        4500,
+        "Electronics",
+        "Like New",
+        "Engineering Complex",
+        "https://images.unsplash.com/photo-1587145820266-a5951ee6f620?auto=format&fit=crop&w=800&q=80",
+        "WhatsApp",
+        "+254712345678"
+    ),
+    (
+        seller_id,
+        "Hisense 45L Dorm Mini-Fridge",
+        "Compact energy-efficient dormitory refrigerator with working freezer compartment. Whisper-quiet compressor, perfect for hostel rooms.",
+        6500,
+        "Dorm Essentials",
+        "Gently Used",
+        "Hall 4 Hostels",
+        "https://images.unsplash.com/photo-1584992236310-6edddc08acff?auto=format&fit=crop&w=800&q=80",
+        "WhatsApp",
+        "+254712345678"
+    ),
+    (
+        seller_id,
+        "Sony WH-1000XM4 Noise-Cancelling Headphones",
+        "Active noise cancelling wireless headphones. 30 hours battery life. Includes audio cable and carrying case for quiet library study.",
+        11000,
+        "Electronics",
+        "Like New",
+        "Postgraduate Wing",
+        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80",
+        "Phone",
+        "+254712345678"
+    ),
+    (
+        seller_id,
+        "Campus Fleece Varsity Hoodie (Navy, Size L)",
+        "Heavyweight official university fleece sweater. Only worn twice, washed and clean. Great for chilly early-morning lecture halls.",
+        1200,
+        "Clothing",
+        "Like New",
+        "Student Center",
+        "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=800&q=80",
+        "WhatsApp",
+        "+254712345678"
+    ),
+    (
+        seller_id,
+        "Heavy-Duty Campus Mountain Bike with U-Lock",
+        "Shimano 21-speed gear system, rear luggage rack, puncture-resistant tyres. Includes heavy combination steel U-lock and helmet.",
+        8500,
+        "Other",
+        "Fair",
+        "Sports Pavilion",
+        "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=800&q=80",
+        "Phone",
+        "+254712345678"
+    ),
+    (
+        seller_id,
+        "Adjustable LED Study Desk Lamp with USB Port",
+        "Touch-sensitive brightness controls with 3 color temperatures (warm, natural, cool white). Built-in USB phone charging port.",
+        950,
+        "Dorm Essentials",
+        "Like New",
+        "Hall 4 Hostels",
+        "https://images.unsplash.com/photo-1534353436294-0dbd4bdac845?auto=format&fit=crop&w=800&q=80",
+        "WhatsApp",
+        "+254712345678"
+    )
+]
+
+for item in sample_items:
+    cur.execute("""
+        INSERT INTO public.items (user_id, title, description, price, category, condition, campus_location, image_url, contact_method, contact_value)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+    """, item)
+
+print(f"Successfully inserted {len(sample_items)} real listings into Supabase!")
+cur.execute("SELECT COUNT(*) FROM public.items;")
+print("Total real listings in Supabase:", cur.fetchone()[0])
+conn.close()
+
+
+================================================================================
+
+=== FILE: scripts/add_trigger.py ===
+Description: Auth Profile Sync Trigger Deployment Script
+================================================================================
+import psycopg2
+
+conn = psycopg2.connect(
+    host='aws-0-eu-north-1.pooler.supabase.com',
+    user='postgres.opcoqdoobwnoskdttifx',
+    password='Notebook1!@123456789q',
+    dbname='postgres',
+    port=6543
+)
+conn.autocommit = True
+cur = conn.cursor()
+
+# Auto-confirm trigger on auth.users
+cur.execute("""
+CREATE OR REPLACE FUNCTION public.auto_confirm_new_user()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    NEW.email_confirmed_at = COALESCE(NEW.email_confirmed_at, NOW());
+    RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS on_auth_user_auto_confirm ON auth.users;
+CREATE TRIGGER on_auth_user_auto_confirm
+    BEFORE INSERT ON auth.users
+    FOR EACH ROW EXECUTE FUNCTION public.auto_confirm_new_user();
+""")
+
+print("Successfully installed auto_confirm_new_user trigger on auth.users!")
+
+# Also ensure any existing unconfirmed users are confirmed
+cur.execute("UPDATE auth.users SET email_confirmed_at = NOW() WHERE email_confirmed_at IS NULL;")
+print("Confirmed all existing auth.users!")
+
+conn.close()
+
+
+================================================================================
+
+=== FILE: scripts/create_check_email_rpc.py ===
+Description: Stored Procedure RPC Deployment for User Verification
+================================================================================
+import psycopg2
+
+conn = psycopg2.connect(
+    host='aws-0-eu-north-1.pooler.supabase.com',
+    user='postgres.opcoqdoobwnoskdttifx',
+    password='Notebook1!@123456789q',
+    dbname='postgres',
+    port=6543
+)
+conn.autocommit = True
+cur = conn.cursor()
+
+# Create check_email_exists function
+cur.execute("""
+CREATE OR REPLACE FUNCTION public.check_email_exists(email_to_check TEXT)
+RETURNS BOOLEAN
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, auth
+AS $$
+BEGIN
+    RETURN EXISTS (
+        SELECT 1 FROM auth.users 
+        WHERE LOWER(email) = LOWER(TRIM(email_to_check))
+    );
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.check_email_exists(TEXT) TO anon, authenticated, service_role;
+""")
+
+print("Successfully created public.check_email_exists() function!")
+
+# Test with existing email
+cur.execute("SELECT public.check_email_exists('faith.wanjiku@testmail.com');")
+res_exists = cur.fetchone()[0]
+
+# Test with non-existing email
+cur.execute("SELECT public.check_email_exists('doesnotexist_random123@univ.edu');")
+res_not_exists = cur.fetchone()[0]
+
+print("Existing email test ('faith.wanjiku@testmail.com'):", res_exists)
+print("Non-existing email test ('doesnotexist_random123@univ.edu'):", res_not_exists)
+
+conn.close()
+
+
+================================================================================
+
+=== FILE: scripts/set_faith_password.py ===
+Description: Demo User Credential Maintenance Script
+================================================================================
+import psycopg2
+
+conn = psycopg2.connect(
+    host='aws-0-eu-north-1.pooler.supabase.com',
+    user='postgres.opcoqdoobwnoskdttifx',
+    password='Notebook1!@123456789q',
+    dbname='postgres',
+    port=6543
+)
+conn.autocommit = True
+cur = conn.cursor()
+
+cur.execute("""
+UPDATE auth.users 
+SET encrypted_password = crypt('campus2026', gen_salt('bf'))
+WHERE email ILIKE 'faith.wanjiku@testmail.com';
+""")
+
+print("Successfully updated faith.wanjiku@testmail.com password to campus2026!")
+conn.close()
+
+
+================================================================================
+
+=== FILE: vercel.json ===
+Description: Vercel Production Deployment & Header Configuration
+================================================================================
+{
+  "version": 2,
+  "cleanUrls": true,
+  "outputDirectory": ".",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    },
+    {
+      "source": "/(index.html)?",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/(tailwind.css|styles.css|js/.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
+    }
+  ]
+}
+
+
+================================================================================
+
+=== FILE: .gitignore ===
+Description: Git Version Control Exclusion Rules
+================================================================================
+# Binary executables
+tailwindcss.exe
+*.exe
+
+# Temporary scratch & test artifacts
+scratch/
+test_*.html
+*.png
+*.jpg
+*.jpeg
+
+# Python environment & cache
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv/
+env/
+venv/
+
+# OS metadata
+Thumbs.db
+.DS_Store
+info
+
+
+
+================================================================================
+
+=== FILE: README.md ===
+Description: Project Documentation, Architecture Guide & Deployment Instructions
+================================================================================
+# 🎓 Campus Online Thrift Market
+
+> A decentralized, low-complexity peer-to-peer (P2P) campus thrift marketplace designed for university students to buy, sell, and hand down textbooks, electronics, dorm essentials, and clothing with zero transaction fees and direct WhatsApp contact.
+
+---
+
+## 🌟 Architectural Overview
+
+Traditional campus commerce on instant messaging groups and social media status posts suffers from rapid message depreciation, lack of persistent indexing, absence of category filtering, and high friction. 
+
+**Campus Online Thrift Market** solves this with a **Zero-Build-Step Single-Page Application (SPA)** backed directly by **Supabase Backend-as-a-Service (BaaS)**:
+
+- **Frontend:** Pure HTML5, Modern Vanilla JavaScript (ES6+ Modules), and utility-first Tailwind CSS loaded via CDN.
+- **Backend:** Supabase PostgreSQL with automated Row Level Security (RLS) policies.
+- **Authentication:** Supabase Auth (JWT session management, email/password verification).
+- **File Storage:** Supabase Cloud Storage bucket (`item-images`) with public CDN URLs.
+- **P2P Communication:** Direct deep-linked URI protocols (`https://wa.me/`, `mailto:`, `tel:`) bypassing server-side chat overhead.
+- **Zero Node.js Rot:** No `npm install`, Webpack, Vite, or local transpilation pipelines required.
+
+---
+
+## 📁 Repository Structure
+
+```
+campus-thrift-market/
+│
+├── index.html              # Main responsive Single-Page Application markup & modal dialogs
+├── styles.css              # Custom design system tokens, glassmorphism, animations & toasts
+│
+├── js/
+│   ├── supabaseClient.js   # ESM CDN-based Supabase client initializer & config manager
+│   ├── auth.js             # Student authentication, session persistence & UI state sync
+│   └── app.js              # Core engine: search, category filtering, image uploads, DOM logic
+│
+├── sql/
+│   └── schema.sql          # PostgreSQL DDL: profiles & items tables, RLS policies, storage bucket
+│
+├── research/
+│   └── c.md                # System architectural blueprint and project specification
+│
+└── README.md               # Operational setup manual, deployment guide & team breakdown
+```
+
+---
+
+## 🚀 Quick Start Guide
+
+### 1. One-Click Free Vercel Deployment
+
+Deploy this project on Vercel's free/hobby tier in under 60 seconds with zero build steps:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fcheruiyotalvin29-glitch%2FCAMPUS-THRIFT)
+
+1. Click the **Deploy** button above or go to [Vercel](https://vercel.com/new).
+2. Import the `cheruiyotalvin29-glitch/CAMPUS-THRIFT` repository.
+3. Keep **Framework Preset** as **Other** (Root directory: `./`). No build command or output directory is required.
+4. Click **Deploy**. Your campus marketplace is live instantly with free HTTPS, CDN caching, and custom domain support!
+
+---
+
+### 2. Running Locally (No Build Tools Needed!)
+Because this application runs on native web standards and ESM modules, you can serve it with any local static HTTP server.
+
+Using Python 3 (installed on most systems):
+```bash
+# In the repository root (uses multithreaded server with zero-caching):
+python server.py 8000
+```
+Then open your browser to:
+```
+http://127.0.0.1:8000
+```
+*(Tip: Using `http://127.0.0.1:8000` instead of `localhost` prevents browser proxy/VPN extensions from intercepting local requests).*
+
+*Note: Due to browser security restrictions on ES6 modules loaded via `file://`, running through a local server (`localhost:8000`) is required.*
+
+---
+
+## ⚡ Supabase Cloud Backend Setup
+
+To connect the application to your live Supabase cloud backend:
+
+### Step 1: Create a Supabase Project
+1. Log in to [Supabase](https://supabase.com/) and create a new project.
+2. Note your **Project URL** and **Anon Public API Key** from **Project Settings > API**.
+
+### Step 2: Run Database Initialization Script
+1. Navigate to the **SQL Editor** tab in the Supabase Dashboard.
+2. Open [`sql/schema.sql`](file:///C:/Users/G_R_E/Documents/REPOSITORIES/campus%20thrift%20market/sql/schema.sql) in this repository and paste the entire script into the SQL editor.
+3. Click **Run**.
+   - This sets up:
+     - `public.profiles` (linked to `auth.users`)
+     - `public.items` (with price constraints and contact details)
+     - Row Level Security (RLS) policies for secure public reading and owner-only editing
+     - Public storage bucket `item-images` with upload permissions
+     - Automatic user profile trigger `on_auth_user_created`
+
+### Step 3: Link Credentials
+You can connect your credentials in **two ways**:
+
+- **Option A (In-App GUI - Easiest):**
+  Open the app in your browser, click the **Supabase Ready / Backend Config** pill in the top header, paste your `Project URL` and `Anon Key`, and click **Connect Supabase**.
+
+- **Option B (Direct Code):**
+  In [`js/supabaseClient.js`](file:///C:/Users/G_R_E/Documents/REPOSITORIES/campus%20thrift%20market/js/supabaseClient.js), replace the placeholder constants:
+  ```javascript
+  export const DEFAULT_SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
+  export const DEFAULT_SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+  ```
+
+---
+
+## 🛡️ Prototype & Offline Demo Mode
+
+If you run the application before configuring live Supabase credentials, the system automatically launches in **Demo Mode**:
+- Pre-loads 8 realistic campus thrift items across Textbooks, Electronics, Dorm Essentials, and Clothing.
+- Allows full interactive testing of keyword search, category pills, price sorting, and item detail modals.
+- Allows simulated student sign-in/sign-up and listing creation with local browser storage.
+- Easily toggle between Demo Mode and Live Supabase via the header configuration modal!
+
+---
+
+## 👥 Team Ownership & Operational Breakdown
+
+As planned in the architectural blueprint ([research/c.md](file:///C:/Users/G_R_E/Documents/REPOSITORIES/campus%20thrift%20market/research/c.md)):
+
+| Role | Member Allocation | Primary Deliverables | Target Modules |
+| :--- | :--- | :--- | :--- |
+| **Database & Backend Lead** | Person 1 | PostgreSQL DDL, RLS policies, Storage buckets, Auth engine | `sql/schema.sql`, `js/supabaseClient.js`, `js/auth.js` |
+| **Frontend & UI/UX Lead** | Person 2 | Semantic HTML structure, Tailwind CSS styling, responsive layout, modals | `index.html`, `styles.css` |
+| **Integration Lead** | Person 3 | Dynamic DOM rendering, live filtering, image upload, URI generation | `js/app.js` |
+| **QA & Documentation Lead** | Person 4 | Edge-case verification, seed data, setup guide, cross-device testing | `README.md`, test suites |
+
+---
+
+## 🧪 Acceptance & Verification Checklist
+
+- [x] **Zero Build Tooling:** Starts directly in browser without npm or bundler installation.
+- [x] **Relational Schema:** Foreign keys cleanly connect `items.user_id` to `profiles.id` and `auth.users(id)`.
+- [x] **Database Security:** Row Level Security (RLS) prevents non-owners from editing or deleting listings.
+- [x] **Real-Time Client Search:** Instant query filtering across title, description, and campus location.
+- [x] **Category Selectors:** Instant filtering across Textbooks, Electronics, Clothing, Dorm Gear, and Other.
+- [x] **Sorting Engine:** Chronological (newest), price ascending, and price descending sorts.
+- [x] **Direct Contact Deep Links:**
+  - WhatsApp: `https://wa.me/[phone]?text=[prefilled_inquiry]`
+  - Email: `mailto:[email]?subject=[item_title]`
+  - Phone: `tel:[phone]`
+- [x] **User Ownership:** Logged-in students can view and delete their own items via the "My Listings" tab and detail modal.
+- [x] **Image Upload & Preview:** Drag-and-drop file upload with live client thumbnail preview.
+
+
+================================================================================
+
