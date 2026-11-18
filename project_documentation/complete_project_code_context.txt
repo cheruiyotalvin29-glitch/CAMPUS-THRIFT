@@ -5,42 +5,43 @@ Generated for: Academic Technical Report & AI Analysis Context
 ================================================================================
 
 TABLE OF CONTENTS:
-01. index.html - Frontend Single-Page Application HTML Structure & Modals
-02. styles.css - Custom UI Stylesheets, Glassmorphism, Animations & Responsive Sheets
-03. js/config.js - Supabase Environment Configuration & API Credentials
-04. js/supabaseClient.js - Supabase Client Factory, LocalStorage Overrides & Health Audit
-05. js/auth.js - User Authentication, Session Persistence & Auth State Listener
-06. js/app.js - Core Application Logic, Item CRUD, Filters, Search & Modal Management
-07. sql/schema.sql - PostgreSQL Database Schema, Tables, Constraints & Row Level Security (RLS)
-08. sql/update_v2.sql - Database Migration v2 & Realtime Subscription Settings
-09. server.py - Local Development Multithreaded HTTP Server
-10. scripts/setup_db.py - Database Initialization and Health Check Script
-11. scripts/seed_real_items.py - Initial Campus Product Catalog Seeding Script
-12. scripts/add_trigger.py - Auth Profile Sync Trigger Deployment Script
-13. scripts/create_check_email_rpc.py - Stored Procedure RPC Deployment for User Verification
-14. scripts/set_faith_password.py - Demo User Credential Maintenance Script
-15. vercel.json - Vercel Production Deployment & Header Configuration
-16. .gitignore - Git Version Control Exclusion Rules
-17. README.md - Project Documentation, Architecture Guide & Deployment Instructions
+01. index.html - Frontend Single-Page Application HTML Structure, Navbars & Modals
+02. styles.css - Design System, Color Tokens, Strict Utility Classes, Animations & Responsive Sheets
+03. tailwind.css - Precompiled Tailwind CSS Utilities and Preflight Base Styles
+04. js/config.js - Supabase Environment Configuration & API Credentials
+05. js/supabaseClient.js - Supabase Client Factory, LocalStorage Overrides & Health Audit
+06. js/auth.js - User Authentication, Session Persistence & Auth State Listener
+07. js/app.js - Core Application Logic, Item CRUD, Filters, Search, Contact Linking & Modal Management
+08. sql/schema.sql - PostgreSQL Database Schema, Tables, Constraints & Row Level Security (RLS)
+09. sql/update_v2.sql - Database Migration v2 & Realtime Subscription Settings
+10. server.py - Local Development Multithreaded HTTP Server
+11. scripts/setup_db.py - Database Initialization and Health Check Script
+12. scripts/seed_real_items.py - Initial Campus Product Catalog Seeding Script
+13. scripts/add_trigger.py - Auth Profile Sync Trigger Deployment Script
+14. scripts/create_check_email_rpc.py - Stored Procedure RPC Deployment for User Verification
+15. scripts/set_faith_password.py - Demo User Credential Maintenance Script
+16. vercel.json - Vercel Production Deployment & Header Configuration
+17. .gitignore - Git Version Control Exclusion Rules
+18. README.md - Project Documentation, Architecture Guide & Deployment Instructions
 
 ================================================================================
 
 === FILE: index.html ===
-Description: Frontend Single-Page Application HTML Structure & Modals
+=== DESCRIPTION: Frontend Single-Page Application HTML Structure, Navbars & Modals ===
 ================================================================================
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
-    <meta name="theme-color" content="#4f46e5">
+    <meta name="theme-color" content="#166534">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>Campus Online Thrift Market | Student P2P Marketplace</title>
     <meta name="description" content="A decentralized peer-to-peer campus marketplace for students to buy and sell textbooks, electronics, dorm essentials, and clothes with instant WhatsApp contact.">
 
     <!-- Crisp Inline SVG Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23166534%22 width=%22100%22 height=%22100%22 rx=%2220%22/><text x=%2250%25%22 y=%2254%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22system-ui%22 font-weight=%22800%22 font-size=%2242%22>CT</text></svg>">
 
     <!-- Open Graph Social Media Previews -->
     <meta property="og:title" content="Campus Online Thrift Market">
@@ -64,7 +65,7 @@ Description: Frontend Single-Page Application HTML Structure & Modals
     <!-- Pre-bundled Zero-Latency Supabase Client -->
     <script src="js/vendor/supabase.js"></script>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-indigo-100 selection:text-indigo-800">
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-emerald-100 selection:text-emerald-900">
 
     <!-- TOAST NOTIFICATION CONTAINER -->
     <div id="toast-container" aria-live="polite"></div>
@@ -91,13 +92,12 @@ Description: Frontend Single-Page Application HTML Structure & Modals
             <!-- Logo & Brand Name -->
             <div class="flex items-center gap-2 sm:gap-3 min-w-0">
                 <a href="#" class="flex items-center gap-2 sm:gap-2.5 group min-w-0">
-                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-indigo-200 group-hover:scale-105 transition-transform shrink-0">
-                        <span class="text-lg sm:text-xl">🎓</span>
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform shrink-0">
+                        <span class="text-sm font-extrabold text-white">CT</span>
                     </div>
                     <div class="min-w-0">
                         <div class="flex items-center gap-1.5 sm:gap-2">
-                            <span class="brand-font font-extrabold text-lg sm:text-2xl tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors truncate">CampusThrift</span>
-                            <span class="hidden md:inline-flex text-[10px] font-bold uppercase tracking-wider bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full shrink-0">P2P Mart</span>
+                            <span class="brand-font font-extrabold text-lg sm:text-2xl tracking-tight text-slate-900 group-hover:text-emerald-700 transition-colors truncate">CampusThrift</span>
                         </div>
                         <p class="text-[11px] text-slate-500 hidden sm:block -mt-0.5">Student Peer-to-Peer Marketplace</p>
                     </div>
@@ -105,23 +105,22 @@ Description: Frontend Single-Page Application HTML Structure & Modals
             </div>
 
             <!-- Navigation Controls & Auth Buttons -->
-            <div id="auth-buttons" class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+            <div id="auth-buttons" class="flex items-center gap-2 shrink-0">
                 
                 <!-- My Listings Button (Visible only on desktop when logged in; on mobile it is in bottom nav) -->
-                <button id="nav-my-listings-btn" onclick="openMyListingsModal()" class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition shadow-sm" title="View & manage your listings">
-                    <span>🏷️</span>
+                <button id="nav-my-listings-btn" onclick="openMyListingsModal()" class="hidden md:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition shadow-sm cursor-pointer" title="View & manage your listings">
                     <span>My Listings</span>
                 </button>
 
                 <!-- User Profile Badge (Visible when logged in) -->
-                <button id="user-badge" onclick="openMyListingsModal()" class="hidden flex items-center gap-1.5 bg-slate-100/90 hover:bg-slate-200 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-xl border border-slate-200/90 transition text-xs font-semibold text-slate-700 shadow-sm" title="Signed in - Click to manage your listings">
-                    <span class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-[10px] sm:text-[11px] shrink-0">👤</span>
-                    <span id="user-name-display" class="max-w-[65px] sm:max-w-[120px] truncate font-semibold text-[11px] sm:text-xs">Student</span>
+                <button id="user-badge" onclick="openMyListingsModal()" class="hidden flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-xl border border-slate-200 transition text-xs font-semibold text-slate-700 shadow-sm cursor-pointer" title="Signed in - Click to manage your listings">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+                    <span id="user-name-display" class="max-w-[70px] sm:max-w-[120px] truncate font-medium text-xs text-slate-800">Student</span>
                 </button>
 
                 <!-- Sell Item CTA (Primary Action) -->
-                <button id="open-post-btn" onclick="checkAuthAndOpenPostModal()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold shadow-md shadow-indigo-200 flex items-center gap-1 sm:gap-1.5 transition-all shrink-0">
-                    <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button id="open-post-btn" onclick="checkAuthAndOpenPostModal()" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-medium px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm shadow-sm flex items-center gap-1.5 transition duration-200 shrink-0 cursor-pointer">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path>
                     </svg>
                     <span class="hidden sm:inline">Sell Item</span>
@@ -129,12 +128,12 @@ Description: Frontend Single-Page Application HTML Structure & Modals
                 </button>
 
                 <!-- Sign In Button (Visible when logged out) -->
-                <button id="open-login-btn" onclick="toggleModal('auth-modal', true)" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold transition active:scale-95 shadow-sm shrink-0">
+                <button id="open-login-btn" onclick="toggleModal('auth-modal', true)" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition active:scale-95 shadow-sm shrink-0 cursor-pointer">
                     Sign In
                 </button>
 
                 <!-- Logout Button (Visible when logged in on desktop) -->
-                <button id="logout-btn" onclick="handleLogout()" class="hidden md:inline-flex bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-200 hover:border-rose-200 px-3 py-2 rounded-xl text-xs font-semibold transition shrink-0" title="Log out">
+                <button id="logout-btn" onclick="handleLogout()" class="hidden md:inline-flex bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-200 hover:border-rose-200 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold transition shrink-0 cursor-pointer" title="Log out">
                     Logout
                 </button>
             </div>
@@ -142,42 +141,40 @@ Description: Frontend Single-Page Application HTML Structure & Modals
     </header>
 
     <!-- HERO / CAMPUS BANNER -->
-    <section class="hero-gradient border-b border-indigo-50/50 py-5 sm:py-12 px-3.5 sm:px-6 lg:px-8">
+    <section class="hero-gradient border-b border-slate-200/50 py-5 sm:py-12 px-3.5 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-5 sm:gap-6">
             <div class="max-w-2xl text-center md:text-left">
-                <div class="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-indigo-100/80 text-indigo-800 text-[11px] sm:text-xs font-semibold mb-2 sm:mb-3">
-                    <span>✨ Save up to 70% on student essentials</span>
-                </div>
+
                 <h2 class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                    Campus Thrift, <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Reinvented.</span>
+                    Your campus marketplace for <span class="text-emerald-700">textbooks, gear & more.</span>
                 </h2>
                 <p class="mt-2 sm:mt-3 text-xs sm:text-base text-slate-600 max-w-xl">
-                    Buy, sell, and hand down verified textbooks, dorm gear, electronics, and fashion directly to students on campus. Zero fees, one-tap phone and WhatsApp copying.
+                    Buy and sell pre-owned textbooks, electronics, dorm essentials, and clothing directly with students on your campus. No fees, no middlemen.
                 </p>
 
                 <!-- Quick Feature Highlights -->
                 <div class="mt-5 flex flex-wrap justify-center md:justify-start items-center gap-4 text-xs font-medium text-slate-600">
                     <span class="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm px-2.5 py-1 rounded-md border border-slate-200/60 shadow-sm">
-                        <span class="text-emerald-500">✓</span> One-Tap Number Copy
+                        <span class="text-emerald-600">✓</span> One-Tap Number Copy
                     </span>
                     <span class="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm px-2.5 py-1 rounded-md border border-slate-200/60 shadow-sm">
-                        <span class="text-indigo-500">✓</span> Zero Commission Fees
+                        <span class="text-emerald-600">✓</span> Zero Commission Fees
                     </span>
                     <span class="flex items-center gap-1.5 bg-white/70 backdrop-blur-sm px-2.5 py-1 rounded-md border border-slate-200/60 shadow-sm">
-                        <span class="text-violet-500">✓</span> On-Campus Handover
+                        <span class="text-emerald-600">✓</span> On-Campus Handover
                     </span>
                 </div>
             </div>
 
             <!-- Quick Action Box / Stats -->
-            <div class="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-lg shadow-indigo-100 border border-slate-200/70 w-full md:w-80 flex flex-col gap-3">
+            <div class="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-lg shadow-slate-200/60 border border-slate-200/70 w-full md:w-80 flex flex-col gap-3">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Market Overview</span>
-                    <span id="items-count-badge" class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full font-bold">Loading...</span>
+                    <span id="items-count-badge" class="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-bold">Loading...</span>
                 </div>
                 <div class="grid grid-cols-2 gap-3 pt-1">
                     <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
-                        <span class="text-2xl font-black text-indigo-600" id="stat-active-listings">--</span>
+                        <span class="text-2xl font-black text-emerald-700" id="stat-active-listings">--</span>
                         <p class="text-[11px] text-slate-500 font-medium">Active Listings</p>
                     </div>
                     <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
@@ -209,7 +206,7 @@ Description: Frontend Single-Page Application HTML Structure & Modals
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </div>
-                    <input type="text" id="search-input" oninput="filterItems()" placeholder="Search textbooks, laptops, mini-fridges, clothing..." class="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition">
+                    <input type="text" id="search-input" oninput="filterItems()" placeholder="Search textbooks, laptops, mini-fridges, clothing..." class="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition">
                     <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600">
                         &times;
                     </button>
@@ -219,10 +216,10 @@ Description: Frontend Single-Page Application HTML Structure & Modals
                 <div class="w-full md:w-auto flex flex-wrap sm:flex-nowrap items-center gap-2.5">
                     <!-- Sort Order Dropdown -->
                     <div class="relative flex-1 sm:flex-initial">
-                        <select id="sort-filter" onchange="filterItems()" class="w-full sm:w-auto px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer transition">
-                            <option value="newest">🕒 Sort: Newest First</option>
-                            <option value="price-asc">💰 Price: Low to High</option>
-                            <option value="price-desc">💎 Price: High to Low</option>
+                        <select id="sort-filter" onchange="filterItems()" class="w-full sm:w-auto px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-600 cursor-pointer transition">
+                            <option value="newest">Newest first</option>
+                            <option value="price-asc">Price: low to high</option>
+                            <option value="price-desc">Price: high to low</option>
                         </select>
                     </div>
                 </div>
@@ -231,23 +228,23 @@ Description: Frontend Single-Page Application HTML Structure & Modals
             <!-- Category Pills Bar -->
             <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs font-semibold">
                 <span class="text-slate-400 pl-1 uppercase tracking-wider text-[10px] hidden sm:inline">Category:</span>
-                <button onclick="setCategory('ALL')" class="category-pill active px-3.5 py-2 rounded-xl border border-indigo-600 bg-indigo-600 text-white transition shadow-sm whitespace-nowrap" data-category="ALL">
-                    All Categories
+                <button onclick="setCategory('ALL')" class="category-pill active px-3.5 py-2 rounded-xl border border-emerald-600 bg-emerald-600 text-white transition shadow-sm whitespace-nowrap cursor-pointer" data-category="ALL">
+                    All
                 </button>
-                <button onclick="setCategory('Textbooks')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Textbooks">
-                    📚 Textbooks
+                <button onclick="setCategory('Textbooks')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap cursor-pointer" data-category="Textbooks">
+                    Textbooks
                 </button>
-                <button onclick="setCategory('Electronics')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Electronics">
-                    💻 Electronics
+                <button onclick="setCategory('Electronics')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap cursor-pointer" data-category="Electronics">
+                    Electronics
                 </button>
-                <button onclick="setCategory('Clothing')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Clothing">
-                    👕 Clothing
+                <button onclick="setCategory('Clothing')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap cursor-pointer" data-category="Clothing">
+                    Clothing
                 </button>
-                <button onclick="setCategory('Dorm Essentials')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Dorm Essentials">
-                    🛋️ Dorm Essentials
+                <button onclick="setCategory('Dorm Essentials')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap cursor-pointer" data-category="Dorm Essentials">
+                    Dorm Essentials
                 </button>
-                <button onclick="setCategory('Other')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap" data-category="Other">
-                    📦 Other
+                <button onclick="setCategory('Other')" class="category-pill px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm whitespace-nowrap cursor-pointer" data-category="Other">
+                    Other
                 </button>
             </div>
         </section>
@@ -290,8 +287,8 @@ Description: Frontend Single-Page Application HTML Structure & Modals
 
             <!-- Empty State View -->
             <div id="empty-state" class="hidden text-center py-16 px-4 bg-white rounded-2xl border border-dashed border-slate-300 my-4 max-w-lg mx-auto">
-                <div class="w-16 h-16 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
-                    🔍
+                <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
                 <h3 class="text-lg font-bold text-slate-800">No campus listings found</h3>
                 <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto">
@@ -301,8 +298,8 @@ Description: Frontend Single-Page Application HTML Structure & Modals
                     <button onclick="resetAllFilters()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition">
                         Reset Filters
                     </button>
-                    <button onclick="checkAuthAndOpenPostModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl transition">
-                        + Sell Item Now
+                    <button onclick="checkAuthAndOpenPostModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl transition cursor-pointer">
+                        Sell an item
                     </button>
                 </div>
             </div>
@@ -313,7 +310,7 @@ Description: Frontend Single-Page Application HTML Structure & Modals
     <nav id="mobile-bottom-nav" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-slate-200/80 px-1.5 flex items-center justify-between text-[10px] font-bold text-slate-500 shadow-[0_-4px_25px_rgba(0,0,0,0.06)] select-none">
         
         <!-- 1. Feed -->
-        <button onclick="scrollToFeed()" class="flex-1 flex flex-col items-center justify-center py-1.5 text-indigo-600 focus:outline-none transition-colors">
+        <button onclick="scrollToFeed()" class="flex-1 flex flex-col items-center justify-center py-1.5 text-emerald-700 focus:outline-none transition-colors">
             <span class="w-6 h-6 flex items-center justify-center mb-0.5">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
@@ -323,7 +320,7 @@ Description: Frontend Single-Page Application HTML Structure & Modals
         </button>
 
         <!-- 2. Search -->
-        <button onclick="focusSearchInput()" class="flex-1 flex flex-col items-center justify-center py-1.5 hover:text-indigo-600 focus:outline-none transition-colors">
+        <button onclick="focusSearchInput()" class="flex-1 flex flex-col items-center justify-center py-1.5 hover:text-emerald-700 focus:outline-none transition-colors">
             <span class="w-6 h-6 flex items-center justify-center mb-0.5">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -334,16 +331,16 @@ Description: Frontend Single-Page Application HTML Structure & Modals
 
         <!-- 3. Sell Center Action Button -->
         <div class="flex-1 flex flex-col items-center justify-center relative">
-            <button onclick="checkAuthAndOpenPostModal()" class="-mt-5 w-12 h-12 rounded-full bg-gradient-to-tr from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 active:scale-95 text-white flex items-center justify-center shadow-lg shadow-indigo-500/35 border-[3.5px] border-white transition-all focus:outline-none" aria-label="Sell Item" title="Sell an Item">
+            <button onclick="checkAuthAndOpenPostModal()" class="-mt-5 w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 border-[3.5px] border-white transition-all focus:outline-none cursor-pointer" aria-label="Sell Item" title="Sell an Item">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
                 </svg>
             </button>
-            <span class="text-[9px] font-bold text-indigo-600 tracking-tight mt-0.5">Sell</span>
+            <span class="text-[9px] font-bold text-emerald-700 tracking-tight mt-0.5">Sell</span>
         </div>
 
         <!-- 4. My Items -->
-        <button onclick="openMyListingsModal()" class="flex-1 flex flex-col items-center justify-center py-1.5 hover:text-indigo-600 focus:outline-none transition-colors">
+        <button onclick="openMyListingsModal()" class="flex-1 flex flex-col items-center justify-center py-1.5 hover:text-emerald-700 focus:outline-none transition-colors">
             <span class="w-6 h-6 flex items-center justify-center mb-0.5">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
@@ -353,7 +350,7 @@ Description: Frontend Single-Page Application HTML Structure & Modals
         </button>
 
         <!-- 5. Account / Logout -->
-        <button onclick="handleMobileAuthAction()" class="flex-1 flex flex-col items-center justify-center py-1.5 hover:text-indigo-600 focus:outline-none transition-colors">
+        <button onclick="handleMobileAuthAction()" class="flex-1 flex flex-col items-center justify-center py-1.5 hover:text-emerald-700 focus:outline-none transition-colors">
             <span class="w-6 h-6 flex items-center justify-center mb-0.5" id="mobile-account-icon">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -385,42 +382,37 @@ Description: Frontend Single-Page Application HTML Structure & Modals
                 </svg>
             </button>
             
-            <div class="flex items-center gap-3 mb-5">
-                <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg font-bold">
-                    🏷️
-                </div>
-                <div>
-                    <h2 id="post-modal-title" class="text-xl font-bold text-slate-900 brand-font">List an Item for Sale</h2>
-                    <p id="post-modal-subtitle" class="text-xs text-slate-500">Connect directly with students on campus via WhatsApp, Phone, or Email.</p>
-                </div>
+            <div class="mb-5">
+                <h2 id="post-modal-title" class="text-xl font-bold text-slate-900 brand-font">List an item for sale</h2>
+                <p id="post-modal-subtitle" class="text-xs text-slate-500 mt-1">Buyers will contact you directly via WhatsApp or phone.</p>
             </div>
             
             <form id="post-item-form" onsubmit="handlePostItem(event)" class="space-y-4">
                 
                 <!-- Title -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-title">Item Title *</label>
-                    <input type="text" id="item-title" required placeholder="e.g. Calculus: Early Transcendentals (8th Ed)" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" for="item-title">Item title</label>
+                    <input type="text" id="item-title" required placeholder="e.g. Engineering Math 3 by Stroud, good condition" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition">
                 </div>
 
                 <!-- Price & Category Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-price">Price (KSh / $) *</label>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1" for="item-price">Asking price (KES)</label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-xs font-bold text-slate-400">KSh</span>
-                            <input type="number" id="item-price" required min="0" step="any" placeholder="1500" class="w-full pl-11 pr-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                            <input type="number" id="item-price" required min="0" step="any" placeholder="1500" class="w-full pl-11 pr-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-category">Category *</label>
-                        <select id="item-category" required class="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
-                            <option value="Textbooks">📚 Textbooks</option>
-                            <option value="Electronics">💻 Electronics</option>
-                            <option value="Clothing">👕 Clothing</option>
-                            <option value="Dorm Essentials">🛋️ Dorm Essentials</option>
-                            <option value="Other">📦 Other</option>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1" for="item-category">Category</label>
+                        <select id="item-category" required class="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition">
+                            <option value="Textbooks">Textbooks</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Dorm Essentials">Dorm Essentials</option>
+                            <option value="Other">Other</option>
                         </select>
                     </div>
                 </div>
@@ -428,8 +420,8 @@ Description: Frontend Single-Page Application HTML Structure & Modals
                 <!-- Condition & Campus Location -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-condition">Item Condition</label>
-                        <select id="item-condition" class="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1" for="item-condition">Condition</label>
+                        <select id="item-condition" class="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition">
                             <option value="Like New">Like New (Mint)</option>
                             <option value="Gently Used" selected>Gently Used</option>
                             <option value="Fair">Fair / Functional</option>
@@ -438,27 +430,26 @@ Description: Frontend Single-Page Application HTML Structure & Modals
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-location">Pickup Campus Location</label>
-                        <input type="text" id="item-location" placeholder="e.g. Science Library, Hall 4" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1" for="item-location">Pickup location</label>
+                        <input type="text" id="item-location" placeholder="e.g. Science Library, Hall 4" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition">
                     </div>
                 </div>
 
                 <!-- Description -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="item-description">Description & Details *</label>
-                    <textarea id="item-description" required rows="3" placeholder="Condition details, edition year, working status, best handover spots..." class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition"></textarea>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" for="item-description">Description</label>
+                    <textarea id="item-description" required rows="3" placeholder="Brief description — edition, condition notes, any accessories included..." class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition"></textarea>
                 </div>
 
                 <!-- Image Upload with Instant Preview -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Item Photo (Optional)</label>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Add a photo</label>
                     
                     <div id="dropzone" class="upload-dropzone rounded-xl p-4 text-center cursor-pointer relative bg-slate-50">
                         <input type="file" id="item-image" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="previewImage(this)">
                         
                         <div id="upload-prompt" class="space-y-1">
-                            <span class="text-2xl">📸</span>
-                            <p class="text-xs font-semibold text-slate-700">Click to upload photo or drag & drop</p>
+                            <p class="text-xs font-semibold text-slate-600">Click to upload a photo or drag & drop</p>
                             <p class="text-[11px] text-slate-400">PNG, JPG, WebP up to 5MB</p>
                         </div>
 
@@ -471,16 +462,16 @@ Description: Frontend Single-Page Application HTML Structure & Modals
                 </div>
 
                 <!-- Preferred Contact Method & Target Value -->
-                <div class="bg-indigo-50/60 p-3.5 rounded-xl border border-indigo-100 space-y-3">
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-3">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-indigo-900 uppercase tracking-wider">How Buyers Reach You</span>
-                        <span class="text-[11px] text-indigo-600 font-semibold">One-Tap Copy</span>
+                        <span class="text-xs font-semibold text-slate-700">How buyers reach you</span>
+                        <span class="text-[11px] text-slate-400 font-medium">One-tap copy</span>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="block text-[11px] font-semibold text-slate-600 mb-1" for="item-contact-method">Contact Method</label>
-                            <select id="item-contact-method" required onchange="updateContactPlaceholder()" class="w-full px-3 py-2 text-xs bg-white border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <select id="item-contact-method" required onchange="updateContactPlaceholder()" class="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600 outline-none">
                                 <option value="WhatsApp" selected>WhatsApp Number</option>
                                 <option value="Phone">Phone Number</option>
                             </select>
@@ -488,17 +479,17 @@ Description: Frontend Single-Page Application HTML Structure & Modals
 
                         <div>
                             <label class="block text-[11px] font-semibold text-slate-600 mb-1" for="item-contact-value">Phone / WhatsApp Number *</label>
-                            <input type="text" id="item-contact-value" required placeholder="+254712345678" class="w-full px-3 py-2 text-xs bg-white border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <input type="text" id="item-contact-value" required placeholder="+254712345678" class="w-full px-3 py-2 text-xs bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-600 outline-none">
                         </div>
                     </div>
-                    <p id="contact-helper-text" class="text-[10px] text-indigo-600/80">
+                    <p id="contact-helper-text" class="text-[10px] text-slate-400">
                         Include country code or local format (e.g. +254 712 345 678 or 0712345678). Buyers will be able to copy your number with a single click.
                     </p>
                 </div>
 
                 <!-- Submit Button -->
                 <div class="pt-2">
-                    <button type="submit" id="submit-item-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3 rounded-xl transition shadow-md shadow-indigo-200 flex items-center justify-center gap-2">
+                    <button type="submit" id="submit-item-btn" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-medium py-3 px-4 rounded-xl shadow-sm transition duration-200 cursor-pointer flex items-center justify-center gap-2">
                         <span id="submit-item-btn-text">Publish Listing</span>
                     </button>
                 </div>
@@ -523,9 +514,6 @@ Description: Frontend Single-Page Application HTML Structure & Modals
             </button>
             
             <div class="text-center mb-6">
-                <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl font-bold shadow-sm">
-                    🎓
-                </div>
                 <h2 id="auth-title" class="text-xl font-bold text-slate-900 brand-font">Student Sign In</h2>
                 <p id="auth-subtitle" class="text-xs text-slate-500 mt-1">Sign in with your student credentials to post items</p>
             </div>
@@ -535,27 +523,27 @@ Description: Frontend Single-Page Application HTML Structure & Modals
                 <!-- Sign-Up Specific Fields -->
                 <div id="signup-fields" class="space-y-3 hidden">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="auth-name">Full Name *</label>
-                        <input type="text" id="auth-name" placeholder="Alex Kamau" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1" for="auth-name">Full name</label>
+                        <input type="text" id="auth-name" placeholder="Alex Kamau" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="auth-phone">Phone / WhatsApp</label>
-                        <input type="text" id="auth-phone" placeholder="+254712345678" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1" for="auth-phone">Phone number</label>
+                        <input type="text" id="auth-phone" placeholder="+254712345678" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition">
                     </div>
                 </div>
 
                 <!-- Email & Password -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="auth-email">Student Email *</label>
-                    <input type="email" id="auth-email" required placeholder="student@university.ac.ke" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" for="auth-email">Email</label>
+                    <input type="email" id="auth-email" required placeholder="student@university.ac.ke" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1" for="auth-password">Password *</label>
-                    <input type="password" id="auth-password" required minlength="6" placeholder="••••••••" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" for="auth-password">Password</label>
+                    <input type="password" id="auth-password" required minlength="6" placeholder="••••••••" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-600 outline-none transition">
                 </div>
 
-                <button type="submit" id="auth-submit-btn" class="w-full mt-2 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3 rounded-xl transition shadow-md shadow-indigo-200 flex items-center justify-center gap-2">
+                <button type="submit" id="auth-submit-btn" class="w-full mt-2 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-medium py-3 px-4 rounded-xl shadow-sm transition duration-200 cursor-pointer flex items-center justify-center gap-2">
                     <span>Sign In</span>
                 </button>
             </form>
@@ -563,7 +551,7 @@ Description: Frontend Single-Page Application HTML Structure & Modals
             <div class="mt-5 pt-4 border-t border-slate-100 text-center">
                 <p class="text-xs text-slate-500">
                     <span id="auth-toggle-text">Need a student account?</span>
-                    <button type="button" id="toggle-auth-btn" onclick="toggleAuthMode()" class="text-indigo-600 font-bold underline hover:text-indigo-800 ml-1 transition">
+                    <button type="button" id="toggle-auth-btn" onclick="toggleAuthMode()" class="text-emerald-700 font-bold underline hover:text-emerald-800 ml-1 transition">
                         Create Account
                     </button>
                 </p>
@@ -597,9 +585,7 @@ Description: Frontend Single-Page Application HTML Structure & Modals
             </button>
             
             <div class="flex items-center gap-3 mb-4">
-                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold">
-                    ⚡
-                </div>
+                
                 <div>
                     <h2 class="text-lg font-bold text-slate-900 brand-font">Supabase Connection</h2>
                     <p class="text-xs text-slate-500">Configure your cloud PostgreSQL & Auth backend</p>
@@ -612,17 +598,17 @@ Description: Frontend Single-Page Application HTML Structure & Modals
                 </p>
 
                 <div>
-                    <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1" for="cfg-url">Supabase Project URL</label>
-                    <input type="text" id="cfg-url" placeholder="https://xyzcompany.supabase.co" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono text-xs outline-none">
+                    <label class="block font-semibold text-slate-600 mb-1" for="cfg-url">Supabase project URL</label>
+                    <input type="text" id="cfg-url" placeholder="https://xyzcompany.supabase.co" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-600 font-mono text-xs outline-none">
                 </div>
 
                 <div>
-                    <label class="block font-bold text-slate-700 uppercase tracking-wider mb-1" for="cfg-key">Supabase Anon Public API Key</label>
-                    <textarea id="cfg-key" rows="2" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono text-xs outline-none"></textarea>
+                    <label class="block font-semibold text-slate-600 mb-1" for="cfg-key">Supabase anon key</label>
+                    <textarea id="cfg-key" rows="2" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-600 font-mono text-xs outline-none"></textarea>
                 </div>
 
                 <div class="flex gap-2 pt-2">
-                    <button onclick="handleSaveConfig()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl transition">
+                    <button onclick="handleSaveConfig()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl transition cursor-pointer">
                         Connect Supabase
                     </button>
                     <button onclick="handleClearConfig()" class="px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition">
@@ -631,7 +617,7 @@ Description: Frontend Single-Page Application HTML Structure & Modals
                 </div>
 
                 <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80 text-[11px] text-slate-500">
-                    💡 <strong>Tip:</strong> Run the DDL script in <a href="sql/schema.sql" target="_blank" class="text-indigo-600 underline font-semibold">sql/schema.sql</a> in your Supabase SQL editor to create all tables, storage bucket, and RLS policies in one click.
+                    <strong>Tip:</strong> Run the DDL script in <a href="sql/schema.sql" target="_blank" class="text-emerald-700 underline font-semibold">sql/schema.sql</a> in your Supabase SQL editor to create all tables, storage bucket, and RLS policies in one click.
                 </div>
             </div>
         </div>
@@ -646,13 +632,11 @@ Description: Frontend Single-Page Application HTML Structure & Modals
             <!-- Modal Header with inline actions (Post Item + Close Button side-by-side, never overlapping) -->
             <div class="flex items-center justify-between gap-3 pb-4 mb-5 border-b border-slate-100">
                 <div class="flex items-center gap-3 min-w-0">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg font-bold shrink-0">
-                        🏷️
-                    </div>
+
                     <div class="min-w-0">
                         <div class="flex items-center gap-2 flex-wrap">
                             <h2 class="text-lg sm:text-xl font-bold text-slate-900 brand-font truncate">My Campus Listings</h2>
-                            <span id="my-listings-count-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 shrink-0">0 Items</span>
+                            <span id="my-listings-count-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-slate-200 shrink-0">0 Items</span>
                         </div>
                         <p class="text-xs text-slate-500 truncate hidden sm:block">Manage, edit, or delete items you have posted on campus.</p>
                     </div>
@@ -660,7 +644,7 @@ Description: Frontend Single-Page Application HTML Structure & Modals
 
                 <!-- Right Header Actions: Post Button + Close Button in inline flex flow -->
                 <div class="flex items-center gap-2 shrink-0">
-                    <button onclick="checkAuthAndOpenPostModal()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm shadow-indigo-200 flex items-center gap-1.5 transition whitespace-nowrap">
+                    <button onclick="checkAuthAndOpenPostModal()" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm flex items-center gap-1.5 transition whitespace-nowrap cursor-pointer">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
                         </svg>
@@ -692,8 +676,8 @@ Description: Frontend Single-Page Application HTML Structure & Modals
             <div class="sm:hidden w-12 h-1.5 bg-slate-300 rounded-full mx-auto mb-3"></div>
             
             <!-- Warning Icon -->
-            <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-3.5 border border-rose-100 shadow-sm text-2xl">
-                🗑️
+            <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-3.5 border border-rose-100 shadow-sm">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
             </div>
             
             <h3 class="text-lg font-bold text-slate-900 brand-font">Delete Listing?</h3>
@@ -717,13 +701,6 @@ Description: Frontend Single-Page Application HTML Structure & Modals
         </div>
     </div>
 
-            <!-- Modal Content / Listings Grid / Empty State -->
-            <div id="my-listings-body" class="space-y-3">
-                <!-- Dynamically populated via renderMyListings() -->
-            </div>
-        </div>
-    </div>
-
     <!-- Load Application Logic Module (Native ES6+ CDN Architecture) -->
     <script type="module" src="js/app.js"></script>
 </body>
@@ -733,7 +710,7 @@ Description: Frontend Single-Page Application HTML Structure & Modals
 ================================================================================
 
 === FILE: styles.css ===
-Description: Custom UI Stylesheets, Glassmorphism, Animations & Responsive Sheets
+=== DESCRIPTION: Design System, Color Tokens, Strict Utility Classes, Animations & Responsive Sheets ===
 ================================================================================
 /* ==========================================================================
    CAMPUS ONLINE THRIFT MARKET - CUSTOM STYLES & DESIGN TOKENS
@@ -743,16 +720,60 @@ Description: Custom UI Stylesheets, Glassmorphism, Animations & Responsive Sheet
 :root {
     --font-heading: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --primary: #4f46e5;
-    --primary-hover: #4338ca;
+    --primary: #059669;
+    --primary-hover: #047857;
     --accent: #10b981;
     --accent-hover: #059669;
     --surface: #ffffff;
-    --background: #f8fafc;
+    --background: #f7f8fa;
     --border-color: #e2e8f0;
     --text-primary: #0f172a;
     --text-secondary: #64748b;
-    --ring-focus: rgba(79, 70, 229, 0.35);
+    --ring-focus: rgba(5, 150, 105, 0.25);
+}
+
+/* ==========================================================================
+   STRICT UTILITY OVERRIDES & EMERALD BRAND PALETTE
+   Ensures button fills, borders, and dynamic visibility never fail
+   ========================================================================== */
+.hidden {
+    display: none !important;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
+.bg-emerald-600 {
+    background-color: #059669 !important;
+}
+
+.hover\:bg-emerald-700:hover, .bg-emerald-700 {
+    background-color: #047857 !important;
+}
+
+.hover\:bg-emerald-800:hover, .bg-emerald-800 {
+    background-color: #065f46 !important;
+}
+
+.text-emerald-600 {
+    color: #059669 !important;
+}
+
+.text-emerald-700 {
+    color: #047857 !important;
+}
+
+.border-emerald-600 {
+    border-color: #059669 !important;
+}
+
+.border-emerald-700 {
+    border-color: #047857 !important;
+}
+
+.shadow-emerald-200\/50, .shadow-emerald-200 {
+    box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.20) !important;
 }
 
 body {
@@ -778,23 +799,24 @@ h1, h2, h3, h4, .brand-font {
 }
 
 .hero-gradient {
-    background: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.08) 0%, rgba(238, 242, 255, 0.5) 90%);
+    background: linear-gradient(135deg, rgba(22, 101, 52, 0.04) 0%, rgba(247, 248, 250, 0.8) 50%, rgba(217, 119, 6, 0.03) 100%);
 }
 
 /* --------------------------------------------------------------------------
    Item Card Micro-Interactions
    -------------------------------------------------------------------------- */
 .item-card {
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
-                box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-                border-color 0.25s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     will-change: transform, box-shadow;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .item-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 16px 30px -10px rgba(79, 70, 229, 0.12), 0 8px 16px -6px rgba(0, 0, 0, 0.04);
-    border-color: rgba(99, 102, 241, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.04);
+    border-color: #cbd5e1;
 }
 
 .card-img-zoom {
@@ -840,10 +862,10 @@ h1, h2, h3, h4, .brand-font {
    Modal Backdrop & Slide-in Transitions
    -------------------------------------------------------------------------- */
 .modal-backdrop {
-    background: rgba(15, 23, 42, 0.65);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    transition: opacity 0.25s ease, visibility 0.25s ease;
+    background: rgba(15, 23, 42, 0.40) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
 .modal-backdrop.hidden {
@@ -944,8 +966,8 @@ h1, h2, h3, h4, .brand-font {
 
 .toast-info {
     background-color: #ffffff;
-    border-left: 4px solid #4f46e5;
-    color: #3730a3;
+    border-left: 4px solid #166534;
+    color: #14532d;
 }
 
 @keyframes toastSlideIn {
@@ -986,8 +1008,8 @@ h1, h2, h3, h4, .brand-font {
 }
 
 .upload-dropzone:hover, .upload-dropzone.dragover {
-    border-color: #4f46e5;
-    background-color: #f5f3ff;
+    border-color: #166534;
+    background-color: #f0fdf4;
 }
 
 /* --------------------------------------------------------------------------
@@ -1105,7 +1127,7 @@ h1, h2, h3, h4, .brand-font {
    -------------------------------------------------------------------------- */
 body.phone-frame-active {
     background: #090d16 !important;
-    background-image: radial-gradient(circle at 50% 20%, rgba(99, 102, 241, 0.18) 0%, transparent 65%) !important;
+    background-image: radial-gradient(circle at 50% 20%, rgba(22, 101, 52, 0.12) 0%, transparent 65%) !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
@@ -1161,8 +1183,16 @@ body.phone-frame-active #mobile-bottom-nav {
 
 ================================================================================
 
+=== FILE: tailwind.css ===
+=== DESCRIPTION: Precompiled Tailwind CSS Utilities and Preflight Base Styles ===
+================================================================================
+/*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */
+@layer properties{@supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))){*,:before,:after,::backdrop{--tw-rotate-x:initial;--tw-rotate-y:initial;--tw-rotate-z:initial;--tw-skew-x:initial;--tw-skew-y:initial;--tw-space-y-reverse:0;--tw-border-style:solid;--tw-gradient-position:initial;--tw-gradient-from:#0000;--tw-gradient-via:#0000;--tw-gradient-to:#0000;--tw-gradient-stops:initial;--tw-gradient-via-stops:initial;--tw-gradient-from-position:0%;--tw-gradient-via-position:50%;--tw-gradient-to-position:100%;--tw-leading:initial;--tw-font-weight:initial;--tw-tracking:initial;--tw-shadow:0 0 #0000;--tw-shadow-color:initial;--tw-shadow-alpha:100%;--tw-inset-shadow:0 0 #0000;--tw-inset-shadow-color:initial;--tw-inset-shadow-alpha:100%;--tw-ring-color:initial;--tw-ring-shadow:0 0 #0000;--tw-inset-ring-color:initial;--tw-inset-ring-shadow:0 0 #0000;--tw-ring-inset:initial;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-offset-shadow:0 0 #0000;--tw-blur:initial;--tw-brightness:initial;--tw-contrast:initial;--tw-grayscale:initial;--tw-hue-rotate:initial;--tw-invert:initial;--tw-opacity:initial;--tw-saturate:initial;--tw-sepia:initial;--tw-drop-shadow:initial;--tw-drop-shadow-color:initial;--tw-drop-shadow-alpha:100%;--tw-drop-shadow-size:initial;--tw-backdrop-blur:initial;--tw-backdrop-brightness:initial;--tw-backdrop-contrast:initial;--tw-backdrop-grayscale:initial;--tw-backdrop-hue-rotate:initial;--tw-backdrop-invert:initial;--tw-backdrop-opacity:initial;--tw-backdrop-saturate:initial;--tw-backdrop-sepia:initial;--tw-duration:initial;--tw-scale-x:1;--tw-scale-y:1;--tw-scale-z:1}}}@layer theme{:root,:host{--font-sans:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";--font-mono:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;--color-red-500:oklch(63.7% .237 25.331);--color-red-600:oklch(57.7% .245 27.325);--color-amber-50:oklch(98.7% .022 95.277);--color-amber-200:oklch(92.4% .12 95.746);--color-amber-700:oklch(55.5% .163 48.998);--color-amber-900:oklch(41.4% .112 45.904);--color-green-500:oklch(72.3% .219 149.579);--color-green-600:oklch(62.7% .194 149.214);--color-emerald-50:oklch(97.9% .021 166.113);--color-emerald-100:oklch(95% .052 163.051);--color-emerald-200:oklch(90.5% .093 164.15);--color-emerald-400:oklch(76.5% .177 163.223);--color-emerald-500:oklch(69.6% .17 162.48);--color-emerald-600:oklch(59.6% .145 163.225);--color-emerald-700:oklch(50.8% .118 165.612);--color-indigo-50:oklch(96.2% .018 272.314);--color-indigo-100:oklch(93% .034 272.788);--color-indigo-200:oklch(87% .065 274.039);--color-indigo-300:oklch(78.5% .115 274.713);--color-indigo-500:oklch(58.5% .233 277.117);--color-indigo-600:oklch(51.1% .262 276.966);--color-indigo-700:oklch(45.7% .24 277.023);--color-indigo-800:oklch(39.8% .195 277.366);--color-indigo-900:oklch(35.9% .144 278.697);--color-violet-500:oklch(60.6% .25 292.717);--color-violet-600:oklch(54.1% .281 293.009);--color-rose-50:oklch(96.9% .015 12.422);--color-rose-100:oklch(94.1% .03 12.58);--color-rose-200:oklch(89.2% .058 10.001);--color-rose-500:oklch(64.5% .246 16.439);--color-rose-600:oklch(58.6% .253 17.585);--color-rose-700:oklch(51.4% .222 16.935);--color-slate-50:oklch(98.4% .003 247.858);--color-slate-100:oklch(96.8% .007 247.896);--color-slate-200:oklch(92.9% .013 255.508);--color-slate-300:oklch(86.9% .022 252.894);--color-slate-400:oklch(70.4% .04 256.788);--color-slate-500:oklch(55.4% .046 257.417);--color-slate-600:oklch(44.6% .043 257.281);--color-slate-700:oklch(37.2% .044 257.287);--color-slate-800:oklch(27.9% .041 260.031);--color-slate-900:oklch(20.8% .042 265.755);--color-gray-50:oklch(98.5% .002 247.839);--color-gray-100:oklch(96.7% .003 264.542);--color-gray-400:oklch(70.7% .022 261.325);--color-gray-500:oklch(55.1% .027 264.364);--color-gray-600:oklch(44.6% .03 256.802);--color-gray-700:oklch(37.3% .034 259.733);--color-gray-800:oklch(27.8% .033 256.848);--color-gray-900:oklch(21% .034 264.665);--color-black:#000;--color-white:#fff;--spacing:.25rem;--container-sm:24rem;--container-md:28rem;--container-lg:32rem;--container-xl:36rem;--container-2xl:42rem;--container-3xl:48rem;--container-7xl:80rem;--text-xs:.75rem;--text-xs--line-height:calc(1 / .75);--text-sm:.875rem;--text-sm--line-height:calc(1.25 / .875);--text-base:1rem;--text-base--line-height:calc(1.5 / 1);--text-lg:1.125rem;--text-lg--line-height:calc(1.75 / 1.125);--text-xl:1.25rem;--text-xl--line-height:calc(1.75 / 1.25);--text-2xl:1.5rem;--text-2xl--line-height:calc(2 / 1.5);--text-3xl:1.875rem;--text-3xl--line-height:calc(2.25 / 1.875);--text-4xl:2.25rem;--text-4xl--line-height:calc(2.5 / 2.25);--text-5xl:3rem;--text-5xl--line-height:1;--font-weight-medium:500;--font-weight-semibold:600;--font-weight-bold:700;--font-weight-extrabold:800;--font-weight-black:900;--tracking-tight:-.025em;--tracking-wide:.025em;--tracking-wider:.05em;--leading-tight:1.25;--leading-relaxed:1.625;--radius-md:.375rem;--radius-lg:.5rem;--radius-xl:.75rem;--radius-2xl:1rem;--animate-spin:spin 1s linear infinite;--animate-ping:ping 1s cubic-bezier(0, 0, .2, 1) infinite;--blur-sm:8px;--blur-md:12px;--blur-xl:24px;--default-transition-duration:.15s;--default-transition-timing-function:cubic-bezier(.4, 0, .2, 1);--default-font-family:var(--font-sans);--default-mono-font-family:var(--font-mono)}}@layer base{*,:after,:before,::backdrop{box-sizing:border-box;border:0 solid;margin:0;padding:0}::file-selector-button{box-sizing:border-box;border:0 solid;margin:0;padding:0}html,:host{-webkit-text-size-adjust:100%;tab-size:4;line-height:1.5;font-family:var(--default-font-family,-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");font-feature-settings:var(--default-font-feature-settings,normal);font-variation-settings:var(--default-font-variation-settings,normal);-webkit-tap-highlight-color:transparent}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;-webkit-text-decoration:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,samp,pre{font-family:var(--default-mono-font-family,ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);font-feature-settings:var(--default-mono-font-feature-settings,normal);font-variation-settings:var(--default-mono-font-variation-settings,normal);font-size:1em}small{font-size:80%}sub,sup{vertical-align:baseline;font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}:-moz-focusring:where(:not(iframe)){outline:auto}progress{vertical-align:baseline}summary{display:list-item}ol,ul,menu{list-style:none}img,svg,video,canvas,audio,iframe,embed,object{vertical-align:middle;display:block}img,video{max-width:100%;height:auto}button,input,select,optgroup,textarea{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}::file-selector-button{font:inherit;font-feature-settings:inherit;font-variation-settings:inherit;letter-spacing:inherit;color:inherit;opacity:1;background-color:#0000;border-radius:0}:where(select:is([multiple],[size])) optgroup{font-weight:bolder}:where(select:is([multiple],[size])) optgroup option{padding-inline-start:20px}::file-selector-button{margin-inline-end:4px}::placeholder{opacity:1}@supports (not ((-webkit-appearance:-apple-pay-button))) or (contain-intrinsic-size:1px){::placeholder{color:currentColor}@supports (color:color-mix(in lab, red, red)){::placeholder{color:color-mix(in oklab, currentcolor 50%, transparent)}}}textarea{resize:vertical}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-date-and-time-value{min-height:1lh;text-align:inherit}::-webkit-datetime-edit{display:inline-flex}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-datetime-edit{padding-block:0}::-webkit-datetime-edit-year-field{padding-block:0}::-webkit-datetime-edit-month-field{padding-block:0}::-webkit-datetime-edit-day-field{padding-block:0}::-webkit-datetime-edit-hour-field{padding-block:0}::-webkit-datetime-edit-minute-field{padding-block:0}::-webkit-datetime-edit-second-field{padding-block:0}::-webkit-datetime-edit-millisecond-field{padding-block:0}::-webkit-datetime-edit-meridiem-field{padding-block:0}::-webkit-calendar-picker-indicator{line-height:1}:-moz-ui-invalid{box-shadow:none}button,input:where([type=button],[type=reset],[type=submit]){appearance:button}::file-selector-button{appearance:button}::-webkit-inner-spin-button{height:auto}::-webkit-outer-spin-button{height:auto}[hidden]:where(:not([hidden=until-found])){display:none!important}}@layer components;@layer utilities{.pointer-events-none{pointer-events:none}.visible{visibility:visible}.absolute{position:absolute}.fixed{position:fixed}.relative{position:relative}.static{position:static}.sticky{position:sticky}.inset-0{inset:0}.inset-y-0{inset-block:0}.top-0{top:0}.top-2{top:calc(var(--spacing) * 2)}.top-3{top:calc(var(--spacing) * 3)}.top-3\.5{top:calc(var(--spacing) * 3.5)}.right-0{right:0}.right-2{right:calc(var(--spacing) * 2)}.right-3{right:calc(var(--spacing) * 3)}.right-3\.5{right:calc(var(--spacing) * 3.5)}.right-5{right:calc(var(--spacing) * 5)}.bottom-0{bottom:0}.bottom-2{bottom:calc(var(--spacing) * 2)}.bottom-5{bottom:calc(var(--spacing) * 5)}.left-0{left:0}.left-3{left:calc(var(--spacing) * 3)}.z-40{z-index:40}.z-50{z-index:50}.container{width:100%}@media (min-width:40rem){.container{max-width:40rem}}@media (min-width:48rem){.container{max-width:48rem}}@media (min-width:64rem){.container{max-width:64rem}}@media (min-width:80rem){.container{max-width:80rem}}@media (min-width:96rem){.container{max-width:96rem}}.mx-auto{margin-inline:auto}.my-1{margin-block:var(--spacing)}.my-4{margin-block:calc(var(--spacing) * 4)}.-mt-0\.5{margin-top:calc(var(--spacing) * -.5)}.-mt-5{margin-top:calc(var(--spacing) * -5)}.mt-0\.5{margin-top:calc(var(--spacing) * .5)}.mt-1{margin-top:var(--spacing)}.mt-1\.5{margin-top:calc(var(--spacing) * 1.5)}.mt-2{margin-top:calc(var(--spacing) * 2)}.mt-3{margin-top:calc(var(--spacing) * 3)}.mt-4{margin-top:calc(var(--spacing) * 4)}.mt-5{margin-top:calc(var(--spacing) * 5)}.mt-auto{margin-top:auto}.mr-2{margin-right:calc(var(--spacing) * 2)}.mb-0\.5{margin-bottom:calc(var(--spacing) * .5)}.mb-1{margin-bottom:var(--spacing)}.mb-1\.5{margin-bottom:calc(var(--spacing) * 1.5)}.mb-2{margin-bottom:calc(var(--spacing) * 2)}.mb-3{margin-bottom:calc(var(--spacing) * 3)}.mb-4{margin-bottom:calc(var(--spacing) * 4)}.mb-5{margin-bottom:calc(var(--spacing) * 5)}.mb-6{margin-bottom:calc(var(--spacing) * 6)}.mb-8{margin-bottom:calc(var(--spacing) * 8)}.mb-16{margin-bottom:calc(var(--spacing) * 16)}.-ml-1{margin-left:calc(var(--spacing) * -1)}.ml-1{margin-left:var(--spacing)}.line-clamp-1{-webkit-line-clamp:1;-webkit-box-orient:vertical;display:-webkit-box;overflow:hidden}.line-clamp-2{-webkit-line-clamp:2;-webkit-box-orient:vertical;display:-webkit-box;overflow:hidden}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.hidden\!{display:none!important}.inline{display:inline}.inline-block{display:inline-block}.inline-flex{display:inline-flex}.table{display:table}.h-1\.5{height:calc(var(--spacing) * 1.5)}.h-2{height:calc(var(--spacing) * 2)}.h-3\.5{height:calc(var(--spacing) * 3.5)}.h-4{height:calc(var(--spacing) * 4)}.h-5{height:calc(var(--spacing) * 5)}.h-6{height:calc(var(--spacing) * 6)}.h-8{height:calc(var(--spacing) * 8)}.h-9{height:calc(var(--spacing) * 9)}.h-10{height:calc(var(--spacing) * 10)}.h-12{height:calc(var(--spacing) * 12)}.h-16{height:calc(var(--spacing) * 16)}.h-20{height:calc(var(--spacing) * 20)}.h-36{height:calc(var(--spacing) * 36)}.h-44{height:calc(var(--spacing) * 44)}.h-48{height:calc(var(--spacing) * 48)}.h-64{height:calc(var(--spacing) * 64)}.h-full{height:100%}.max-h-\[90vh\]{max-height:90vh}.max-h-\[92vh\]{max-height:92vh}.min-h-screen{min-height:100vh}.w-1\.5{width:calc(var(--spacing) * 1.5)}.w-1\/2{width:50%}.w-1\/3{width:33.3333%}.w-2{width:calc(var(--spacing) * 2)}.w-3\.5{width:calc(var(--spacing) * 3.5)}.w-3\/4{width:75%}.w-4{width:calc(var(--spacing) * 4)}.w-5{width:calc(var(--spacing) * 5)}.w-6{width:calc(var(--spacing) * 6)}.w-8{width:calc(var(--spacing) * 8)}.w-9{width:calc(var(--spacing) * 9)}.w-10{width:calc(var(--spacing) * 10)}.w-12{width:calc(var(--spacing) * 12)}.w-16{width:calc(var(--spacing) * 16)}.w-20{width:calc(var(--spacing) * 20)}.w-24{width:calc(var(--spacing) * 24)}.w-full{width:100%}.max-w-2xl{max-width:var(--container-2xl)}.max-w-3xl{max-width:var(--container-3xl)}.max-w-7xl{max-width:var(--container-7xl)}.max-w-\[65px\]{max-width:65px}.max-w-\[80\%\]{max-width:80%}.max-w-lg{max-width:var(--container-lg)}.max-w-md{max-width:var(--container-md)}.max-w-sm{max-width:var(--container-sm)}.max-w-xl{max-width:var(--container-xl)}.min-w-0{min-width:0}.flex-1{flex:1}.flex-shrink-0,.shrink-0{flex-shrink:0}.flex-grow{flex-grow:1}.transform{transform:var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,)}.transform\!{transform:var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,)!important}.animate-ping{animation:var(--animate-ping)}.animate-spin{animation:var(--animate-spin)}.cursor-pointer{cursor:pointer}.resize{resize:both}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-baseline{align-items:baseline}.items-center{align-items:center}.items-start{align-items:flex-start}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.gap-1{gap:var(--spacing)}.gap-1\.5{gap:calc(var(--spacing) * 1.5)}.gap-2{gap:calc(var(--spacing) * 2)}.gap-2\.5{gap:calc(var(--spacing) * 2.5)}.gap-3{gap:calc(var(--spacing) * 3)}.gap-3\.5{gap:calc(var(--spacing) * 3.5)}.gap-4{gap:calc(var(--spacing) * 4)}.gap-5{gap:calc(var(--spacing) * 5)}.gap-6{gap:calc(var(--spacing) * 6)}:where(.space-y-1>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(var(--spacing) * var(--tw-space-y-reverse));margin-block-end:calc(var(--spacing) * calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-2>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 2) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-3>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-3\.5>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 3.5) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 3.5) * calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-4>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 4) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-y-reverse)))}:where(.space-y-5>:not(:last-child)){--tw-space-y-reverse:0;margin-block-start:calc(calc(var(--spacing) * 5) * var(--tw-space-y-reverse));margin-block-end:calc(calc(var(--spacing) * 5) * calc(1 - var(--tw-space-y-reverse)))}.self-start{align-self:flex-start}.truncate{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.rounded{border-radius:.25rem}.rounded-2xl{border-radius:var(--radius-2xl)}.rounded-full{border-radius:3.40282e38px}.rounded-lg{border-radius:var(--radius-lg)}.rounded-md{border-radius:var(--radius-md)}.rounded-xl{border-radius:var(--radius-xl)}.border{border-style:var(--tw-border-style);border-width:1px}.border-2{border-style:var(--tw-border-style);border-width:2px}.border-\[3\.5px\]{border-style:var(--tw-border-style);border-width:3.5px}.border-t{border-top-style:var(--tw-border-style);border-top-width:1px}.border-b{border-bottom-style:var(--tw-border-style);border-bottom-width:1px}.border-dashed{--tw-border-style:dashed;border-style:dashed}.border-amber-200\/90{border-color:#fee685e6}@supports (color:color-mix(in lab, red, red)){.border-amber-200\/90{border-color:color-mix(in oklab, var(--color-amber-200) 90%, transparent)}}.border-emerald-200{border-color:var(--color-emerald-200)}.border-gray-100{border-color:var(--color-gray-100)}.border-indigo-50\/50{border-color:#eef2ff80}@supports (color:color-mix(in lab, red, red)){.border-indigo-50\/50{border-color:color-mix(in oklab, var(--color-indigo-50) 50%, transparent)}}.border-indigo-100{border-color:var(--color-indigo-100)}.border-indigo-200{border-color:var(--color-indigo-200)}.border-indigo-200\/60{border-color:#c7d2ff99}@supports (color:color-mix(in lab, red, red)){.border-indigo-200\/60{border-color:color-mix(in oklab, var(--color-indigo-200) 60%, transparent)}}.border-indigo-600{border-color:var(--color-indigo-600)}.border-rose-200{border-color:var(--color-rose-200)}.border-slate-100{border-color:var(--color-slate-100)}.border-slate-200{border-color:var(--color-slate-200)}.border-slate-200\/60{border-color:#e2e8f099}@supports (color:color-mix(in lab, red, red)){.border-slate-200\/60{border-color:color-mix(in oklab, var(--color-slate-200) 60%, transparent)}}.border-slate-200\/70{border-color:#e2e8f0b3}@supports (color:color-mix(in lab, red, red)){.border-slate-200\/70{border-color:color-mix(in oklab, var(--color-slate-200) 70%, transparent)}}.border-slate-200\/80{border-color:#e2e8f0cc}@supports (color:color-mix(in lab, red, red)){.border-slate-200\/80{border-color:color-mix(in oklab, var(--color-slate-200) 80%, transparent)}}.border-slate-200\/90{border-color:#e2e8f0e6}@supports (color:color-mix(in lab, red, red)){.border-slate-200\/90{border-color:color-mix(in oklab, var(--color-slate-200) 90%, transparent)}}.border-slate-300{border-color:var(--color-slate-300)}.border-slate-700{border-color:var(--color-slate-700)}.border-slate-700\/80{border-color:#314158cc}@supports (color:color-mix(in lab, red, red)){.border-slate-700\/80{border-color:color-mix(in oklab, var(--color-slate-700) 80%, transparent)}}.border-white{border-color:var(--color-white)}.bg-amber-50\/80{background-color:#fffbebcc}@supports (color:color-mix(in lab, red, red)){.bg-amber-50\/80{background-color:color-mix(in oklab, var(--color-amber-50) 80%, transparent)}}.bg-black{background-color:var(--color-black)}.bg-emerald-50{background-color:var(--color-emerald-50)}.bg-emerald-400{background-color:var(--color-emerald-400)}.bg-emerald-500{background-color:var(--color-emerald-500)}.bg-emerald-600{background-color:var(--color-emerald-600)}.bg-gray-50{background-color:var(--color-gray-50)}.bg-green-500{background-color:var(--color-green-500)}.bg-indigo-50{background-color:var(--color-indigo-50)}.bg-indigo-50\/60{background-color:#eef2ff99}@supports (color:color-mix(in lab, red, red)){.bg-indigo-50\/60{background-color:color-mix(in oklab, var(--color-indigo-50) 60%, transparent)}}.bg-indigo-50\/70{background-color:#eef2ffb3}@supports (color:color-mix(in lab, red, red)){.bg-indigo-50\/70{background-color:color-mix(in oklab, var(--color-indigo-50) 70%, transparent)}}.bg-indigo-100{background-color:var(--color-indigo-100)}.bg-indigo-100\/80{background-color:#e0e7ffcc}@supports (color:color-mix(in lab, red, red)){.bg-indigo-100\/80{background-color:color-mix(in oklab, var(--color-indigo-100) 80%, transparent)}}.bg-indigo-500{background-color:var(--color-indigo-500)}.bg-indigo-600{background-color:var(--color-indigo-600)}.bg-indigo-900{background-color:var(--color-indigo-900)}.bg-red-500{background-color:var(--color-red-500)}.bg-rose-50{background-color:var(--color-rose-50)}.bg-rose-600{background-color:var(--color-rose-600)}.bg-slate-50{background-color:var(--color-slate-50)}.bg-slate-100{background-color:var(--color-slate-100)}.bg-slate-100\/90{background-color:#f1f5f9e6}@supports (color:color-mix(in lab, red, red)){.bg-slate-100\/90{background-color:color-mix(in oklab, var(--color-slate-100) 90%, transparent)}}.bg-slate-300{background-color:var(--color-slate-300)}.bg-slate-900{background-color:var(--color-slate-900)}.bg-slate-900\/60{background-color:#0f172b99}@supports (color:color-mix(in lab, red, red)){.bg-slate-900\/60{background-color:color-mix(in oklab, var(--color-slate-900) 60%, transparent)}}.bg-slate-900\/75{background-color:#0f172bbf}@supports (color:color-mix(in lab, red, red)){.bg-slate-900\/75{background-color:color-mix(in oklab, var(--color-slate-900) 75%, transparent)}}.bg-slate-900\/80{background-color:#0f172bcc}@supports (color:color-mix(in lab, red, red)){.bg-slate-900\/80{background-color:color-mix(in oklab, var(--color-slate-900) 80%, transparent)}}.bg-slate-900\/90{background-color:#0f172be6}@supports (color:color-mix(in lab, red, red)){.bg-slate-900\/90{background-color:color-mix(in oklab, var(--color-slate-900) 90%, transparent)}}.bg-white{background-color:var(--color-white)}.bg-white\/70{background-color:#ffffffb3}@supports (color:color-mix(in lab, red, red)){.bg-white\/70{background-color:color-mix(in oklab, var(--color-white) 70%, transparent)}}.bg-white\/90{background-color:#ffffffe6}@supports (color:color-mix(in lab, red, red)){.bg-white\/90{background-color:color-mix(in oklab, var(--color-white) 90%, transparent)}}.bg-white\/95{background-color:#fffffff2}@supports (color:color-mix(in lab, red, red)){.bg-white\/95{background-color:color-mix(in oklab, var(--color-white) 95%, transparent)}}.bg-gradient-to-r{--tw-gradient-position:to right in oklab;background-image:linear-gradient(var(--tw-gradient-stops))}.bg-gradient-to-tr{--tw-gradient-position:to top right in oklab;background-image:linear-gradient(var(--tw-gradient-stops))}.from-indigo-600{--tw-gradient-from:var(--color-indigo-600);--tw-gradient-stops:var(--tw-gradient-via-stops,var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))}.to-indigo-500{--tw-gradient-to:var(--color-indigo-500);--tw-gradient-stops:var(--tw-gradient-via-stops,var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))}.to-violet-600{--tw-gradient-to:var(--color-violet-600);--tw-gradient-stops:var(--tw-gradient-via-stops,var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))}.bg-clip-text{-webkit-background-clip:text;background-clip:text}.object-cover{object-fit:cover}.p-3{padding:calc(var(--spacing) * 3)}.p-3\.5{padding:calc(var(--spacing) * 3.5)}.p-4{padding:calc(var(--spacing) * 4)}.p-5{padding:calc(var(--spacing) * 5)}.p-6{padding:calc(var(--spacing) * 6)}.px-1\.5{padding-inline:calc(var(--spacing) * 1.5)}.px-2{padding-inline:calc(var(--spacing) * 2)}.px-2\.5{padding-inline:calc(var(--spacing) * 2.5)}.px-3{padding-inline:calc(var(--spacing) * 3)}.px-3\.5{padding-inline:calc(var(--spacing) * 3.5)}.px-4{padding-inline:calc(var(--spacing) * 4)}.px-5{padding-inline:calc(var(--spacing) * 5)}.py-0\.5{padding-block:calc(var(--spacing) * .5)}.py-1{padding-block:var(--spacing)}.py-1\.5{padding-block:calc(var(--spacing) * 1.5)}.py-2{padding-block:calc(var(--spacing) * 2)}.py-2\.5{padding-block:calc(var(--spacing) * 2.5)}.py-3{padding-block:calc(var(--spacing) * 3)}.py-5{padding-block:calc(var(--spacing) * 5)}.py-6{padding-block:calc(var(--spacing) * 6)}.py-8{padding-block:calc(var(--spacing) * 8)}.py-12{padding-block:calc(var(--spacing) * 12)}.py-16{padding-block:calc(var(--spacing) * 16)}.pt-0{padding-top:0}.pt-1{padding-top:var(--spacing)}.pt-2{padding-top:calc(var(--spacing) * 2)}.pt-2\.5{padding-top:calc(var(--spacing) * 2.5)}.pt-4{padding-top:calc(var(--spacing) * 4)}.pr-2{padding-right:calc(var(--spacing) * 2)}.pr-3{padding-right:calc(var(--spacing) * 3)}.pr-3\.5{padding-right:calc(var(--spacing) * 3.5)}.pr-10{padding-right:calc(var(--spacing) * 10)}.pb-1{padding-bottom:var(--spacing)}.pb-4{padding-bottom:calc(var(--spacing) * 4)}.pl-1{padding-left:var(--spacing)}.pl-3{padding-left:calc(var(--spacing) * 3)}.pl-3\.5{padding-left:calc(var(--spacing) * 3.5)}.pl-10{padding-left:calc(var(--spacing) * 10)}.pl-11{padding-left:calc(var(--spacing) * 11)}.text-center{text-align:center}.font-mono{font-family:var(--font-mono)}.font-sans{font-family:var(--font-sans)}.text-2xl{font-size:var(--text-2xl);line-height:var(--tw-leading,var(--text-2xl--line-height))}.text-3xl{font-size:var(--text-3xl);line-height:var(--tw-leading,var(--text-3xl--line-height))}.text-base{font-size:var(--text-base);line-height:var(--tw-leading,var(--text-base--line-height))}.text-lg{font-size:var(--text-lg);line-height:var(--tw-leading,var(--text-lg--line-height))}.text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}.text-xl{font-size:var(--text-xl);line-height:var(--tw-leading,var(--text-xl--line-height))}.text-xs{font-size:var(--text-xs);line-height:var(--tw-leading,var(--text-xs--line-height))}.text-\[9px\]{font-size:9px}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.leading-relaxed{--tw-leading:var(--leading-relaxed);line-height:var(--leading-relaxed)}.leading-tight{--tw-leading:var(--leading-tight);line-height:var(--leading-tight)}.font-black{--tw-font-weight:var(--font-weight-black);font-weight:var(--font-weight-black)}.font-bold{--tw-font-weight:var(--font-weight-bold);font-weight:var(--font-weight-bold)}.font-extrabold{--tw-font-weight:var(--font-weight-extrabold);font-weight:var(--font-weight-extrabold)}.font-medium{--tw-font-weight:var(--font-weight-medium);font-weight:var(--font-weight-medium)}.font-semibold{--tw-font-weight:var(--font-weight-semibold);font-weight:var(--font-weight-semibold)}.tracking-tight{--tw-tracking:var(--tracking-tight);letter-spacing:var(--tracking-tight)}.tracking-wide{--tw-tracking:var(--tracking-wide);letter-spacing:var(--tracking-wide)}.tracking-wider{--tw-tracking:var(--tracking-wider);letter-spacing:var(--tracking-wider)}.whitespace-nowrap{white-space:nowrap}.whitespace-pre-line{white-space:pre-line}.text-amber-700{color:var(--color-amber-700)}.text-amber-900{color:var(--color-amber-900)}.text-emerald-500{color:var(--color-emerald-500)}.text-emerald-600{color:var(--color-emerald-600)}.text-emerald-700{color:var(--color-emerald-700)}.text-gray-400{color:var(--color-gray-400)}.text-gray-500{color:var(--color-gray-500)}.text-gray-600{color:var(--color-gray-600)}.text-gray-700{color:var(--color-gray-700)}.text-gray-800{color:var(--color-gray-800)}.text-gray-900{color:var(--color-gray-900)}.text-indigo-500{color:var(--color-indigo-500)}.text-indigo-600{color:var(--color-indigo-600)}.text-indigo-600\/80{color:#4f39f6cc}@supports (color:color-mix(in lab, red, red)){.text-indigo-600\/80{color:color-mix(in oklab, var(--color-indigo-600) 80%, transparent)}}.text-indigo-700{color:var(--color-indigo-700)}.text-indigo-800{color:var(--color-indigo-800)}.text-indigo-900{color:var(--color-indigo-900)}.text-rose-500{color:var(--color-rose-500)}.text-rose-600{color:var(--color-rose-600)}.text-rose-700{color:var(--color-rose-700)}.text-slate-300{color:var(--color-slate-300)}.text-slate-400{color:var(--color-slate-400)}.text-slate-500{color:var(--color-slate-500)}.text-slate-600{color:var(--color-slate-600)}.text-slate-700{color:var(--color-slate-700)}.text-slate-800{color:var(--color-slate-800)}.text-slate-900{color:var(--color-slate-900)}.text-transparent{color:#0000}.text-violet-500{color:var(--color-violet-500)}.text-white{color:var(--color-white)}.uppercase{text-transform:uppercase}.underline{text-decoration-line:underline}.underline-offset-2{text-underline-offset:2px}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.opacity-0{opacity:0}.opacity-25{opacity:.25}.opacity-75{opacity:.75}.shadow-2xl{--tw-shadow:0 25px 50px -12px var(--tw-shadow-color,#00000040);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-\[0_-4px_25px_rgba\(0\,0\,0\,0\.06\)\]{--tw-shadow:0 -4px 25px var(--tw-shadow-color,#0000000f);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px var(--tw-shadow-color,#0000001a), 0 4px 6px -4px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px var(--tw-shadow-color,#0000001a), 0 2px 4px -2px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 3px 0 var(--tw-shadow-color,#0000001a), 0 1px 2px -1px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.shadow-indigo-100{--tw-shadow-color:oklch(93% .034 272.788)}@supports (color:color-mix(in lab, red, red)){.shadow-indigo-100{--tw-shadow-color:color-mix(in oklab, var(--color-indigo-100) var(--tw-shadow-alpha), transparent)}}.shadow-indigo-200{--tw-shadow-color:oklch(87% .065 274.039)}@supports (color:color-mix(in lab, red, red)){.shadow-indigo-200{--tw-shadow-color:color-mix(in oklab, var(--color-indigo-200) var(--tw-shadow-alpha), transparent)}}.shadow-indigo-500\/35{--tw-shadow-color:#625fff59}@supports (color:color-mix(in lab, red, red)){.shadow-indigo-500\/35{--tw-shadow-color:color-mix(in oklab, color-mix(in oklab, var(--color-indigo-500) 35%, transparent) var(--tw-shadow-alpha), transparent)}}.filter{filter:var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,)}.backdrop-blur-md{--tw-backdrop-blur:blur(var(--blur-md));-webkit-backdrop-filter:var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);backdrop-filter:var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,)}.backdrop-blur-sm{--tw-backdrop-blur:blur(var(--blur-sm));-webkit-backdrop-filter:var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);backdrop-filter:var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,)}.backdrop-blur-xl{--tw-backdrop-blur:blur(var(--blur-xl));-webkit-backdrop-filter:var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);backdrop-filter:var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,)}.transition{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to,opacity,box-shadow,transform,translate,scale,rotate,filter,-webkit-backdrop-filter,backdrop-filter,display,content-visibility,overlay,pointer-events;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-all{transition-property:all;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-colors{transition-property:color,background-color,border-color,outline-color,text-decoration-color,fill,stroke,--tw-gradient-from,--tw-gradient-via,--tw-gradient-to;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.transition-transform{transition-property:transform,translate,scale,rotate;transition-timing-function:var(--tw-ease,var(--default-transition-timing-function));transition-duration:var(--tw-duration,var(--default-transition-duration))}.duration-300{--tw-duration:.3s;transition-duration:.3s}.outline-none{--tw-outline-style:none;outline-style:none}.select-none{-webkit-user-select:none;user-select:none}@media (hover:hover){.group-hover\:scale-105:is(:where(.group):hover *){--tw-scale-x:105%;--tw-scale-y:105%;--tw-scale-z:105%;scale:var(--tw-scale-x) var(--tw-scale-y)}.group-hover\:text-indigo-600:is(:where(.group):hover *){color:var(--color-indigo-600)}}.selection\:bg-indigo-100 ::selection{background-color:var(--color-indigo-100)}.selection\:bg-indigo-100::selection{background-color:var(--color-indigo-100)}.selection\:text-indigo-800 ::selection{color:var(--color-indigo-800)}.selection\:text-indigo-800::selection{color:var(--color-indigo-800)}@media (hover:hover){.hover\:scale-105:hover{--tw-scale-x:105%;--tw-scale-y:105%;--tw-scale-z:105%;scale:var(--tw-scale-x) var(--tw-scale-y)}.hover\:border-indigo-300:hover{border-color:var(--color-indigo-300)}.hover\:border-rose-200:hover{border-color:var(--color-rose-200)}.hover\:bg-emerald-100:hover{background-color:var(--color-emerald-100)}.hover\:bg-green-600:hover{background-color:var(--color-green-600)}.hover\:bg-indigo-100:hover{background-color:var(--color-indigo-100)}.hover\:bg-indigo-700:hover{background-color:var(--color-indigo-700)}.hover\:bg-red-600:hover{background-color:var(--color-red-600)}.hover\:bg-rose-50:hover{background-color:var(--color-rose-50)}.hover\:bg-rose-100:hover{background-color:var(--color-rose-100)}.hover\:bg-rose-700:hover{background-color:var(--color-rose-700)}.hover\:bg-slate-50:hover{background-color:var(--color-slate-50)}.hover\:bg-slate-100:hover{background-color:var(--color-slate-100)}.hover\:bg-slate-200:hover{background-color:var(--color-slate-200)}.hover\:bg-slate-800:hover{background-color:var(--color-slate-800)}.hover\:bg-slate-900:hover{background-color:var(--color-slate-900)}.hover\:bg-white:hover{background-color:var(--color-white)}.hover\:from-indigo-700:hover{--tw-gradient-from:var(--color-indigo-700);--tw-gradient-stops:var(--tw-gradient-via-stops,var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))}.hover\:to-indigo-600:hover{--tw-gradient-to:var(--color-indigo-600);--tw-gradient-stops:var(--tw-gradient-via-stops,var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position))}.hover\:text-gray-600:hover{color:var(--color-gray-600)}.hover\:text-indigo-600:hover{color:var(--color-indigo-600)}.hover\:text-indigo-800:hover{color:var(--color-indigo-800)}.hover\:text-rose-600:hover{color:var(--color-rose-600)}.hover\:text-slate-600:hover{color:var(--color-slate-600)}.hover\:text-slate-900:hover{color:var(--color-slate-900)}.hover\:shadow-md:hover{--tw-shadow:0 4px 6px -1px var(--tw-shadow-color,#0000001a), 0 2px 4px -2px var(--tw-shadow-color,#0000001a);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}}.focus\:bg-white:focus{background-color:var(--color-white)}.focus\:ring-2:focus{--tw-ring-shadow:var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color,currentcolor);box-shadow:var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow)}.focus\:ring-indigo-500:focus{--tw-ring-color:var(--color-indigo-500)}.focus\:outline-none:focus{--tw-outline-style:none;outline-style:none}.active\:scale-95:active{--tw-scale-x:95%;--tw-scale-y:95%;--tw-scale-z:95%;scale:var(--tw-scale-x) var(--tw-scale-y)}.active\:scale-\[0\.98\]:active{scale:.98}.active\:scale-\[0\.99\]:active{scale:.99}@media (min-width:40rem){.sm\:top-4{top:calc(var(--spacing) * 4)}.sm\:right-4{right:calc(var(--spacing) * 4)}.sm\:mt-3{margin-top:calc(var(--spacing) * 3)}.sm\:mb-3{margin-bottom:calc(var(--spacing) * 3)}.sm\:block{display:block}.sm\:hidden{display:none}.sm\:inline{display:inline}.sm\:inline-flex{display:inline-flex}.sm\:h-4{height:calc(var(--spacing) * 4)}.sm\:h-6{height:calc(var(--spacing) * 6)}.sm\:h-10{height:calc(var(--spacing) * 10)}.sm\:h-80{height:calc(var(--spacing) * 80)}.sm\:w-4{width:calc(var(--spacing) * 4)}.sm\:w-6{width:calc(var(--spacing) * 6)}.sm\:w-10{width:calc(var(--spacing) * 10)}.sm\:w-auto{width:auto}.sm\:max-w-\[120px\]{max-width:120px}.sm\:flex-initial{flex:0 auto}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:flex-row{flex-direction:row}.sm\:flex-nowrap{flex-wrap:nowrap}.sm\:items-center{align-items:center}.sm\:gap-1\.5{gap:calc(var(--spacing) * 1.5)}.sm\:gap-2{gap:calc(var(--spacing) * 2)}.sm\:gap-2\.5{gap:calc(var(--spacing) * 2.5)}.sm\:gap-3{gap:calc(var(--spacing) * 3)}.sm\:gap-4{gap:calc(var(--spacing) * 4)}.sm\:gap-6{gap:calc(var(--spacing) * 6)}.sm\:self-auto{align-self:auto}.sm\:p-4{padding:calc(var(--spacing) * 4)}.sm\:p-5{padding:calc(var(--spacing) * 5)}.sm\:p-7{padding:calc(var(--spacing) * 7)}.sm\:px-2\.5{padding-inline:calc(var(--spacing) * 2.5)}.sm\:px-3{padding-inline:calc(var(--spacing) * 3)}.sm\:px-3\.5{padding-inline:calc(var(--spacing) * 3.5)}.sm\:px-4{padding-inline:calc(var(--spacing) * 4)}.sm\:px-6{padding-inline:calc(var(--spacing) * 6)}.sm\:py-1{padding-block:var(--spacing)}.sm\:py-1\.5{padding-block:calc(var(--spacing) * 1.5)}.sm\:py-2{padding-block:calc(var(--spacing) * 2)}.sm\:py-3\.5{padding-block:calc(var(--spacing) * 3.5)}.sm\:py-12{padding-block:calc(var(--spacing) * 12)}.sm\:text-2xl{font-size:var(--text-2xl);line-height:var(--tw-leading,var(--text-2xl--line-height))}.sm\:text-4xl{font-size:var(--text-4xl);line-height:var(--tw-leading,var(--text-4xl--line-height))}.sm\:text-base{font-size:var(--text-base);line-height:var(--tw-leading,var(--text-base--line-height))}.sm\:text-sm{font-size:var(--text-sm);line-height:var(--tw-leading,var(--text-sm--line-height))}.sm\:text-xl{font-size:var(--text-xl);line-height:var(--tw-leading,var(--text-xl--line-height))}.sm\:text-xs{font-size:var(--text-xs);line-height:var(--tw-leading,var(--text-xs--line-height))}.sm\:text-\[11px\]{font-size:11px}}@media (min-width:48rem){.md\:mb-0{margin-bottom:0}.md\:block{display:block}.md\:flex{display:flex}.md\:hidden{display:none}.md\:inline-flex{display:inline-flex}.md\:w-1\/2{width:50%}.md\:w-1\/3{width:33.3333%}.md\:w-80{width:calc(var(--spacing) * 80)}.md\:w-auto{width:auto}.md\:flex-1{flex:1}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.md\:flex-row{flex-direction:row}.md\:justify-start{justify-content:flex-start}.md\:text-left{text-align:left}}@media (min-width:64rem){.lg\:block{display:block}.lg\:flex{display:flex}.lg\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.lg\:px-8{padding-inline:calc(var(--spacing) * 8)}.lg\:text-5xl{font-size:var(--text-5xl);line-height:var(--tw-leading,var(--text-5xl--line-height))}}}@property --tw-rotate-x{syntax:"*";inherits:false}@property --tw-rotate-y{syntax:"*";inherits:false}@property --tw-rotate-z{syntax:"*";inherits:false}@property --tw-skew-x{syntax:"*";inherits:false}@property --tw-skew-y{syntax:"*";inherits:false}@property --tw-space-y-reverse{syntax:"*";inherits:false;initial-value:0}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid}@property --tw-gradient-position{syntax:"*";inherits:false}@property --tw-gradient-from{syntax:"<color>";inherits:false;initial-value:#0000}@property --tw-gradient-via{syntax:"<color>";inherits:false;initial-value:#0000}@property --tw-gradient-to{syntax:"<color>";inherits:false;initial-value:#0000}@property --tw-gradient-stops{syntax:"*";inherits:false}@property --tw-gradient-via-stops{syntax:"*";inherits:false}@property --tw-gradient-from-position{syntax:"<length-percentage>";inherits:false;initial-value:0%}@property --tw-gradient-via-position{syntax:"<length-percentage>";inherits:false;initial-value:50%}@property --tw-gradient-to-position{syntax:"<length-percentage>";inherits:false;initial-value:100%}@property --tw-leading{syntax:"*";inherits:false}@property --tw-font-weight{syntax:"*";inherits:false}@property --tw-tracking{syntax:"*";inherits:false}@property --tw-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-shadow-color{syntax:"*";inherits:false}@property --tw-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-inset-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-inset-shadow-color{syntax:"*";inherits:false}@property --tw-inset-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-ring-color{syntax:"*";inherits:false}@property --tw-ring-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-inset-ring-color{syntax:"*";inherits:false}@property --tw-inset-ring-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-ring-inset{syntax:"*";inherits:false}@property --tw-ring-offset-width{syntax:"<length>";inherits:false;initial-value:0}@property --tw-ring-offset-color{syntax:"*";inherits:false;initial-value:#fff}@property --tw-ring-offset-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000}@property --tw-blur{syntax:"*";inherits:false}@property --tw-brightness{syntax:"*";inherits:false}@property --tw-contrast{syntax:"*";inherits:false}@property --tw-grayscale{syntax:"*";inherits:false}@property --tw-hue-rotate{syntax:"*";inherits:false}@property --tw-invert{syntax:"*";inherits:false}@property --tw-opacity{syntax:"*";inherits:false}@property --tw-saturate{syntax:"*";inherits:false}@property --tw-sepia{syntax:"*";inherits:false}@property --tw-drop-shadow{syntax:"*";inherits:false}@property --tw-drop-shadow-color{syntax:"*";inherits:false}@property --tw-drop-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%}@property --tw-drop-shadow-size{syntax:"*";inherits:false}@property --tw-backdrop-blur{syntax:"*";inherits:false}@property --tw-backdrop-brightness{syntax:"*";inherits:false}@property --tw-backdrop-contrast{syntax:"*";inherits:false}@property --tw-backdrop-grayscale{syntax:"*";inherits:false}@property --tw-backdrop-hue-rotate{syntax:"*";inherits:false}@property --tw-backdrop-invert{syntax:"*";inherits:false}@property --tw-backdrop-opacity{syntax:"*";inherits:false}@property --tw-backdrop-saturate{syntax:"*";inherits:false}@property --tw-backdrop-sepia{syntax:"*";inherits:false}@property --tw-duration{syntax:"*";inherits:false}@property --tw-scale-x{syntax:"*";inherits:false;initial-value:1}@property --tw-scale-y{syntax:"*";inherits:false;initial-value:1}@property --tw-scale-z{syntax:"*";inherits:false;initial-value:1}@keyframes spin{to{transform:rotate(360deg)}}@keyframes ping{75%,to{opacity:0;transform:scale(2)}}
+
+================================================================================
+
 === FILE: js/config.js ===
-Description: Supabase Environment Configuration & API Credentials
+=== DESCRIPTION: Supabase Environment Configuration & API Credentials ===
 ================================================================================
 // ============================================================================
 // SUPABASE PROJECT CONFIGURATION
@@ -1178,7 +1208,7 @@ export const SUPABASE_CONFIG = {
 ================================================================================
 
 === FILE: js/supabaseClient.js ===
-Description: Supabase Client Factory, LocalStorage Overrides & Health Audit
+=== DESCRIPTION: Supabase Client Factory, LocalStorage Overrides & Health Audit ===
 ================================================================================
 // ============================================================================
 // SUPABASE CLIENT INITIALIZATION & LIVE AUDIT LOGGING MODULE
@@ -1334,7 +1364,7 @@ if (isSupabaseConfigured()) {
 ================================================================================
 
 === FILE: js/auth.js ===
-Description: User Authentication, Session Persistence & Auth State Listener
+=== DESCRIPTION: User Authentication, Session Persistence & Auth State Listener ===
 ================================================================================
 // ============================================================================
 // STUDENT AUTHENTICATION & SESSION MANAGEMENT MODULE
@@ -1708,7 +1738,7 @@ export function updateAuthUI() {
 ================================================================================
 
 === FILE: js/app.js ===
-Description: Core Application Logic, Item CRUD, Filters, Search & Modal Management
+=== DESCRIPTION: Core Application Logic, Item CRUD, Filters, Search, Contact Linking & Modal Management ===
 ================================================================================
 // ============================================================================
 // MAIN APPLICATION ENGINE & DOM INTERACTION CONTROLLER
@@ -1905,73 +1935,71 @@ function renderItems(items) {
         const formattedPrice = Number(item.price).toLocaleString();
 
         const card = document.createElement('article');
-        card.className = 'item-card bg-white rounded-2xl border border-slate-200/80 overflow-hidden flex flex-col justify-between shadow-sm relative group';
+        card.className = 'item-card bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col justify-between shadow-sm relative group h-full transition duration-200 hover:-translate-y-0.5 hover:shadow-md';
         card.setAttribute('data-id', item.id);
 
         card.innerHTML = `
-            <div>
-                <!-- Image Container with Zoom effect (Stays blank if seller provided no photo) -->
-                <div class="relative h-48 w-full bg-slate-100 overflow-hidden cursor-pointer" onclick="openItemDetail('${item.id}')">
+            <div class="flex-1 flex flex-col">
+                <!-- Image Container with Zoom effect -->
+                <div class="relative h-48 w-full bg-slate-100 overflow-hidden cursor-pointer shrink-0" onclick="openItemDetail('${item.id}')">
                     ${hasImage ? `
                         <img src="${item.image_url}" 
                              alt="${escapeHTML(item.title)}" 
                              loading="lazy"
-                             onerror="this.style.display='none';"
+                             onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
                              class="card-img-zoom w-full h-full object-cover">
+                        <div class="hidden w-full h-full bg-slate-100 flex flex-col items-center justify-center text-slate-400 gap-1.5">
+                            <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <span class="text-[11px] font-medium text-slate-400">${escapeHTML(item.category || 'Item')}</span>
+                        </div>
                     ` : `
-                        <div class="w-full h-full bg-slate-100"></div>
+                        <div class="w-full h-full bg-slate-100 flex flex-col items-center justify-center text-slate-400 gap-1.5">
+                            <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <span class="text-[11px] font-medium text-slate-400">${escapeHTML(item.category || 'Item')}</span>
+                        </div>
                     `}
                     
                     <!-- Category Badge -->
                     <span class="absolute top-3 left-3 text-[11px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md shadow-sm ${categoryBadgeClass}">
                         ${escapeHTML(item.category)}
                     </span>
-
-                    <!-- Condition Badge -->
-                    ${item.condition ? `
-                        <span class="absolute top-3 right-3 text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-900/75 text-white backdrop-blur-sm">
-                            ${escapeHTML(item.condition)}
-                        </span>
-                    ` : ''}
-
-                    <!-- Campus Location Ribbon -->
-                    ${item.campus_location ? `
-                        <div class="absolute bottom-2 left-3 right-3 flex items-center gap-1 text-[11px] text-white bg-slate-900/60 backdrop-blur-md px-2 py-0.5 rounded-md font-medium truncate">
-                            <span>📍</span> <span class="truncate">${escapeHTML(item.campus_location)}</span>
-                        </div>
-                    ` : ''}
                 </div>
 
                 <!-- Card Body -->
-                <div class="p-4 sm:p-5">
+                <div class="p-4 sm:p-5 flex-1 flex flex-col">
                     <div class="flex items-start justify-between gap-2 mb-1">
-                        <h3 class="font-bold text-base text-slate-900 line-clamp-1 group-hover:text-indigo-600 transition-colors cursor-pointer" onclick="openItemDetail('${item.id}')" title="${escapeHTML(item.title)}">
+                        <h3 class="font-bold text-base text-slate-900 line-clamp-1 group-hover:text-emerald-700 transition-colors cursor-pointer" onclick="openItemDetail('${item.id}')" title="${escapeHTML(item.title)}">
                             ${escapeHTML(item.title)}
                         </h3>
                     </div>
 
-                    <p class="text-xl font-extrabold text-indigo-600 mb-2 brand-font tracking-tight">
+                    <div class="flex items-center gap-1.5 text-[11px] text-slate-500 mt-1 mb-2">
+                        ${item.condition ? `<span>${escapeHTML(item.condition)}</span>` : ''}
+                        ${item.condition && item.campus_location ? `<span>·</span>` : ''}
+                        ${item.campus_location ? `<span>${escapeHTML(item.campus_location)}</span>` : ''}
+                    </div>
+
+                    <p class="text-lg font-bold text-slate-900 mb-2 brand-font">
                         KSh ${formattedPrice}
                     </p>
 
-                    <p class="text-slate-500 text-xs line-clamp-2 leading-relaxed">
+                    <p class="text-slate-500 text-xs line-clamp-2 leading-relaxed flex-1">
                         ${escapeHTML(item.description)}
                     </p>
                 </div>
             </div>
 
             <!-- Card Actions Footer -->
-            <div class="p-4 sm:p-5 pt-0 space-y-2">
+            <div class="p-4 sm:p-5 pt-0 mt-auto space-y-2">
                 <div class="flex items-center gap-2">
                     <button onclick="copyToClipboard('${escapeHTML(item.contact_value)}', this)" 
-                            class="flex-1 text-center bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-bold py-2.5 px-3 rounded-xl text-xs transition shadow-sm shadow-indigo-200 flex items-center justify-center gap-1.5"
+                            class="flex-1 text-center bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-medium py-2.5 px-3 rounded-xl text-xs transition shadow-sm flex items-center justify-center gap-1.5 cursor-pointer truncate"
                             title="Copy seller's ${escapeHTML(item.contact_method)}: ${escapeHTML(item.contact_value)}">
-                        <span>📋</span>
                         <span>Copy ${escapeHTML(item.contact_method)}</span>
                     </button>
 
                     <button onclick="openItemDetail('${item.id}')" 
-                            class="px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition"
+                            class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition cursor-pointer shrink-0"
                             title="View full item details">
                         View
                     </button>
@@ -1979,12 +2007,10 @@ function renderItems(items) {
 
                 ${isOwner ? `
                     <div class="pt-2 border-t border-slate-100 flex items-center justify-end gap-2">
-                        <button onclick="openEditItemModal('${item.id}')" class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg transition flex items-center gap-1" title="Edit this listing">
-                            <span>✏️</span>
+                        <button onclick="openEditItemModal('${item.id}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition flex items-center gap-1 cursor-pointer" title="Edit this listing">
                             <span>Edit</span>
                         </button>
-                        <button onclick="handleDeleteItem('${item.id}')" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold rounded-lg transition flex items-center gap-1" title="Delete this listing">
-                            <span>🗑️</span>
+                        <button onclick="handleDeleteItem('${item.id}')" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold rounded-lg transition flex items-center gap-1 cursor-pointer" title="Delete this listing">
                             <span>Delete</span>
                         </button>
                     </div>
@@ -2008,9 +2034,9 @@ function getCategoryBadgeClass(category) {
 
 function getContactIcon(method) {
     switch (method) {
-        case 'WhatsApp': return '💬';
-        case 'Phone': return '📞';
-        default: return '📞';
+        case 'WhatsApp': return '';
+        case 'Phone': return '';
+        default: return '';
     }
 }
 
@@ -2058,10 +2084,10 @@ export function setCategory(category) {
     document.querySelectorAll('.category-pill').forEach(btn => {
         const cat = btn.getAttribute('data-category');
         if (cat === category) {
-            btn.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
+            btn.classList.add('bg-emerald-600', 'text-white', 'border-emerald-600');
             btn.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
         } else {
-            btn.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600');
+            btn.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-600');
             btn.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
         }
     });
@@ -2090,16 +2116,16 @@ export function renderMyListings() {
         if (countBadge) countBadge.textContent = '0 Items';
         body.innerHTML = `
             <div class="py-12 px-4 text-center">
-                <div class="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-3xl mx-auto mb-4 shadow-sm">
-                    🔒
+                <div class="w-16 h-16 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-4 shadow-sm">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                 </div>
                 <h3 class="text-base font-bold text-slate-900 brand-font">Student Sign-In Required</h3>
                 <p class="text-xs text-slate-500 mt-1.5 max-w-sm mx-auto leading-relaxed">
                     Please sign in with your student account to manage your listings, edit prices, or mark items as sold.
                 </p>
                 <div class="mt-5">
-                    <button onclick="toggleModal('my-listings-modal', false); toggleModal('auth-modal', true)" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md shadow-indigo-200 transition">
-                        Sign In Now
+                    <button onclick="toggleModal('my-listings-modal', false); toggleModal('auth-modal', true)" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-medium px-5 py-2.5 rounded-xl shadow-sm transition cursor-pointer">
+                        Sign In to CampusThrift
                     </button>
                 </div>
             </div>
@@ -2115,17 +2141,19 @@ export function renderMyListings() {
     if (myListings.length === 0) {
         body.innerHTML = `
             <div class="py-12 px-4 text-center border-2 border-dashed border-slate-200 rounded-2xl">
-                <div class="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-3xl mx-auto mb-4">
-                    📦
+                <div class="w-16 h-16 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                 </div>
                 <h3 class="text-base font-bold text-slate-900 brand-font">No Active Listings Yet</h3>
                 <p class="text-xs text-slate-500 mt-1.5 max-w-sm mx-auto leading-relaxed">
                     You haven't posted any items on the campus market yet. Turn your textbooks, electronics, and dorm items into cash!
                 </p>
                 <div class="mt-5">
-                    <button onclick="checkAuthAndOpenPostModal()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md shadow-indigo-200 transition inline-flex items-center gap-1.5">
-                        <span>+</span>
-                        <span>Post Your First Item</span>
+                    <button onclick="checkAuthAndOpenPostModal()" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-medium px-5 py-2.5 rounded-xl shadow-sm transition inline-flex items-center gap-1.5 cursor-pointer">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        <span>Post your first item</span>
                     </button>
                 </div>
             </div>
@@ -2145,18 +2173,23 @@ export function renderMyListings() {
                 });
 
                 return `
-                    <div class="bg-white rounded-xl border border-slate-200/90 p-3.5 flex flex-col justify-between hover:border-indigo-300 transition shadow-sm group">
+                    <div class="bg-white rounded-xl border border-slate-200/90 p-3.5 flex flex-col justify-between hover:border-slate-300 transition shadow-sm group">
                         <div>
                             <div class="flex gap-3">
-                                <!-- Thumbnail (Stays blank if seller provided no photo) -->
+                                <!-- Thumbnail (Clean placeholder if seller provided no photo) -->
                                 <div class="w-20 h-20 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0 cursor-pointer" onclick="openItemDetail('${item.id}')">
                                     ${hasImage ? `
                                         <img src="${item.image_url}" 
                                              alt="${escapeHTML(item.title)}" 
                                              class="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                                             onerror="this.style.display='none';">
+                                             onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+                                        <div class="hidden w-full h-full bg-slate-100 flex items-center justify-center text-slate-300">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        </div>
                                     ` : `
-                                        <div class="w-full h-full bg-slate-100"></div>
+                                        <div class="w-full h-full bg-slate-100 flex items-center justify-center text-slate-300">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        </div>
                                     `}
                                 </div>
 
@@ -2172,14 +2205,14 @@ export function renderMyListings() {
                                             </span>
                                         ` : ''}
                                     </div>
-                                    <h4 class="font-bold text-sm text-slate-900 truncate hover:text-indigo-600 cursor-pointer" onclick="openItemDetail('${item.id}')" title="${escapeHTML(item.title)}">
+                                    <h4 class="font-bold text-sm text-slate-900 truncate hover:text-emerald-700 cursor-pointer" onclick="openItemDetail('${item.id}')" title="${escapeHTML(item.title)}">
                                         ${escapeHTML(item.title)}
                                     </h4>
-                                    <p class="text-sm font-extrabold text-indigo-600 brand-font mt-0.5">
+                                    <p class="text-sm font-bold text-slate-900 brand-font mt-0.5">
                                         KSh ${formattedPrice}
                                     </p>
                                     <p class="text-[11px] text-slate-400 truncate mt-0.5">
-                                        📍 ${escapeHTML(item.campus_location || 'Main Campus')} • ${dateFormatted}
+                                        ${escapeHTML(item.campus_location || 'Main Campus')} · ${dateFormatted}
                                     </p>
                                 </div>
                             </div>
@@ -2187,17 +2220,15 @@ export function renderMyListings() {
 
                         <!-- Action Controls -->
                         <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2">
-                            <button onclick="openItemDetail('${item.id}')" class="text-xs font-semibold text-slate-600 hover:text-slate-900 px-2 py-1 rounded hover:bg-slate-100 transition">
+                            <button onclick="openItemDetail('${item.id}')" class="text-xs font-semibold text-slate-600 hover:text-slate-900 px-2 py-1 rounded hover:bg-slate-100 transition cursor-pointer">
                                 View
                             </button>
 
                             <div class="flex items-center gap-1.5">
-                                <button onclick="openEditItemModal('${item.id}')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-lg border border-indigo-200 transition shadow-sm active:scale-95" title="Edit listing details">
-                                    <span>✏️</span>
+                                <button onclick="openEditItemModal('${item.id}')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg border border-slate-200 transition shadow-sm active:scale-95 cursor-pointer" title="Edit listing details">
                                     <span>Edit</span>
                                 </button>
-                                <button onclick="handleDeleteItem('${item.id}')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-lg border border-rose-200 transition active:scale-95" title="Delete listing permanently">
-                                    <span>🗑️</span>
+                                <button onclick="handleDeleteItem('${item.id}')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold rounded-lg border border-rose-200 transition active:scale-95 cursor-pointer" title="Delete listing permanently">
                                     <span>Delete</span>
                                 </button>
                             </div>
@@ -2363,7 +2394,7 @@ export async function handlePostItem(event) {
             }
 
             logSupabase('DATABASE', 'Item successfully updated in Supabase items table', updatedData);
-            showToast('✅ Listing updated successfully!', 'success');
+            showToast('Listing updated successfully!', 'success');
             editingItemId = null;
         } else {
             // Step 2B: Insert new row into Supabase PostgreSQL 'items' table
@@ -2394,7 +2425,7 @@ export async function handlePostItem(event) {
             }
 
             logSupabase('DATABASE', 'Item successfully persisted in Supabase items table', insertedData);
-            showToast('🎉 Listing published live to Supabase!', 'success');
+            showToast('Listing published!', 'success');
         }
 
         document.getElementById('post-item-form').reset();
@@ -2521,15 +2552,22 @@ export function openItemDetail(itemId) {
 
     modalBody.innerHTML = `
         <div class="space-y-5">
-            <!-- Full Item Image (Stays blank if seller provided no photo) -->
+            <!-- Full Item Image (Clean placeholder if seller provided no photo) -->
             <div class="relative h-64 sm:h-80 w-full rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-inner">
                 ${hasItemImage ? `
                     <img src="${item.image_url}" 
                          alt="${escapeHTML(item.title)}" 
                          class="w-full h-full object-cover"
-                         onerror="this.style.display='none';">
+                         onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+                    <div class="hidden w-full h-full bg-slate-100 flex flex-col items-center justify-center text-slate-400 gap-2">
+                        <svg class="w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <span class="text-xs font-medium text-slate-400">No image provided for this listing</span>
+                    </div>
                 ` : `
-                    <div class="w-full h-full bg-slate-100"></div>
+                    <div class="w-full h-full bg-slate-100 flex flex-col items-center justify-center text-slate-400 gap-2">
+                        <svg class="w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <span class="text-xs font-medium text-slate-400">No image provided for this listing</span>
+                    </div>
                 `}
                 
                 <!-- Badges (Grouped on top-left, max 70% width to stay completely clear of close button) -->
@@ -2547,7 +2585,7 @@ export function openItemDetail(itemId) {
 
                 <!-- Floating Close Button (Top-Right: High contrast, elevated, floating squarely inside photo with 14px inset) -->
                 <button onclick="toggleModal('detail-modal', false)" 
-                        class="modal-close-floating-btn" 
+                        class="modal-close-floating-btn cursor-pointer" 
                         title="Close (Esc)" 
                         aria-label="Close modal">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
@@ -2560,60 +2598,61 @@ export function openItemDetail(itemId) {
             <div>
                 <div class="flex flex-wrap items-baseline justify-between gap-2">
                     <h2 class="text-2xl font-bold text-slate-900 brand-font">${escapeHTML(item.title)}</h2>
-                    <span class="text-2xl font-extrabold text-indigo-600 brand-font">KSh ${formattedPrice}</span>
+                    <span class="text-2xl font-extrabold text-slate-900 brand-font">KSh ${formattedPrice}</span>
                 </div>
                 
                 <div class="flex flex-wrap items-center gap-3 text-xs text-slate-500 mt-2">
-                    <span class="flex items-center gap-1">
-                        <span>📍</span> ${escapeHTML(item.campus_location || 'Main Campus')}
-                    </span>
-                    <span>•</span>
-                    <span class="flex items-center gap-1">
-                        <span>🕒</span> Posted ${dateFormatted}
-                    </span>
+                    <span>${escapeHTML(item.campus_location || 'Main Campus')}</span>
+                    <span>·</span>
+                    <span>Posted ${dateFormatted}</span>
                 </div>
             </div>
 
             <!-- Item Description -->
             <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80">
-                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Description & Condition</h4>
+                <h4 class="text-xs font-semibold text-slate-500 mb-1.5">Description</h4>
                 <p class="text-sm text-slate-700 leading-relaxed whitespace-pre-line">${escapeHTML(item.description)}</p>
             </div>
 
             <!-- Seller & Contact Channel Box -->
-            <div class="p-4 rounded-xl bg-indigo-50/70 border border-indigo-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                    <span class="text-[11px] font-bold text-indigo-900 uppercase tracking-wider block">Seller Contact Number</span>
+                    <span class="text-[11px] font-semibold text-slate-600 block">Seller contact</span>
                     <p class="text-sm font-bold text-slate-800 mt-1 flex items-center gap-2">
-                        <span>${item.contact_method === 'WhatsApp' ? '💬 WhatsApp:' : '📞 Phone:'}</span>
-                        <span class="font-mono text-indigo-700 bg-white px-2 py-0.5 rounded border border-indigo-200/60">${escapeHTML(item.contact_value)}</span>
+                        <span>${item.contact_method === 'WhatsApp' ? 'WhatsApp:' : 'Phone:'}</span>
+                        <span class="font-mono text-slate-800 bg-white px-2 py-0.5 rounded border border-slate-200">${escapeHTML(item.contact_value)}</span>
                     </p>
                 </div>
 
-                <button onclick="copyToClipboard('${escapeHTML(item.contact_value)}', this)" 
-                        class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold py-2.5 px-5 rounded-xl text-sm transition shadow-md shadow-indigo-200 flex items-center justify-center gap-2">
-                    <span>📋</span>
-                    <span>Copy ${escapeHTML(item.contact_method)} Number</span>
-                </button>
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    ${item.contact_method === 'WhatsApp' ? `
+                        <a href="${contactLink}" target="_blank" rel="noopener noreferrer"
+                           class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-medium py-2.5 px-4 rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-2 cursor-pointer">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                            <span>Chat on WhatsApp</span>
+                        </a>
+                    ` : ''}
+                    <button onclick="copyToClipboard('${escapeHTML(item.contact_value)}', this)" 
+                            class="flex-1 sm:flex-initial ${item.contact_method === 'WhatsApp' ? 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200' : 'bg-emerald-600 hover:bg-emerald-700 text-white'} font-medium py-2.5 px-4 rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-2 cursor-pointer">
+                        <span>Copy number</span>
+                    </button>
+                </div>
             </div>
 
             ${isOwner ? `
-                <div class="p-4 rounded-xl bg-amber-50/80 border border-amber-200/90 space-y-3">
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
-                            <span>👑</span> You Own This Listing
+                        <span class="text-xs font-semibold text-slate-600">Your listing
                         </span>
                     </div>
                     <div class="flex items-center gap-2">
                         <button onclick="openEditItemModal('${item.id}')" 
-                                class="flex-1 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition shadow-sm shadow-indigo-200 flex items-center justify-center gap-1.5">
-                            <span>✏️</span>
-                            <span>Edit Listing</span>
+                                class="flex-1 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-medium py-2.5 px-4 rounded-xl text-xs transition shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
+                            <span>Edit listing</span>
                         </button>
                         <button onclick="handleDeleteItem('${item.id}')" 
-                                class="bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-700 font-bold py-2.5 px-4 rounded-xl text-xs transition border border-rose-200 flex items-center justify-center gap-1.5">
-                            <span>🗑️</span>
-                            <span>Delete Listing</span>
+                                class="bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-700 font-medium py-2.5 px-4 rounded-xl text-xs transition border border-rose-200 flex items-center justify-center gap-1.5 cursor-pointer">
+                            <span>Delete listing</span>
                         </button>
                     </div>
                 </div>
@@ -2886,15 +2925,15 @@ function showUnconfiguredNotice() {
     const emptyState = document.getElementById('empty-state');
     if (emptyState) {
         emptyState.innerHTML = `
-            <div class="w-16 h-16 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
-                ⚡
+            <div class="w-16 h-16 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4 border border-amber-100">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
             </div>
             <h3 class="text-lg font-bold text-slate-800">Supabase Not Connected</h3>
             <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto">
                 All mock/stub data has been removed. Please enter your Supabase Project URL and Public Anon Key to load live marketplace items.
             </p>
             <div class="mt-5 flex justify-center gap-3">
-                <button onclick="openConfigModal()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-md shadow-indigo-200">
+                <button onclick="openConfigModal()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-xl transition shadow-sm cursor-pointer">
                     Connect Supabase Now
                 </button>
             </div>
@@ -2964,17 +3003,22 @@ export async function copyToClipboard(text, btnElement) {
     if (!text) return;
     try {
         await navigator.clipboard.writeText(text);
-        showToast(`📋 Copied "${text}" to clipboard!`, 'success');
+        showToast(`Copied "${text}" to clipboard!`, 'success');
         
         if (btnElement) {
             const originalHTML = btnElement.innerHTML;
-            btnElement.classList.add('bg-emerald-600');
-            btnElement.classList.remove('bg-indigo-600');
-            btnElement.innerHTML = `<span>✓</span><span>Copied!</span>`;
+            const hadWhiteBg = btnElement.classList.contains('bg-white');
+            if (hadWhiteBg) {
+                btnElement.classList.remove('bg-white', 'text-slate-700');
+                btnElement.classList.add('bg-emerald-600', 'text-white');
+            }
+            btnElement.innerHTML = `<span>✓</span> <span>Copied!</span>`;
             setTimeout(() => {
                 btnElement.innerHTML = originalHTML;
-                btnElement.classList.remove('bg-emerald-600');
-                btnElement.classList.add('bg-indigo-600');
+                if (hadWhiteBg) {
+                    btnElement.classList.add('bg-white', 'text-slate-700');
+                    btnElement.classList.remove('bg-emerald-600', 'text-white');
+                }
             }, 2000);
         }
     } catch (err) {
@@ -2987,7 +3031,7 @@ export async function copyToClipboard(text, btnElement) {
         textArea.select();
         try {
             document.execCommand('copy');
-            showToast(`📋 Copied "${text}" to clipboard!`, 'success');
+            showToast(`Copied "${text}" to clipboard!`, 'success');
         } catch (e) {
             showToast(`Contact: ${text}`, 'info');
         }
@@ -3027,12 +3071,7 @@ export function showToast(message, type = 'info') {
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
 
-    let icon = 'ℹ️';
-    if (type === 'success') icon = '✅';
-    if (type === 'error') icon = '⚠️';
-
     toast.innerHTML = `
-        <span class="text-base flex-shrink-0">${icon}</span>
         <span class="flex-grow text-xs font-medium text-slate-800">${escapeHTML(message)}</span>
     `;
 
@@ -3065,13 +3104,13 @@ export function togglePhoneFrame() {
     const text = document.getElementById('phone-mode-text');
 
     if (isFrameActive) {
-        if (icon) icon.textContent = '💻';
+        if (icon) icon.textContent = 'Desktop';
         if (text) text.textContent = 'Desktop View';
-        showToast('📱 Switched to Phone Frame Simulator view', 'info');
+        showToast('Switched to Phone Frame Simulator view', 'info');
     } else {
-        if (icon) icon.textContent = '📱';
+        if (icon) icon.textContent = 'Mobile';
         if (text) text.textContent = 'Phone Frame View';
-        showToast('💻 Expanded to Responsive Desktop view', 'info');
+        showToast('Expanded to Responsive Desktop view', 'info');
     }
 }
 
@@ -3105,7 +3144,7 @@ export function handleMobileAuthAction() {
 ================================================================================
 
 === FILE: sql/schema.sql ===
-Description: PostgreSQL Database Schema, Tables, Constraints & Row Level Security (RLS)
+=== DESCRIPTION: PostgreSQL Database Schema, Tables, Constraints & Row Level Security (RLS) ===
 ================================================================================
 -- ============================================================================
 -- CAMPUS ONLINE THRIFT MARKET - COMPLETE DATABASE INITIALIZATION SCRIPT
@@ -3310,7 +3349,7 @@ GRANT EXECUTE ON FUNCTION public.check_email_exists(TEXT) TO anon, authenticated
 ================================================================================
 
 === FILE: sql/update_v2.sql ===
-Description: Database Migration v2 & Realtime Subscription Settings
+=== DESCRIPTION: Database Migration v2 & Realtime Subscription Settings ===
 ================================================================================
 -- ============================================================================
 -- CAMPUS THRIFT MARKET - MIGRATION UPDATE V2
@@ -3375,7 +3414,7 @@ GRANT EXECUTE ON FUNCTION public.check_email_exists(TEXT) TO anon, authenticated
 ================================================================================
 
 === FILE: server.py ===
-Description: Local Development Multithreaded HTTP Server
+=== DESCRIPTION: Local Development Multithreaded HTTP Server ===
 ================================================================================
 import http.server
 import socketserver
@@ -3411,7 +3450,7 @@ if __name__ == '__main__':
 ================================================================================
 
 === FILE: scripts/setup_db.py ===
-Description: Database Initialization and Health Check Script
+=== DESCRIPTION: Database Initialization and Health Check Script ===
 ================================================================================
 import psycopg2
 
@@ -3453,7 +3492,7 @@ print("All database checks passed!")
 ================================================================================
 
 === FILE: scripts/seed_real_items.py ===
-Description: Initial Campus Product Catalog Seeding Script
+=== DESCRIPTION: Initial Campus Product Catalog Seeding Script ===
 ================================================================================
 import psycopg2
 import json
@@ -3566,7 +3605,7 @@ conn.close()
 ================================================================================
 
 === FILE: scripts/add_trigger.py ===
-Description: Auth Profile Sync Trigger Deployment Script
+=== DESCRIPTION: Auth Profile Sync Trigger Deployment Script ===
 ================================================================================
 import psycopg2
 
@@ -3611,7 +3650,7 @@ conn.close()
 ================================================================================
 
 === FILE: scripts/create_check_email_rpc.py ===
-Description: Stored Procedure RPC Deployment for User Verification
+=== DESCRIPTION: Stored Procedure RPC Deployment for User Verification ===
 ================================================================================
 import psycopg2
 
@@ -3663,7 +3702,7 @@ conn.close()
 ================================================================================
 
 === FILE: scripts/set_faith_password.py ===
-Description: Demo User Credential Maintenance Script
+=== DESCRIPTION: Demo User Credential Maintenance Script ===
 ================================================================================
 import psycopg2
 
@@ -3690,7 +3729,7 @@ conn.close()
 ================================================================================
 
 === FILE: vercel.json ===
-Description: Vercel Production Deployment & Header Configuration
+=== DESCRIPTION: Vercel Production Deployment & Header Configuration ===
 ================================================================================
 {
   "version": 2,
@@ -3739,7 +3778,7 @@ Description: Vercel Production Deployment & Header Configuration
 ================================================================================
 
 === FILE: .gitignore ===
-Description: Git Version Control Exclusion Rules
+=== DESCRIPTION: Git Version Control Exclusion Rules ===
 ================================================================================
 # Binary executables
 tailwindcss.exe
@@ -3771,7 +3810,7 @@ info
 ================================================================================
 
 === FILE: README.md ===
-Description: Project Documentation, Architecture Guide & Deployment Instructions
+=== DESCRIPTION: Project Documentation, Architecture Guide & Deployment Instructions ===
 ================================================================================
 # 🎓 Campus Online Thrift Market
 
