@@ -1,7 +1,4 @@
-// ============================================================================
-// STUDENT AUTHENTICATION & SESSION MANAGEMENT MODULE
-// Strictly connected to Supabase Auth & PostgreSQL Profiles (No Stubs)
-// ============================================================================
+// Student authentication & session management module
 
 import { supabase, isSupabaseConfigured, logSupabase } from './supabaseClient.js';
 

@@ -1,7 +1,4 @@
-/* ==========================================================================
-   CAMPUS ONLINE THRIFT MARKET - CUSTOM STYLES & DESIGN TOKENS
-   Modern, dynamic aesthetics extending Tailwind CSS
-   ========================================================================== */
+/* Custom styles & theme tokens for Campus Thrift Market */
 
 :root {
     --font-heading: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -18,10 +15,7 @@
     --ring-focus: rgba(5, 150, 105, 0.25);
 }
 
-/* ==========================================================================
-   STRICT UTILITY OVERRIDES & EMERALD BRAND PALETTE
-   Ensures button fills, borders, and dynamic visibility never fail
-   ========================================================================== */
+/* Utility overrides and brand colors */
 .hidden {
     display: none !important;
 }
@@ -74,9 +68,7 @@ h1, h2, h3, h4, .brand-font {
     font-family: var(--font-heading);
 }
 
-/* --------------------------------------------------------------------------
-   Glassmorphism & Header Styling
-   -------------------------------------------------------------------------- */
+/* Glassmorphism & Header Styling */
 .glass-nav {
     background: rgba(255, 255, 255, 0.88);
     backdrop-filter: blur(12px);
@@ -208,9 +200,7 @@ h1, h2, h3, h4, .brand-font {
     }
 }
 
-/* --------------------------------------------------------------------------
-   Toast Notifications System
-   -------------------------------------------------------------------------- */
+/* Toast Notifications System */
 #toast-container {
     position: fixed;
     top: 1.25rem;
@@ -267,9 +257,7 @@ h1, h2, h3, h4, .brand-font {
     }
 }
 
-/* --------------------------------------------------------------------------
-   Loading Shimmer / Skeleton
-   -------------------------------------------------------------------------- */
+/* Loading Shimmer / Skeleton */
 .skeleton-shimmer {
     background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
     background-size: 200% 100%;
@@ -285,9 +273,7 @@ h1, h2, h3, h4, .brand-font {
     }
 }
 
-/* --------------------------------------------------------------------------
-   Image Upload Dropzone
-   -------------------------------------------------------------------------- */
+/* Image Upload Dropzone */
 .upload-dropzone {
     border: 2px dashed #cbd5e1;
     transition: border-color 0.2s ease, background-color 0.2s ease;
@@ -298,9 +284,7 @@ h1, h2, h3, h4, .brand-font {
     background-color: #f0fdf4;
 }
 
-/* --------------------------------------------------------------------------
-   Custom Scrollbar
-   -------------------------------------------------------------------------- */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -319,9 +303,7 @@ h1, h2, h3, h4, .brand-font {
     background: #94a3b8;
 }
 
-/* --------------------------------------------------------------------------
-   Mobile Phone Optimizations & Native Bottom Sheets
-   -------------------------------------------------------------------------- */
+/* Mobile Phone Optimizations & Native Bottom Sheets */
 /* Keep upper bar spacious on phones & tablets so CampusThrift logo is never squeezed */
 @media (max-width: 767px) {
     #nav-my-listings-btn {
@@ -408,9 +390,7 @@ h1, h2, h3, h4, .brand-font {
     -webkit-overflow-scrolling: touch;
 }
 
-/* --------------------------------------------------------------------------
-   Desktop Phone Frame Simulator Mode (iPhone 15 Pro Aesthetic)
-   -------------------------------------------------------------------------- */
+/* Desktop Phone Frame Simulator Mode (iPhone 15 Pro Aesthetic) */
 body.phone-frame-active {
     background: #090d16 !important;
     background-image: radial-gradient(circle at 50% 20%, rgba(22, 101, 52, 0.12) 0%, transparent 65%) !important;

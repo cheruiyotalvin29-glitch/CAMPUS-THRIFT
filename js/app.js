@@ -1,7 +1,4 @@
-// ============================================================================
-// MAIN APPLICATION ENGINE & DOM INTERACTION CONTROLLER
-// Strict Supabase Integration (No Stubs, 100% Real PostgreSQL & Storage Data)
-// ============================================================================
+// Campus Online Thrift Market - Main Application Controller
 
 import { 
     supabase, 
@@ -23,18 +20,14 @@ import {
     onAuthStateChanged 
 } from './auth.js';
 
-// ----------------------------------------------------------------------------
 // GLOBAL APPLICATION STATE
-// ----------------------------------------------------------------------------
 let allItems = [];
 let activeCategory = 'ALL';
 let isSignUpMode = false;
 let editingItemId = null;
 let pendingDeleteItemId = null;
 
-// ----------------------------------------------------------------------------
 // INITIALIZATION ON DOM LOAD
-// ----------------------------------------------------------------------------
 window.addEventListener('DOMContentLoaded', () => {
     logSupabase('CONFIG', 'DOM loaded. Initializing Campus Online Thrift Market application...');
 
@@ -113,9 +106,9 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// ----------------------------------------------------------------------------
+
 // 1. DATA FETCHING & RENDERING ENGINE (STRICT SUPABASE POSTGRESQL)
-// ----------------------------------------------------------------------------
+
 
 /**
  * Retrieves marketplace listings strictly from the Supabase `items` table.
@@ -298,9 +291,9 @@ function getContactIcon(method) {
     }
 }
 
-// ----------------------------------------------------------------------------
+
 // 2. CLIENT-SIDE SEARCH, CATEGORY & SORT FILTERING
-// ----------------------------------------------------------------------------
+
 
 export function filterItems() {
     const searchInput = document.getElementById('search-input');
@@ -522,9 +515,9 @@ function updateStats(count = allItems.length) {
     if (badge) badge.textContent = `${count} active item${count === 1 ? '' : 's'}`;
 }
 
-// ----------------------------------------------------------------------------
+
 // 3. CONTACT URI GENERATION (WhatsApp, Email, Phone)
-// ----------------------------------------------------------------------------
+
 
 export function buildContactURI(method, value, title) {
     const safeTitle = title || 'your campus thrift listing';
@@ -544,9 +537,9 @@ export function buildContactURI(method, value, title) {
     }
 }
 
-// ----------------------------------------------------------------------------
+
 // 4. ITEM CREATION PIPELINE & STORAGE UPLOAD (STRICT SUPABASE)
-// ----------------------------------------------------------------------------
+
 
 export async function handlePostItem(event) {
     event.preventDefault();
@@ -784,9 +777,7 @@ export function handleDeleteItem(itemId) {
     openDeleteConfirmModal(itemId);
 }
 
-// ----------------------------------------------------------------------------
 // 5. ITEM DETAIL MODAL VIEW
-// ----------------------------------------------------------------------------
 
 export function openItemDetail(itemId) {
     const item = allItems.find(i => String(i.id) === String(itemId));
@@ -931,9 +922,7 @@ export function openItemDetail(itemId) {
     toggleModal('detail-modal', true);
 }
 
-// ----------------------------------------------------------------------------
 // 6. STUDENT AUTHENTICATION FLOW
-// ----------------------------------------------------------------------------
 
 export async function handleAuth(event) {
     event.preventDefault();
@@ -1123,9 +1112,7 @@ export function openEditItemModal(itemId) {
     toggleModal('post-modal', true);
 }
 
-// ----------------------------------------------------------------------------
 // 7. SUPABASE CONFIGURATION MODAL & STATUS
-// ----------------------------------------------------------------------------
 
 export function openConfigModal() {
     const urlInput = document.getElementById('cfg-url');
@@ -1200,9 +1187,7 @@ function showUnconfiguredNotice() {
     }
 }
 
-// ----------------------------------------------------------------------------
 // 8. IMAGE PREVIEW & FORM UTILITIES
-// ----------------------------------------------------------------------------
 
 export function previewImage(input) {
     if (input.files && input.files[0]) {
@@ -1297,9 +1282,7 @@ export async function copyToClipboard(text, btnElement) {
     }
 }
 
-// ----------------------------------------------------------------------------
 // 9. MODALS & TOAST NOTIFICATION SYSTEM
-// ----------------------------------------------------------------------------
 
 export function toggleModal(modalId, show) {
     const modal = document.getElementById(modalId);
@@ -1352,9 +1335,7 @@ function escapeHTML(str) {
         .replace(/'/g, '&#39;');
 }
 
-// ----------------------------------------------------------------------------
 // 10. PHONE FRAME & MOBILE APP INTERACTIONS
-// ----------------------------------------------------------------------------
 
 export function togglePhoneFrame() {
     const isFrameActive = document.body.classList.toggle('phone-frame-active');

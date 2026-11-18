@@ -1,7 +1,4 @@
-// ============================================================================
-// SUPABASE CLIENT INITIALIZATION & LIVE AUDIT LOGGING MODULE
-// Campus Online Thrift Market System
-// ============================================================================
+// Supabase client initialization & configuration
 
 import { SUPABASE_CONFIG } from './config.js';
 
@@ -101,27 +98,17 @@ export function clearSupabaseConfig() {
 }
 
 /**
- * Structured console audit logger for all live Supabase interactions.
+ * Helper logger for Supabase actions and errors.
  * @param {'AUTH'|'DATABASE'|'STORAGE'|'CONFIG'|'ERROR'} category 
  * @param {string} action 
  * @param {any} details 
  */
 export function logSupabase(category, action, details = {}) {
-    const timestamp = new Date().toISOString().split('T')[1].replace('Z', '');
-    const colorMap = {
-        AUTH: '#6366f1',
-        DATABASE: '#10b981',
-        STORAGE: '#f59e0b',
-        CONFIG: '#06b6d4',
-        ERROR: '#ef4444'
-    };
-    const color = colorMap[category] || '#64748b';
-    console.log(
-        `%c[SUPABASE ${category}] %c${timestamp} - ${action}`,
-        `background: ${color}; color: #ffffff; padding: 2px 6px; border-radius: 4px; font-weight: bold;`,
-        'color: inherit; font-weight: 600;',
-        details
-    );
+    if (category === 'ERROR') {
+        console.error(`[Supabase Error] ${action}:`, details);
+    } else if (category === 'AUTH' || category === 'STORAGE') {
+        console.info(`[Supabase ${category}] ${action}`);
+    }
 }
 
 // Active connection parameters

@@ -48,38 +48,27 @@ Below is the complete architectural directory tree of the repository:
 ```text
 CAMPUS-THRIFT/
 │
-├── .gitignore                      # Defines files and directories to be excluded from Git version control (build binaries, temp logs).
 ├── index.html                      # Single-page application entry point containing layout, header, hero banner, item grid, and modal DOM trees.
-├── info                            # Active editor workspace configuration and user state tracking file.
 ├── README.md                       # Comprehensive repository documentation, architecture overview, setup guide, and Vercel deploy instructions.
 ├── server.py                       # Lightweight Python multithreaded HTTP server script used for local development and offline debugging.
-├── styles.css                      # Custom CSS containing glassmorphism visual effects, custom animations, floating modal buttons, and mobile sheets.
+├── styles.css                      # Custom CSS containing design system tokens, animations, floating modal buttons, and mobile sheets.
 ├── tailwind.css                    # Standalone precompiled Tailwind utility CSS classes ensuring zero build step during browser execution.
-├── tailwindcss.exe                 # Standalone Tailwind CSS compiler executable used to generate custom utilities without Node.js.
 ├── vercel.json                     # Production deployment configuration for Vercel ensuring correct static routing and immutable caching headers.
 │
 ├── js/                             # Modular JavaScript source files executing entirely on the client browser.
 │   ├── app.js                      # Core application controller: handles item CRUD, dynamic rendering, live search, filtering, and modal lifecycles.
 │   ├── auth.js                     # Authentication manager: interfaces with Supabase GoTrue to handle login, registration, and session persistence.
 │   ├── config.js                   # Project configuration constants storing the default Supabase project URL and anonymous API key.
-│   ├── supabaseClient.js           # Supabase client singleton factory: handles credential resolution, localStorage overrides, and live audit logging.
+│   ├── supabaseClient.js           # Supabase client singleton factory: handles credential resolution and localStorage overrides.
 │   └── vendor/
 │       └── supabase.js             # Pre-bundled local distribution of @supabase/supabase-js v2 library enabling offline and CDN-independent execution.
 │
 ├── project_documentation/          # Comprehensive academic and technical documentation suite.
 │   ├── complete_project_code_context.txt # Single bundled text archive containing 100% of the project's source code files with explicit header markers.
-│   └── technical_report_spec.md    # Complete Chapter 3 (Methodology & Design) and Chapter 4 (Implementation & Results) technical specification.
+│   └── technical_report_spec.md    # Complete Chapter 3, 4, and 5 academic technical report specifications.
 │
-├── scripts/                        # Automated administrative, maintenance, and database bootstrapping Python scripts.
-│   ├── add_trigger.py              # Script to automatically inject SQL triggers for user profile synchronization into Supabase.
-│   ├── create_check_email_rpc.py   # Deploys a Remote Procedure Call (RPC) in PostgreSQL to securely check for email collisions prior to sign-up.
-│   ├── seed_real_items.py          # Populates the marketplace database with realistic, high-fidelity sample university items for testing.
-│   ├── set_faith_password.py       # Administrative utility to update and verify credentials for test user accounts.
-│   └── setup_db.py                 # Automated database initialization script executing schema creation and table verification.
-│
-└── sql/                            # Production PostgreSQL Database Definition and Migration Scripts.
-    ├── schema.sql                  # Comprehensive DDL script: defines tables, UUID generators, triggers, RLS policies, and storage bucket configs.
-    └── update_v2.sql               # Incremental schema migration script adding campus location columns, contact method constraints, and real-time settings.
+└── sql/                            # Production PostgreSQL Database Definition.
+    └── schema.sql                  # Unified DDL script: defines tables, UUID generators, triggers, RLS policies, storage bucket configs, and RPCs.
 ```
 
 ---

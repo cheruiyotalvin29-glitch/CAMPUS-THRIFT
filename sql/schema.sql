@@ -1,7 +1,4 @@
--- ============================================================================
--- CAMPUS ONLINE THRIFT MARKET - COMPLETE DATABASE INITIALIZATION SCRIPT
--- PostgreSQL DDL for Supabase BaaS (Production-Grade, Strict Schema)
--- ============================================================================
+-- Campus Online Thrift Market - Complete Database Schema (Supabase PostgreSQL)
 
 -- 1. Enable UUID Extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

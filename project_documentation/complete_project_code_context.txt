@@ -1,28 +1,22 @@
 ================================================================================
 CAMPUS ONLINE THRIFT MARKET - COMPLETE SOURCE CODE CONTEXT BUNDLE
+Branch: presentation-demo (Clean Lecturer Presentation Distribution)
 Repository: https://github.com/cheruiyotalvin29-glitch/CAMPUS-THRIFT
 Generated for: Academic Technical Report & AI Analysis Context
 ================================================================================
 
 TABLE OF CONTENTS:
 01. index.html - Frontend Single-Page Application HTML Structure, Navbars & Modals
-02. styles.css - Design System, Color Tokens, Strict Utility Classes, Animations & Responsive Sheets
+02. styles.css - Design System, Color Tokens, Strict Utility Classes & Responsive Sheets
 03. tailwind.css - Precompiled Tailwind CSS Utilities and Preflight Base Styles
 04. js/config.js - Supabase Environment Configuration & API Credentials
 05. js/supabaseClient.js - Supabase Client Factory, LocalStorage Overrides & Health Audit
 06. js/auth.js - User Authentication, Session Persistence & Auth State Listener
-07. js/app.js - Core Application Logic, Item CRUD, Filters, Search, Contact Linking & Modal Management
-08. sql/schema.sql - PostgreSQL Database Schema, Tables, Constraints & Row Level Security (RLS)
-09. sql/update_v2.sql - Database Migration v2 & Realtime Subscription Settings
-10. server.py - Local Development Multithreaded HTTP Server
-11. scripts/setup_db.py - Database Initialization and Health Check Script
-12. scripts/seed_real_items.py - Initial Campus Product Catalog Seeding Script
-13. scripts/add_trigger.py - Auth Profile Sync Trigger Deployment Script
-14. scripts/create_check_email_rpc.py - Stored Procedure RPC Deployment for User Verification
-15. scripts/set_faith_password.py - Demo User Credential Maintenance Script
-16. vercel.json - Vercel Production Deployment & Header Configuration
-17. .gitignore - Git Version Control Exclusion Rules
-18. README.md - Project Documentation, Architecture Guide & Deployment Instructions
+07. js/app.js - Core Marketplace Logic, Item CRUD, Filters, Search & Modal Management
+08. sql/schema.sql - Unified PostgreSQL Database Schema, Tables, Constraints & Row Level Security (RLS)
+09. server.py - Local Development Multithreaded HTTP Server
+10. vercel.json - Vercel Production Deployment & Header Configuration
+11. README.md - Project Documentation, Architecture Guide & Deployment Instructions
 
 ================================================================================
 
@@ -362,9 +356,7 @@ TABLE OF CONTENTS:
 
     </div> <!-- /#app-shell -->
 
-    <!-- ======================================================================
-         MODALS & DIALOG OVERLAYS
-         ====================================================================== -->
+    <!-- Modals & Dialogs -->
 
     <!-- 1. POST ITEM FORM MODAL -->
     <div id="post-modal" class="modal-backdrop fixed inset-0 hidden z-50 flex items-center justify-center p-4">
@@ -710,12 +702,9 @@ TABLE OF CONTENTS:
 ================================================================================
 
 === FILE: styles.css ===
-=== DESCRIPTION: Design System, Color Tokens, Strict Utility Classes, Animations & Responsive Sheets ===
+=== DESCRIPTION: Design System, Color Tokens, Strict Utility Classes & Responsive Sheets ===
 ================================================================================
-/* ==========================================================================
-   CAMPUS ONLINE THRIFT MARKET - CUSTOM STYLES & DESIGN TOKENS
-   Modern, dynamic aesthetics extending Tailwind CSS
-   ========================================================================== */
+/* Custom styles & theme tokens for Campus Thrift Market */
 
 :root {
     --font-heading: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -732,10 +721,7 @@ TABLE OF CONTENTS:
     --ring-focus: rgba(5, 150, 105, 0.25);
 }
 
-/* ==========================================================================
-   STRICT UTILITY OVERRIDES & EMERALD BRAND PALETTE
-   Ensures button fills, borders, and dynamic visibility never fail
-   ========================================================================== */
+/* Utility overrides and brand colors */
 .hidden {
     display: none !important;
 }
@@ -788,9 +774,7 @@ h1, h2, h3, h4, .brand-font {
     font-family: var(--font-heading);
 }
 
-/* --------------------------------------------------------------------------
-   Glassmorphism & Header Styling
-   -------------------------------------------------------------------------- */
+/* Glassmorphism & Header Styling */
 .glass-nav {
     background: rgba(255, 255, 255, 0.88);
     backdrop-filter: blur(12px);
@@ -922,9 +906,7 @@ h1, h2, h3, h4, .brand-font {
     }
 }
 
-/* --------------------------------------------------------------------------
-   Toast Notifications System
-   -------------------------------------------------------------------------- */
+/* Toast Notifications System */
 #toast-container {
     position: fixed;
     top: 1.25rem;
@@ -981,9 +963,7 @@ h1, h2, h3, h4, .brand-font {
     }
 }
 
-/* --------------------------------------------------------------------------
-   Loading Shimmer / Skeleton
-   -------------------------------------------------------------------------- */
+/* Loading Shimmer / Skeleton */
 .skeleton-shimmer {
     background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
     background-size: 200% 100%;
@@ -999,9 +979,7 @@ h1, h2, h3, h4, .brand-font {
     }
 }
 
-/* --------------------------------------------------------------------------
-   Image Upload Dropzone
-   -------------------------------------------------------------------------- */
+/* Image Upload Dropzone */
 .upload-dropzone {
     border: 2px dashed #cbd5e1;
     transition: border-color 0.2s ease, background-color 0.2s ease;
@@ -1012,9 +990,7 @@ h1, h2, h3, h4, .brand-font {
     background-color: #f0fdf4;
 }
 
-/* --------------------------------------------------------------------------
-   Custom Scrollbar
-   -------------------------------------------------------------------------- */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -1033,9 +1009,7 @@ h1, h2, h3, h4, .brand-font {
     background: #94a3b8;
 }
 
-/* --------------------------------------------------------------------------
-   Mobile Phone Optimizations & Native Bottom Sheets
-   -------------------------------------------------------------------------- */
+/* Mobile Phone Optimizations & Native Bottom Sheets */
 /* Keep upper bar spacious on phones & tablets so CampusThrift logo is never squeezed */
 @media (max-width: 767px) {
     #nav-my-listings-btn {
@@ -1122,9 +1096,7 @@ h1, h2, h3, h4, .brand-font {
     -webkit-overflow-scrolling: touch;
 }
 
-/* --------------------------------------------------------------------------
-   Desktop Phone Frame Simulator Mode (iPhone 15 Pro Aesthetic)
-   -------------------------------------------------------------------------- */
+/* Desktop Phone Frame Simulator Mode (iPhone 15 Pro Aesthetic) */
 body.phone-frame-active {
     background: #090d16 !important;
     background-image: radial-gradient(circle at 50% 20%, rgba(22, 101, 52, 0.12) 0%, transparent 65%) !important;
@@ -1210,10 +1182,7 @@ export const SUPABASE_CONFIG = {
 === FILE: js/supabaseClient.js ===
 === DESCRIPTION: Supabase Client Factory, LocalStorage Overrides & Health Audit ===
 ================================================================================
-// ============================================================================
-// SUPABASE CLIENT INITIALIZATION & LIVE AUDIT LOGGING MODULE
-// Campus Online Thrift Market System
-// ============================================================================
+// Supabase client initialization & configuration
 
 import { SUPABASE_CONFIG } from './config.js';
 
@@ -1313,27 +1282,17 @@ export function clearSupabaseConfig() {
 }
 
 /**
- * Structured console audit logger for all live Supabase interactions.
+ * Helper logger for Supabase actions and errors.
  * @param {'AUTH'|'DATABASE'|'STORAGE'|'CONFIG'|'ERROR'} category 
  * @param {string} action 
  * @param {any} details 
  */
 export function logSupabase(category, action, details = {}) {
-    const timestamp = new Date().toISOString().split('T')[1].replace('Z', '');
-    const colorMap = {
-        AUTH: '#6366f1',
-        DATABASE: '#10b981',
-        STORAGE: '#f59e0b',
-        CONFIG: '#06b6d4',
-        ERROR: '#ef4444'
-    };
-    const color = colorMap[category] || '#64748b';
-    console.log(
-        `%c[SUPABASE ${category}] %c${timestamp} - ${action}`,
-        `background: ${color}; color: #ffffff; padding: 2px 6px; border-radius: 4px; font-weight: bold;`,
-        'color: inherit; font-weight: 600;',
-        details
-    );
+    if (category === 'ERROR') {
+        console.error(`[Supabase Error] ${action}:`, details);
+    } else if (category === 'AUTH' || category === 'STORAGE') {
+        console.info(`[Supabase ${category}] ${action}`);
+    }
 }
 
 // Active connection parameters
@@ -1366,10 +1325,7 @@ if (isSupabaseConfigured()) {
 === FILE: js/auth.js ===
 === DESCRIPTION: User Authentication, Session Persistence & Auth State Listener ===
 ================================================================================
-// ============================================================================
-// STUDENT AUTHENTICATION & SESSION MANAGEMENT MODULE
-// Strictly connected to Supabase Auth & PostgreSQL Profiles (No Stubs)
-// ============================================================================
+// Student authentication & session management module
 
 import { supabase, isSupabaseConfigured, logSupabase } from './supabaseClient.js';
 
@@ -1738,12 +1694,9 @@ export function updateAuthUI() {
 ================================================================================
 
 === FILE: js/app.js ===
-=== DESCRIPTION: Core Application Logic, Item CRUD, Filters, Search, Contact Linking & Modal Management ===
+=== DESCRIPTION: Core Marketplace Logic, Item CRUD, Filters, Search & Modal Management ===
 ================================================================================
-// ============================================================================
-// MAIN APPLICATION ENGINE & DOM INTERACTION CONTROLLER
-// Strict Supabase Integration (No Stubs, 100% Real PostgreSQL & Storage Data)
-// ============================================================================
+// Campus Online Thrift Market - Main Application Controller
 
 import { 
     supabase, 
@@ -1765,18 +1718,14 @@ import {
     onAuthStateChanged 
 } from './auth.js';
 
-// ----------------------------------------------------------------------------
 // GLOBAL APPLICATION STATE
-// ----------------------------------------------------------------------------
 let allItems = [];
 let activeCategory = 'ALL';
 let isSignUpMode = false;
 let editingItemId = null;
 let pendingDeleteItemId = null;
 
-// ----------------------------------------------------------------------------
 // INITIALIZATION ON DOM LOAD
-// ----------------------------------------------------------------------------
 window.addEventListener('DOMContentLoaded', () => {
     logSupabase('CONFIG', 'DOM loaded. Initializing Campus Online Thrift Market application...');
 
@@ -1855,9 +1804,9 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// ----------------------------------------------------------------------------
+
 // 1. DATA FETCHING & RENDERING ENGINE (STRICT SUPABASE POSTGRESQL)
-// ----------------------------------------------------------------------------
+
 
 /**
  * Retrieves marketplace listings strictly from the Supabase `items` table.
@@ -2040,9 +1989,9 @@ function getContactIcon(method) {
     }
 }
 
-// ----------------------------------------------------------------------------
+
 // 2. CLIENT-SIDE SEARCH, CATEGORY & SORT FILTERING
-// ----------------------------------------------------------------------------
+
 
 export function filterItems() {
     const searchInput = document.getElementById('search-input');
@@ -2264,9 +2213,9 @@ function updateStats(count = allItems.length) {
     if (badge) badge.textContent = `${count} active item${count === 1 ? '' : 's'}`;
 }
 
-// ----------------------------------------------------------------------------
+
 // 3. CONTACT URI GENERATION (WhatsApp, Email, Phone)
-// ----------------------------------------------------------------------------
+
 
 export function buildContactURI(method, value, title) {
     const safeTitle = title || 'your campus thrift listing';
@@ -2286,9 +2235,9 @@ export function buildContactURI(method, value, title) {
     }
 }
 
-// ----------------------------------------------------------------------------
+
 // 4. ITEM CREATION PIPELINE & STORAGE UPLOAD (STRICT SUPABASE)
-// ----------------------------------------------------------------------------
+
 
 export async function handlePostItem(event) {
     event.preventDefault();
@@ -2526,9 +2475,7 @@ export function handleDeleteItem(itemId) {
     openDeleteConfirmModal(itemId);
 }
 
-// ----------------------------------------------------------------------------
 // 5. ITEM DETAIL MODAL VIEW
-// ----------------------------------------------------------------------------
 
 export function openItemDetail(itemId) {
     const item = allItems.find(i => String(i.id) === String(itemId));
@@ -2673,9 +2620,7 @@ export function openItemDetail(itemId) {
     toggleModal('detail-modal', true);
 }
 
-// ----------------------------------------------------------------------------
 // 6. STUDENT AUTHENTICATION FLOW
-// ----------------------------------------------------------------------------
 
 export async function handleAuth(event) {
     event.preventDefault();
@@ -2865,9 +2810,7 @@ export function openEditItemModal(itemId) {
     toggleModal('post-modal', true);
 }
 
-// ----------------------------------------------------------------------------
 // 7. SUPABASE CONFIGURATION MODAL & STATUS
-// ----------------------------------------------------------------------------
 
 export function openConfigModal() {
     const urlInput = document.getElementById('cfg-url');
@@ -2942,9 +2885,7 @@ function showUnconfiguredNotice() {
     }
 }
 
-// ----------------------------------------------------------------------------
 // 8. IMAGE PREVIEW & FORM UTILITIES
-// ----------------------------------------------------------------------------
 
 export function previewImage(input) {
     if (input.files && input.files[0]) {
@@ -3039,9 +2980,7 @@ export async function copyToClipboard(text, btnElement) {
     }
 }
 
-// ----------------------------------------------------------------------------
 // 9. MODALS & TOAST NOTIFICATION SYSTEM
-// ----------------------------------------------------------------------------
 
 export function toggleModal(modalId, show) {
     const modal = document.getElementById(modalId);
@@ -3094,9 +3033,7 @@ function escapeHTML(str) {
         .replace(/'/g, '&#39;');
 }
 
-// ----------------------------------------------------------------------------
 // 10. PHONE FRAME & MOBILE APP INTERACTIONS
-// ----------------------------------------------------------------------------
 
 export function togglePhoneFrame() {
     const isFrameActive = document.body.classList.toggle('phone-frame-active');
@@ -3144,12 +3081,9 @@ export function handleMobileAuthAction() {
 ================================================================================
 
 === FILE: sql/schema.sql ===
-=== DESCRIPTION: PostgreSQL Database Schema, Tables, Constraints & Row Level Security (RLS) ===
+=== DESCRIPTION: Unified PostgreSQL Database Schema, Tables, Constraints & Row Level Security (RLS) ===
 ================================================================================
--- ============================================================================
--- CAMPUS ONLINE THRIFT MARKET - COMPLETE DATABASE INITIALIZATION SCRIPT
--- PostgreSQL DDL for Supabase BaaS (Production-Grade, Strict Schema)
--- ============================================================================
+-- Campus Online Thrift Market - Complete Database Schema (Supabase PostgreSQL)
 
 -- 1. Enable UUID Extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -3348,71 +3282,6 @@ GRANT EXECUTE ON FUNCTION public.check_email_exists(TEXT) TO anon, authenticated
 
 ================================================================================
 
-=== FILE: sql/update_v2.sql ===
-=== DESCRIPTION: Database Migration v2 & Realtime Subscription Settings ===
-================================================================================
--- ============================================================================
--- CAMPUS THRIFT MARKET - MIGRATION UPDATE V2
--- Run this in your Supabase SQL Editor to update an existing database:
--- 1. Cleans up any legacy 'Email' contact entries to 'WhatsApp'
--- 2. Enforces contact_method constraint strictly to ('WhatsApp', 'Phone')
--- 3. Ensures campus_location column exists
--- 4. Installs the auto-confirm trigger so student sign-ups are instant!
--- ============================================================================
-
--- 1. Ensure campus_location column exists on items
-ALTER TABLE public.items ADD COLUMN IF NOT EXISTS campus_location TEXT DEFAULT 'Main Campus';
-
--- 2. Update any legacy listings with 'Email' to 'WhatsApp'
-UPDATE public.items 
-SET contact_method = 'WhatsApp' 
-WHERE contact_method = 'Email';
-
--- 3. Enforce constraint to only allow ('WhatsApp', 'Phone')
-ALTER TABLE public.items DROP CONSTRAINT IF EXISTS items_contact_method_check;
-ALTER TABLE public.items ADD CONSTRAINT items_contact_method_check 
-    CHECK (contact_method IN ('WhatsApp', 'Phone'));
-
--- 4. Auto-Confirm Trigger: Makes all student signups instant without email confirmation wait!
-CREATE OR REPLACE FUNCTION public.auto_confirm_new_user()
-RETURNS TRIGGER
-LANGUAGE plpgsql
-SECURITY DEFINER
-AS $$
-BEGIN
-    NEW.email_confirmed_at = COALESCE(NEW.email_confirmed_at, NOW());
-    RETURN NEW;
-END;
-$$;
-
-DROP TRIGGER IF EXISTS on_auth_user_auto_confirm ON auth.users;
-CREATE TRIGGER on_auth_user_auto_confirm
-    BEFORE INSERT ON auth.users
-    FOR EACH ROW EXECUTE FUNCTION public.auto_confirm_new_user();
-
--- 5. Confirm any existing unconfirmed users
-UPDATE auth.users SET email_confirmed_at = NOW() WHERE email_confirmed_at IS NULL;
-
--- 6. Helper RPC Function to check if an email is already registered
-CREATE OR REPLACE FUNCTION public.check_email_exists(email_to_check TEXT)
-RETURNS BOOLEAN
-LANGUAGE plpgsql
-SECURITY DEFINER
-SET search_path = public, auth
-AS $$
-BEGIN
-    RETURN EXISTS (
-        SELECT 1 FROM auth.users 
-        WHERE LOWER(email) = LOWER(TRIM(email_to_check))
-    );
-END;
-$$;
-
-GRANT EXECUTE ON FUNCTION public.check_email_exists(TEXT) TO anon, authenticated, service_role;
-
-
-================================================================================
-
 === FILE: server.py ===
 === DESCRIPTION: Local Development Multithreaded HTTP Server ===
 ================================================================================
@@ -3445,285 +3314,6 @@ if __name__ == '__main__':
         httpd.serve_forever()
     except KeyboardInterrupt:
         pass
-
-
-================================================================================
-
-=== FILE: scripts/setup_db.py ===
-=== DESCRIPTION: Database Initialization and Health Check Script ===
-================================================================================
-import psycopg2
-
-host = 'aws-0-eu-north-1.pooler.supabase.com'
-user = 'postgres.opcoqdoobwnoskdttifx'
-password = 'Notebook1!@123456789q'
-
-print("Connecting to Supabase PostgreSQL at", host, "...")
-conn = psycopg2.connect(host=host, user=user, password=password, dbname='postgres', port=6543)
-conn.autocommit = True
-cur = conn.cursor()
-
-print("Reading sql/schema.sql...")
-with open('sql/schema.sql', 'r', encoding='utf-8') as f:
-    sql = f.read()
-
-print("Executing DDL in Supabase...")
-cur.execute(sql)
-print("SUCCESS: schema.sql executed successfully!")
-
-print("Confirming pending emails in auth.users...")
-cur.execute("UPDATE auth.users SET email_confirmed_at = NOW() WHERE email_confirmed_at IS NULL;")
-print("SUCCESS: Email confirmed for registered users!")
-
-cur.execute("SELECT id, name, public FROM storage.buckets;")
-print("Storage Buckets:", cur.fetchall())
-
-cur.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_name;")
-print("Public Tables:", [r[0] for r in cur.fetchall()])
-
-# Check columns of items table
-cur.execute("SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'items' ORDER BY ordinal_position;")
-print("Columns in items:", cur.fetchall())
-
-conn.close()
-print("All database checks passed!")
-
-
-================================================================================
-
-=== FILE: scripts/seed_real_items.py ===
-=== DESCRIPTION: Initial Campus Product Catalog Seeding Script ===
-================================================================================
-import psycopg2
-import json
-
-host = 'aws-0-eu-north-1.pooler.supabase.com'
-user = 'postgres.opcoqdoobwnoskdttifx'
-password = 'Notebook1!@123456789q'
-
-conn = psycopg2.connect(host=host, user=user, password=password, dbname='postgres', port=6543)
-conn.autocommit = True
-cur = conn.cursor()
-
-# Get existing student profile ID
-cur.execute("SELECT id FROM public.profiles LIMIT 1;")
-row = cur.fetchone()
-if not row:
-    print("No profiles found!")
-    exit(1)
-
-seller_id = row[0]
-print("Using seller profile ID:", seller_id)
-
-sample_items = [
-    (
-        seller_id,
-        "TI-84 Plus CE Graphing Calculator",
-        "Color screen graphing calculator in excellent condition with USB charging cable and sliding hard case. Pre-loaded with statistics tools.",
-        4500,
-        "Electronics",
-        "Like New",
-        "Engineering Complex",
-        "https://images.unsplash.com/photo-1587145820266-a5951ee6f620?auto=format&fit=crop&w=800&q=80",
-        "WhatsApp",
-        "+254712345678"
-    ),
-    (
-        seller_id,
-        "Hisense 45L Dorm Mini-Fridge",
-        "Compact energy-efficient dormitory refrigerator with working freezer compartment. Whisper-quiet compressor, perfect for hostel rooms.",
-        6500,
-        "Dorm Essentials",
-        "Gently Used",
-        "Hall 4 Hostels",
-        "https://images.unsplash.com/photo-1584992236310-6edddc08acff?auto=format&fit=crop&w=800&q=80",
-        "WhatsApp",
-        "+254712345678"
-    ),
-    (
-        seller_id,
-        "Sony WH-1000XM4 Noise-Cancelling Headphones",
-        "Active noise cancelling wireless headphones. 30 hours battery life. Includes audio cable and carrying case for quiet library study.",
-        11000,
-        "Electronics",
-        "Like New",
-        "Postgraduate Wing",
-        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80",
-        "Phone",
-        "+254712345678"
-    ),
-    (
-        seller_id,
-        "Campus Fleece Varsity Hoodie (Navy, Size L)",
-        "Heavyweight official university fleece sweater. Only worn twice, washed and clean. Great for chilly early-morning lecture halls.",
-        1200,
-        "Clothing",
-        "Like New",
-        "Student Center",
-        "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=800&q=80",
-        "WhatsApp",
-        "+254712345678"
-    ),
-    (
-        seller_id,
-        "Heavy-Duty Campus Mountain Bike with U-Lock",
-        "Shimano 21-speed gear system, rear luggage rack, puncture-resistant tyres. Includes heavy combination steel U-lock and helmet.",
-        8500,
-        "Other",
-        "Fair",
-        "Sports Pavilion",
-        "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=800&q=80",
-        "Phone",
-        "+254712345678"
-    ),
-    (
-        seller_id,
-        "Adjustable LED Study Desk Lamp with USB Port",
-        "Touch-sensitive brightness controls with 3 color temperatures (warm, natural, cool white). Built-in USB phone charging port.",
-        950,
-        "Dorm Essentials",
-        "Like New",
-        "Hall 4 Hostels",
-        "https://images.unsplash.com/photo-1534353436294-0dbd4bdac845?auto=format&fit=crop&w=800&q=80",
-        "WhatsApp",
-        "+254712345678"
-    )
-]
-
-for item in sample_items:
-    cur.execute("""
-        INSERT INTO public.items (user_id, title, description, price, category, condition, campus_location, image_url, contact_method, contact_value)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
-    """, item)
-
-print(f"Successfully inserted {len(sample_items)} real listings into Supabase!")
-cur.execute("SELECT COUNT(*) FROM public.items;")
-print("Total real listings in Supabase:", cur.fetchone()[0])
-conn.close()
-
-
-================================================================================
-
-=== FILE: scripts/add_trigger.py ===
-=== DESCRIPTION: Auth Profile Sync Trigger Deployment Script ===
-================================================================================
-import psycopg2
-
-conn = psycopg2.connect(
-    host='aws-0-eu-north-1.pooler.supabase.com',
-    user='postgres.opcoqdoobwnoskdttifx',
-    password='Notebook1!@123456789q',
-    dbname='postgres',
-    port=6543
-)
-conn.autocommit = True
-cur = conn.cursor()
-
-# Auto-confirm trigger on auth.users
-cur.execute("""
-CREATE OR REPLACE FUNCTION public.auto_confirm_new_user()
-RETURNS TRIGGER
-LANGUAGE plpgsql
-SECURITY DEFINER
-AS $$
-BEGIN
-    NEW.email_confirmed_at = COALESCE(NEW.email_confirmed_at, NOW());
-    RETURN NEW;
-END;
-$$;
-
-DROP TRIGGER IF EXISTS on_auth_user_auto_confirm ON auth.users;
-CREATE TRIGGER on_auth_user_auto_confirm
-    BEFORE INSERT ON auth.users
-    FOR EACH ROW EXECUTE FUNCTION public.auto_confirm_new_user();
-""")
-
-print("Successfully installed auto_confirm_new_user trigger on auth.users!")
-
-# Also ensure any existing unconfirmed users are confirmed
-cur.execute("UPDATE auth.users SET email_confirmed_at = NOW() WHERE email_confirmed_at IS NULL;")
-print("Confirmed all existing auth.users!")
-
-conn.close()
-
-
-================================================================================
-
-=== FILE: scripts/create_check_email_rpc.py ===
-=== DESCRIPTION: Stored Procedure RPC Deployment for User Verification ===
-================================================================================
-import psycopg2
-
-conn = psycopg2.connect(
-    host='aws-0-eu-north-1.pooler.supabase.com',
-    user='postgres.opcoqdoobwnoskdttifx',
-    password='Notebook1!@123456789q',
-    dbname='postgres',
-    port=6543
-)
-conn.autocommit = True
-cur = conn.cursor()
-
-# Create check_email_exists function
-cur.execute("""
-CREATE OR REPLACE FUNCTION public.check_email_exists(email_to_check TEXT)
-RETURNS BOOLEAN
-LANGUAGE plpgsql
-SECURITY DEFINER
-SET search_path = public, auth
-AS $$
-BEGIN
-    RETURN EXISTS (
-        SELECT 1 FROM auth.users 
-        WHERE LOWER(email) = LOWER(TRIM(email_to_check))
-    );
-END;
-$$;
-
-GRANT EXECUTE ON FUNCTION public.check_email_exists(TEXT) TO anon, authenticated, service_role;
-""")
-
-print("Successfully created public.check_email_exists() function!")
-
-# Test with existing email
-cur.execute("SELECT public.check_email_exists('faith.wanjiku@testmail.com');")
-res_exists = cur.fetchone()[0]
-
-# Test with non-existing email
-cur.execute("SELECT public.check_email_exists('doesnotexist_random123@univ.edu');")
-res_not_exists = cur.fetchone()[0]
-
-print("Existing email test ('faith.wanjiku@testmail.com'):", res_exists)
-print("Non-existing email test ('doesnotexist_random123@univ.edu'):", res_not_exists)
-
-conn.close()
-
-
-================================================================================
-
-=== FILE: scripts/set_faith_password.py ===
-=== DESCRIPTION: Demo User Credential Maintenance Script ===
-================================================================================
-import psycopg2
-
-conn = psycopg2.connect(
-    host='aws-0-eu-north-1.pooler.supabase.com',
-    user='postgres.opcoqdoobwnoskdttifx',
-    password='Notebook1!@123456789q',
-    dbname='postgres',
-    port=6543
-)
-conn.autocommit = True
-cur = conn.cursor()
-
-cur.execute("""
-UPDATE auth.users 
-SET encrypted_password = crypt('campus2026', gen_salt('bf'))
-WHERE email ILIKE 'faith.wanjiku@testmail.com';
-""")
-
-print("Successfully updated faith.wanjiku@testmail.com password to campus2026!")
-conn.close()
 
 
 ================================================================================
@@ -3773,38 +3363,6 @@ conn.close()
     }
   ]
 }
-
-
-================================================================================
-
-=== FILE: .gitignore ===
-=== DESCRIPTION: Git Version Control Exclusion Rules ===
-================================================================================
-# Binary executables
-tailwindcss.exe
-*.exe
-
-# Temporary scratch & test artifacts
-scratch/
-test_*.html
-*.png
-*.jpg
-*.jpeg
-
-# Python environment & cache
-__pycache__/
-*.py[cod]
-*$py.class
-.env
-.venv/
-env/
-venv/
-
-# OS metadata
-Thumbs.db
-.DS_Store
-info
-
 
 
 ================================================================================
