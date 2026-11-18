@@ -156,7 +156,7 @@ export async function loadUserProfile(userId) {
  */
 export async function signUpStudent(email, password, fullName, phoneNumber = '', campusLocation = 'Main Campus') {
     if (!isSupabaseConfigured()) {
-        throw new Error('Supabase is not configured. Please enter your project URL and Anon key first.');
+        throw new Error('Database is not configured. Please enter your connection credentials first.');
     }
 
     if (!email || !password) {
@@ -198,7 +198,7 @@ export async function signUpStudent(email, password, fullName, phoneNumber = '',
     if (error) {
         logSupabase('ERROR', 'Supabase registration failed', error);
         if (error.message && error.message.toLowerCase().includes('rate limit')) {
-            throw new Error('Supabase email rate limit reached. Fix: In your Supabase Dashboard -> Authentication -> Providers -> Email, turn off "Confirm email".');
+            throw new Error('Email rate limit reached. Please try again shortly or sign in.');
         }
         if (error.message && (
             error.message.toLowerCase().includes('already registered') || 
@@ -271,7 +271,7 @@ export async function signUpStudent(email, password, fullName, phoneNumber = '',
  */
 export async function signInStudent(email, password) {
     if (!isSupabaseConfigured()) {
-        throw new Error('Supabase is not configured. Please enter your project URL and Anon key first.');
+        throw new Error('Database is not configured. Please enter your connection credentials first.');
     }
 
     if (!email || !password) {

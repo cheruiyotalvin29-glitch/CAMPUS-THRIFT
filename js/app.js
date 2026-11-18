@@ -545,7 +545,7 @@ export async function handlePostItem(event) {
     event.preventDefault();
 
     if (!isSupabaseConfigured()) {
-        showToast('Supabase is not configured yet. Please enter your project credentials.', 'error');
+        showToast('Database connection is not configured yet.', 'error');
         openConfigModal();
         return;
     }
@@ -566,7 +566,7 @@ export async function handlePostItem(event) {
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
             </svg>
-            ${editingItemId ? 'Saving Changes...' : 'Uploading to Supabase...'}
+            ${editingItemId ? 'Saving Changes...' : 'Uploading...'}
         `;
     }
 
@@ -917,16 +917,16 @@ export async function handleAuth(event) {
 
     if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerText = isSignUpMode ? 'Registering with Supabase...' : 'Signing in with Supabase...';
+        submitBtn.innerText = isSignUpMode ? 'Registering...' : 'Signing in...';
     }
 
     try {
         if (isSignUpMode) {
             await signUpStudent(email, password, name, phone);
-            showToast('Student account registered in Supabase! You can now post listings.', 'success');
+            showToast('Student account registered! You can now post listings.', 'success');
         } else {
             await signInStudent(email, password);
-            showToast('Welcome back! Signed in to Supabase successfully.', 'success');
+            showToast('Welcome back! Signed in successfully.', 'success');
         }
         toggleModal('auth-modal', false);
         await fetchItems();
@@ -979,13 +979,13 @@ export function toggleAuthMode() {
 
 export async function handleLogout() {
     await signOutStudent();
-    showToast('Signed out of Supabase successfully.', 'info');
+    showToast('Signed out successfully.', 'info');
     filterItems();
 }
 
 export function checkAuthAndOpenPostModal() {
     if (!isSupabaseConfigured()) {
-        showToast('Please configure your Supabase connection first.', 'error');
+        showToast('Please configure your database connection first.', 'error');
         openConfigModal();
         return;
     }
