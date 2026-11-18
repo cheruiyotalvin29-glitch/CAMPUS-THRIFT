@@ -193,40 +193,45 @@ function renderItems(items) {
         const formattedPrice = Number(item.price).toLocaleString();
 
         const card = document.createElement('article');
-        card.className = 'item-card bg-white rounded-2xl border border-slate-200/80 overflow-hidden flex flex-col justify-between shadow-sm relative group';
+        card.className = 'item-card bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col justify-between shadow-sm relative group h-full transition duration-200 hover:-translate-y-0.5 hover:shadow-md';
         card.setAttribute('data-id', item.id);
 
         card.innerHTML = `
-            <div>
-                <!-- Image Container with Zoom effect (Stays blank if seller provided no photo) -->
-                <div class="relative h-48 w-full bg-slate-100 overflow-hidden cursor-pointer" onclick="openItemDetail('${item.id}')">
+            <div class="flex-1 flex flex-col">
+                <!-- Image Container with Zoom effect -->
+                <div class="relative h-48 w-full bg-slate-100 overflow-hidden cursor-pointer shrink-0" onclick="openItemDetail('${item.id}')">
                     ${hasImage ? `
                         <img src="${item.image_url}" 
                              alt="${escapeHTML(item.title)}" 
                              loading="lazy"
-                             onerror="this.style.display='none';"
+                             onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
                              class="card-img-zoom w-full h-full object-cover">
+                        <div class="hidden w-full h-full bg-slate-100 flex flex-col items-center justify-center text-slate-400 gap-1.5">
+                            <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <span class="text-[11px] font-medium text-slate-400">${escapeHTML(item.category || 'Item')}</span>
+                        </div>
                     ` : `
-                        <div class="w-full h-full bg-slate-100"></div>
+                        <div class="w-full h-full bg-slate-100 flex flex-col items-center justify-center text-slate-400 gap-1.5">
+                            <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <span class="text-[11px] font-medium text-slate-400">${escapeHTML(item.category || 'Item')}</span>
+                        </div>
                     `}
                     
                     <!-- Category Badge -->
                     <span class="absolute top-3 left-3 text-[11px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-md shadow-sm ${categoryBadgeClass}">
                         ${escapeHTML(item.category)}
                     </span>
-
-
                 </div>
 
                 <!-- Card Body -->
-                <div class="p-4 sm:p-5">
+                <div class="p-4 sm:p-5 flex-1 flex flex-col">
                     <div class="flex items-start justify-between gap-2 mb-1">
                         <h3 class="font-bold text-base text-slate-900 line-clamp-1 group-hover:text-emerald-700 transition-colors cursor-pointer" onclick="openItemDetail('${item.id}')" title="${escapeHTML(item.title)}">
                             ${escapeHTML(item.title)}
                         </h3>
                     </div>
 
-                    <div class="flex items-center gap-1.5 text-[11px] text-slate-400 mt-1 mb-2">
+                    <div class="flex items-center gap-1.5 text-[11px] text-slate-500 mt-1 mb-2">
                         ${item.condition ? `<span>${escapeHTML(item.condition)}</span>` : ''}
                         ${item.condition && item.campus_location ? `<span>·</span>` : ''}
                         ${item.campus_location ? `<span>${escapeHTML(item.campus_location)}</span>` : ''}
@@ -236,23 +241,23 @@ function renderItems(items) {
                         KSh ${formattedPrice}
                     </p>
 
-                    <p class="text-slate-500 text-xs line-clamp-2 leading-relaxed">
+                    <p class="text-slate-500 text-xs line-clamp-2 leading-relaxed flex-1">
                         ${escapeHTML(item.description)}
                     </p>
                 </div>
             </div>
 
             <!-- Card Actions Footer -->
-            <div class="p-4 sm:p-5 pt-0 space-y-2">
+            <div class="p-4 sm:p-5 pt-0 mt-auto space-y-2">
                 <div class="flex items-center gap-2">
                     <button onclick="copyToClipboard('${escapeHTML(item.contact_value)}', this)" 
-                            class="flex-1 text-center bg-emerald-700 hover:bg-emerald-800 active:scale-[0.98] text-white font-bold py-2.5 px-3 rounded-xl text-xs transition shadow-sm shadow-emerald-200/50 flex items-center justify-center gap-1.5"
+                            class="flex-1 text-center bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-medium py-2.5 px-3 rounded-xl text-xs transition shadow-sm flex items-center justify-center gap-1.5 cursor-pointer truncate"
                             title="Copy seller's ${escapeHTML(item.contact_method)}: ${escapeHTML(item.contact_value)}">
                         <span>Copy ${escapeHTML(item.contact_method)}</span>
                     </button>
 
                     <button onclick="openItemDetail('${item.id}')" 
-                            class="px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition"
+                            class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition cursor-pointer shrink-0"
                             title="View full item details">
                         View
                     </button>
@@ -260,10 +265,10 @@ function renderItems(items) {
 
                 ${isOwner ? `
                     <div class="pt-2 border-t border-slate-100 flex items-center justify-end gap-2">
-                        <button onclick="openEditItemModal('${item.id}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition flex items-center gap-1" title="Edit this listing">
+                        <button onclick="openEditItemModal('${item.id}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition flex items-center gap-1 cursor-pointer" title="Edit this listing">
                             <span>Edit</span>
                         </button>
-                        <button onclick="handleDeleteItem('${item.id}')" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold rounded-lg transition flex items-center gap-1" title="Delete this listing">
+                        <button onclick="handleDeleteItem('${item.id}')" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold rounded-lg transition flex items-center gap-1 cursor-pointer" title="Delete this listing">
                             <span>Delete</span>
                         </button>
                     </div>
@@ -337,10 +342,10 @@ export function setCategory(category) {
     document.querySelectorAll('.category-pill').forEach(btn => {
         const cat = btn.getAttribute('data-category');
         if (cat === category) {
-            btn.classList.add('bg-emerald-700', 'text-white', 'border-emerald-700');
+            btn.classList.add('bg-emerald-600', 'text-white', 'border-emerald-600');
             btn.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
         } else {
-            btn.classList.remove('bg-emerald-700', 'text-white', 'border-emerald-700');
+            btn.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-600');
             btn.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
         }
     });
@@ -377,8 +382,8 @@ export function renderMyListings() {
                     Please sign in with your student account to manage your listings, edit prices, or mark items as sold.
                 </p>
                 <div class="mt-5">
-                    <button onclick="toggleModal('my-listings-modal', false); toggleModal('auth-modal', true)" class="bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md shadow-emerald-200/50 transition">
-                        Sign in
+                    <button onclick="toggleModal('my-listings-modal', false); toggleModal('auth-modal', true)" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-medium px-5 py-2.5 rounded-xl shadow-sm transition cursor-pointer">
+                        Sign In to CampusThrift
                     </button>
                 </div>
             </div>
@@ -402,8 +407,10 @@ export function renderMyListings() {
                     You haven't posted any items on the campus market yet. Turn your textbooks, electronics, and dorm items into cash!
                 </p>
                 <div class="mt-5">
-                    <button onclick="checkAuthAndOpenPostModal()" class="bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md shadow-emerald-200/50 transition inline-flex items-center gap-1.5">
-                        <span>+</span>
+                    <button onclick="checkAuthAndOpenPostModal()" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-medium px-5 py-2.5 rounded-xl shadow-sm transition inline-flex items-center gap-1.5 cursor-pointer">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
+                        </svg>
                         <span>Post your first item</span>
                     </button>
                 </div>
@@ -427,15 +434,20 @@ export function renderMyListings() {
                     <div class="bg-white rounded-xl border border-slate-200/90 p-3.5 flex flex-col justify-between hover:border-slate-300 transition shadow-sm group">
                         <div>
                             <div class="flex gap-3">
-                                <!-- Thumbnail (Stays blank if seller provided no photo) -->
+                                <!-- Thumbnail (Clean placeholder if seller provided no photo) -->
                                 <div class="w-20 h-20 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0 cursor-pointer" onclick="openItemDetail('${item.id}')">
                                     ${hasImage ? `
                                         <img src="${item.image_url}" 
                                              alt="${escapeHTML(item.title)}" 
                                              class="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                                             onerror="this.style.display='none';">
+                                             onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+                                        <div class="hidden w-full h-full bg-slate-100 flex items-center justify-center text-slate-300">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        </div>
                                     ` : `
-                                        <div class="w-full h-full bg-slate-100"></div>
+                                        <div class="w-full h-full bg-slate-100 flex items-center justify-center text-slate-300">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        </div>
                                     `}
                                 </div>
 
@@ -466,15 +478,15 @@ export function renderMyListings() {
 
                         <!-- Action Controls -->
                         <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2">
-                            <button onclick="openItemDetail('${item.id}')" class="text-xs font-semibold text-slate-600 hover:text-slate-900 px-2 py-1 rounded hover:bg-slate-100 transition">
+                            <button onclick="openItemDetail('${item.id}')" class="text-xs font-semibold text-slate-600 hover:text-slate-900 px-2 py-1 rounded hover:bg-slate-100 transition cursor-pointer">
                                 View
                             </button>
 
                             <div class="flex items-center gap-1.5">
-                                <button onclick="openEditItemModal('${item.id}')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg border border-slate-200 transition shadow-sm active:scale-95" title="Edit listing details">
+                                <button onclick="openEditItemModal('${item.id}')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg border border-slate-200 transition shadow-sm active:scale-95 cursor-pointer" title="Edit listing details">
                                     <span>Edit</span>
                                 </button>
-                                <button onclick="handleDeleteItem('${item.id}')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-lg border border-rose-200 transition active:scale-95" title="Delete listing permanently">
+                                <button onclick="handleDeleteItem('${item.id}')" class="inline-flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold rounded-lg border border-rose-200 transition active:scale-95 cursor-pointer" title="Delete listing permanently">
                                     <span>Delete</span>
                                 </button>
                             </div>
@@ -798,15 +810,22 @@ export function openItemDetail(itemId) {
 
     modalBody.innerHTML = `
         <div class="space-y-5">
-            <!-- Full Item Image (Stays blank if seller provided no photo) -->
+            <!-- Full Item Image (Clean placeholder if seller provided no photo) -->
             <div class="relative h-64 sm:h-80 w-full rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-inner">
                 ${hasItemImage ? `
                     <img src="${item.image_url}" 
                          alt="${escapeHTML(item.title)}" 
                          class="w-full h-full object-cover"
-                         onerror="this.style.display='none';">
+                         onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+                    <div class="hidden w-full h-full bg-slate-100 flex flex-col items-center justify-center text-slate-400 gap-2">
+                        <svg class="w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <span class="text-xs font-medium text-slate-400">No image provided for this listing</span>
+                    </div>
                 ` : `
-                    <div class="w-full h-full bg-slate-100"></div>
+                    <div class="w-full h-full bg-slate-100 flex flex-col items-center justify-center text-slate-400 gap-2">
+                        <svg class="w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <span class="text-xs font-medium text-slate-400">No image provided for this listing</span>
+                    </div>
                 `}
                 
                 <!-- Badges (Grouped on top-left, max 70% width to stay completely clear of close button) -->
@@ -824,7 +843,7 @@ export function openItemDetail(itemId) {
 
                 <!-- Floating Close Button (Top-Right: High contrast, elevated, floating squarely inside photo with 14px inset) -->
                 <button onclick="toggleModal('detail-modal', false)" 
-                        class="modal-close-floating-btn" 
+                        class="modal-close-floating-btn cursor-pointer" 
                         title="Close (Esc)" 
                         aria-label="Close modal">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
@@ -863,10 +882,19 @@ export function openItemDetail(itemId) {
                     </p>
                 </div>
 
-                <button onclick="copyToClipboard('${escapeHTML(item.contact_value)}', this)" 
-                        class="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white font-bold py-2.5 px-5 rounded-xl text-sm transition shadow-md shadow-emerald-200/50 flex items-center justify-center gap-2">
-                    <span>Copy ${escapeHTML(item.contact_method)} number</span>
-                </button>
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    ${item.contact_method === 'WhatsApp' ? `
+                        <a href="${contactLink}" target="_blank" rel="noopener noreferrer"
+                           class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-medium py-2.5 px-4 rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-2 cursor-pointer">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                            <span>Chat on WhatsApp</span>
+                        </a>
+                    ` : ''}
+                    <button onclick="copyToClipboard('${escapeHTML(item.contact_value)}', this)" 
+                            class="flex-1 sm:flex-initial ${item.contact_method === 'WhatsApp' ? 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200' : 'bg-emerald-600 hover:bg-emerald-700 text-white'} font-medium py-2.5 px-4 rounded-xl text-sm transition shadow-sm flex items-center justify-center gap-2 cursor-pointer">
+                        <span>Copy number</span>
+                    </button>
+                </div>
             </div>
 
             ${isOwner ? `
@@ -877,11 +905,11 @@ export function openItemDetail(itemId) {
                     </div>
                     <div class="flex items-center gap-2">
                         <button onclick="openEditItemModal('${item.id}')" 
-                                class="flex-1 bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition shadow-sm shadow-emerald-200/50 flex items-center justify-center gap-1.5">
+                                class="flex-1 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-medium py-2.5 px-4 rounded-xl text-xs transition shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
                             <span>Edit listing</span>
                         </button>
                         <button onclick="handleDeleteItem('${item.id}')" 
-                                class="bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-700 font-bold py-2.5 px-4 rounded-xl text-xs transition border border-rose-200 flex items-center justify-center gap-1.5">
+                                class="bg-rose-50 hover:bg-rose-100 active:scale-95 text-rose-700 font-medium py-2.5 px-4 rounded-xl text-xs transition border border-rose-200 flex items-center justify-center gap-1.5 cursor-pointer">
                             <span>Delete listing</span>
                         </button>
                     </div>
@@ -1155,15 +1183,15 @@ function showUnconfiguredNotice() {
     const emptyState = document.getElementById('empty-state');
     if (emptyState) {
         emptyState.innerHTML = `
-            <div class="w-16 h-16 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
-                ⚡
+            <div class="w-16 h-16 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4 border border-amber-100">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
             </div>
             <h3 class="text-lg font-bold text-slate-800">Supabase Not Connected</h3>
             <p class="text-sm text-slate-500 mt-1 max-w-sm mx-auto">
                 All mock/stub data has been removed. Please enter your Supabase Project URL and Public Anon Key to load live marketplace items.
             </p>
             <div class="mt-5 flex justify-center gap-3">
-                <button onclick="openConfigModal()" class="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl transition shadow-md shadow-emerald-200/50">
+                <button onclick="openConfigModal()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-xl transition shadow-sm cursor-pointer">
                     Connect Supabase Now
                 </button>
             </div>
@@ -1237,13 +1265,18 @@ export async function copyToClipboard(text, btnElement) {
         
         if (btnElement) {
             const originalHTML = btnElement.innerHTML;
-            btnElement.classList.add('bg-emerald-600');
-            btnElement.classList.remove('bg-emerald-700');
-            btnElement.innerHTML = `<span>✓</span><span>Copied!</span>`;
+            const hadWhiteBg = btnElement.classList.contains('bg-white');
+            if (hadWhiteBg) {
+                btnElement.classList.remove('bg-white', 'text-slate-700');
+                btnElement.classList.add('bg-emerald-600', 'text-white');
+            }
+            btnElement.innerHTML = `<span>✓</span> <span>Copied!</span>`;
             setTimeout(() => {
                 btnElement.innerHTML = originalHTML;
-                btnElement.classList.remove('bg-emerald-600');
-                btnElement.classList.add('bg-emerald-700');
+                if (hadWhiteBg) {
+                    btnElement.classList.add('bg-white', 'text-slate-700');
+                    btnElement.classList.remove('bg-emerald-600', 'text-white');
+                }
             }, 2000);
         }
     } catch (err) {
